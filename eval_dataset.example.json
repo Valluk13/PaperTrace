@@ -1,0 +1,12 @@
+[
+  {
+    "question_id": "q01",
+    "user_query": "Methods for synthesizing scientific literature with retrieval-augmented language models",
+    "expected_arxiv_ids": ["2411.14199"]
+  },
+  {
+    "question_id": "q02",
+    "user_query": "TODO: замените на свою тему. Нужно 15-20 тем, expected_arxiv_ids = 3-5 статей, которые точно должны найтись",
+    "expected_arxiv_ids": []
+  }
+]

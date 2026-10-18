@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+downloaded_pdfs/
+eval_cache.json
+eval_results.json
+results_table.md
