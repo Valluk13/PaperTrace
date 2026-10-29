@@ -1,0 +1,77 @@
+[
+  {
+    "question_id": "q01",
+    "user_query": "Mitigating hallucination in LLM-based scientific literature review",
+    "expected_arxiv_ids": ["2411.14199"]
+  },
+  {
+    "question_id": "q02",
+    "user_query": "Evaluating RAG systems with LLM-as-a-judge frameworks",
+    "expected_arxiv_ids": ["2306.05685"]
+  },
+  {
+    "question_id": "q03",
+    "user_query": "Defending autonomous LLM agents against indirect prompt injection",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question_id": "q04",
+    "user_query": "Multi-agent collaboration for complex reasoning tasks in LangGraph",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question_id": "q05",
+    "user_query": "Self-correction and reflection mechanisms in Agentic AI",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question_id": "q06",
+    "user_query": "GraphRAG versus standard semantic search for document question answering",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question_id": "q07",
+    "user_query": "Cost-effective tool use and API routing in large language models",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question_id": "q08",
+    "user_query": "Long-term memory architectures for lifelong learning agents",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question_id": "q09",
+    "user_query": "Automated red teaming and jailbreak detection for LLM applications",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question_id": "q10",
+    "user_query": "Multi-modal RAG systems for scientific documents with tables and figures",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question_id": "q11",
+    "user_query": "Optimization of prompt workflows using evolutionary algorithms",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question_id": "q12",
+    "user_query": "Agentic workflows for automated systematic literature reviews",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question_id": "q13",
+    "user_query": "Impact of context window size on information retrieval in RAG",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question_id": "q14",
+    "user_query": "Benchmarking mathematical reasoning in multi-agent LLM systems",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question_id": "q15",
+    "user_query": "Security guardrails for preventing unauthorized tool execution in agents",
+    "expected_arxiv_ids": []
+  }
+]
