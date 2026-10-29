@@ -6,3 +6,4 @@ downloaded_pdfs/
 eval_cache.json
 eval_results.json
 results_table.md
+.pytest_cache/
