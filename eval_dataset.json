@@ -2,76 +2,137 @@
   {
     "question_id": "q01",
     "user_query": "Mitigating hallucination in LLM-based scientific literature review",
-    "expected_arxiv_ids": ["2411.14199"]
+    "expected_arxiv_ids": [
+      "2311.05232",
+      "2312.10997",
+      "2409.10102",
+      "2508.05660"
+    ]
   },
   {
     "question_id": "q02",
     "user_query": "Evaluating RAG systems with LLM-as-a-judge frameworks",
-    "expected_arxiv_ids": ["2306.05685"]
+    "expected_arxiv_ids": [
+      "2306.05685",
+      "2310.17631",
+      "2311.09476"
+    ]
+
   },
   {
     "question_id": "q03",
     "user_query": "Defending autonomous LLM agents against indirect prompt injection",
-    "expected_arxiv_ids": []
+    "expected_arxiv_ids": [
+      "2406.13352",
+      "2312.14197",
+      "2410.02644"
+    ]
   },
   {
     "question_id": "q04",
     "user_query": "Multi-agent collaboration for complex reasoning tasks in LangGraph",
-    "expected_arxiv_ids": []
+    "expected_arxiv_ids": [
+      "2411.18241",
+      "2404.17729",
+      "2501.06322"
+    ]
   },
   {
     "question_id": "q05",
     "user_query": "Self-correction and reflection mechanisms in Agentic AI",
-    "expected_arxiv_ids": []
+    "expected_arxiv_ids": [
+      "2303.11366",
+      "2303.17651",
+      "2406.15673"
+    ]
   },
   {
     "question_id": "q06",
     "user_query": "GraphRAG versus standard semantic search for document question answering",
-    "expected_arxiv_ids": []
+    "expected_arxiv_ids": [
+      "2404.16130",
+      "2405.16506",
+      "2501.00309"
+    ]
   },
   {
     "question_id": "q07",
     "user_query": "Cost-effective tool use and API routing in large language models",
-    "expected_arxiv_ids": []
+    "expected_arxiv_ids": [
+      "2406.18665",
+      "2403.12031",
+      "2305.05176"
+    ]
   },
   {
     "question_id": "q08",
     "user_query": "Long-term memory architectures for lifelong learning agents",
-    "expected_arxiv_ids": []
+    "expected_arxiv_ids": [
+      "2404.13501",
+      "2310.08560",
+      "2501.07278"
+    ]
   },
   {
     "question_id": "q09",
     "user_query": "Automated red teaming and jailbreak detection for LLM applications",
-    "expected_arxiv_ids": []
+    "expected_arxiv_ids": [
+      "2402.04249",
+      "2404.01318",
+      "2407.16667"
+    ]
   },
   {
     "question_id": "q10",
     "user_query": "Multi-modal RAG systems for scientific documents with tables and figures",
-    "expected_arxiv_ids": []
+    "expected_arxiv_ids": [
+      "2410.10594",
+      "2407.01449",
+      "2607.24799"
+    ]
   },
-  {
+{
     "question_id": "q11",
     "user_query": "Optimization of prompt workflows using evolutionary algorithms",
-    "expected_arxiv_ids": []
+    "expected_arxiv_ids": [
+      "2309.16797",
+      "2309.03409",
+      "2309.08532"
+    ]
   },
   {
     "question_id": "q12",
     "user_query": "Agentic workflows for automated systematic literature reviews",
-    "expected_arxiv_ids": []
+    "expected_arxiv_ids": [
+      "2508.05660",
+      "2312.07559",
+      "2501.05468"
+    ]
   },
   {
     "question_id": "q13",
     "user_query": "Impact of context window size on information retrieval in RAG",
-    "expected_arxiv_ids": []
+    "expected_arxiv_ids": [
+      "2411.03538",
+      "2501.01880",
+      "2410.18050"
+    ]
   },
-  {
-    "question_id": "q14",
+  {"question_id": "q14",
     "user_query": "Benchmarking mathematical reasoning in multi-agent LLM systems",
-    "expected_arxiv_ids": []
+    "expected_arxiv_ids": [
+      "2610.26943",
+      "2404.04735",
+      "2607.04394"
+    ]
   },
   {
     "question_id": "q15",
     "user_query": "Security guardrails for preventing unauthorized tool execution in agents",
-    "expected_arxiv_ids": []
+    "expected_arxiv_ids": [
+      "2603.19469",
+      "2406.13352",
+      "2410.02644"
+    ]
   }
 ]
