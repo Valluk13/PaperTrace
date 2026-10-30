@@ -1,0 +1,2 @@
+arxiv_id,title,year,venue,rater1,rater2,final_label,comment
+2402.12345,Example: Pipeline for X,2024,NeurIPS,good,good,good,строка-пример: удалите её; real CSV генерирует reliability_rag.py make-template
