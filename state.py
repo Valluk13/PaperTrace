@@ -4,7 +4,7 @@
 # Если нужно новое поле, напишите тимлиду.
 
 import operator
-from typing import Annotated, List, Literal, Optional, TypedDict
+from typing import Annotated, Any, Dict, List, Literal, Optional, TypedDict
 
 from pydantic import BaseModel, Field
 
@@ -68,6 +68,17 @@ class ModeEvalResult(BaseModel):
     latency_sec: float
     total_tokens: int
     search_recall: Optional[float] = None
+    # Поля ниже позволяют пересчитать метрики из файла, не оплачивая прогон заново.
+    # Старые JSON читаются: у всех новых значений есть дефолты.
+    status: Literal["ok", "guard_blocked", "no_sources", "crashed", "judge_error"] = "ok"
+    unavailable_claims: int = 0
+    unparsed_citations: int = 0
+    claims_written: int = 0   # сколько тезисов было в черновике, до отсева внутреннего верификатора
+    review_text: Optional[str] = None
+    draft_text: Optional[str] = None
+    claims: List[Dict[str, Any]] = Field(default_factory=list)
+    claim_checks: List[Dict[str, Any]] = Field(default_factory=list,
+        description="Вердикты судьи по каждому тезису: на какой странице подтверждён, был ли доступен arXiv")
 
 
 # 5. Состояние графа LangGraph. Поля с operator.add складываются между узлами.
