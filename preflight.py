@@ -25,11 +25,18 @@ except Exception as e:
 
 llm = common.get_llm()
 if llm is None:
-    sys.exit("ПРЕФЛАЙТ: не заданы LLM_API_KEY / LLM_MODEL в .env")
+    sys.exit("ПРЕФЛАЙТ: не заданы LLM_API_KEY / LLM_MODEL / LLM_BASE_URL в .env")
 txt, tok = common.ask(llm, "Reply with the single word: ok", "ping")
 print(f"LLM OK, ответ={txt[:40]!r}, токенов={tok}")
 if tok == 0:
     print("ПРЕДУПРЕЖДЕНИЕ: шлюз не отдаёт usage — колонка «Токенов» будет нулевой")
-if common.get_llm("judge") is None:
-    sys.exit("ПРЕФЛАЙТ: не задан судья (JUDGE_MODEL)")
+judge = common.get_llm("judge")
+if judge is None:
+    sys.exit("ПРЕФЛАЙТ: не задан судья (JUDGE_MODEL / JUDGE_BASE_URL)")
+if os.getenv("JUDGE_MODEL") == os.getenv("LLM_MODEL"):
+    sys.exit("ПРЕФЛАЙТ: JUDGE_MODEL совпадает с LLM_MODEL — судья не независим, метрики необъективны")
+txt, tok = common.ask(judge, "Reply with the single word: ok", "ping")
+print(f"Судья OK ({os.getenv('JUDGE_MODEL')}), токенов={tok}")
+if not (os.getenv("OPENALEX_MAILTO") or "").strip():
+    print("ПРЕДУПРЕЖДЕНИЕ: OPENALEX_MAILTO пустой — OpenAlex даст общий вежливый пул и 429 под нагрузкой")
 print("ПРЕФЛАЙТ ПРОЙДЕН — можно запускать бенчмарк")

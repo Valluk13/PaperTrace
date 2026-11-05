@@ -29,9 +29,11 @@ def get_llm(role: str = "main"):
     Возвращает None, если ключ или модель не заданы."""
     prefix = "JUDGE" if role == "judge" else "LLM"
     api_key = os.getenv(f"{prefix}_API_KEY") or os.getenv("LLM_API_KEY", "")
-    base_url = os.getenv(f"{prefix}_BASE_URL") or os.getenv("LLM_BASE_URL", "https://openrouter.ai/api/v1")
+    # Без молчаливого дефолта на чужой провайдер: нет base_url в .env — значит ключ не настроен,
+    # а не «поехали на openrouter» (там polza-ключ даст 401 и ночь умрёт тихо).
+    base_url = os.getenv(f"{prefix}_BASE_URL") or os.getenv("LLM_BASE_URL", "")
     model = os.getenv(f"{prefix}_MODEL") or os.getenv("LLM_MODEL", "")
-    if not api_key or not model:
+    if not api_key or not model or not base_url:
         return None
     from langchain_openai import ChatOpenAI  # импорт здесь, чтобы тесты работали без библиотеки
     return ChatOpenAI(api_key=api_key, base_url=base_url, model=model,

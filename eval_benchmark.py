@@ -27,6 +27,7 @@ CACHE_PATH = "eval_cache.json"
 _cache: Dict[str, dict] = {}
 _pages_cache: Dict[str, Optional[Dict[int, str]]] = {}
 _missing: set = set()
+_judge_tokens = 0   # судья оплачивается отдельно от писателя; раньше эти токены выбрасывались
 
 MODE_NAMES = {"a": "mode_a_chat", "b": "mode_b_vanilla_rag", "c": "mode_c_papertrace"}
 
@@ -80,8 +81,9 @@ def _load_cache() -> None:
         try:
             with open(CACHE_PATH, encoding="utf-8") as f:
                 _cache.update(json.load(f))
-        except Exception:
-            pass
+            print(f"[Eval] кэш судьи: {len(_cache)} вердиктов")
+        except Exception as e:
+            print(f"[Eval] ВНИМАНИЕ: кэш судьи повреждён ({e!r}) — вердикты будут считаться заново и платно")
 
 
 def _save_cache() -> None:
@@ -107,10 +109,12 @@ def pages_of(arxiv_id: str) -> Optional[Dict[int, str]]:
 # Судья
 # ---------------------------------------------------------------------------
 def judge_support(judge, claim: str, page_text: str) -> bool:
+    global _judge_tokens
     key = hashlib.sha1(f"{os.getenv('JUDGE_MODEL')}|{claim}|{page_text[:6000]}".encode()).hexdigest()
     if key in _cache:
         return _cache[key]["supported"]
-    out, _ = ask(judge, JUDGE_SYSTEM, f"CLAIM:\n{claim}\n\nPAGE TEXT:\n{page_text[:6000]}")
+    out, tok = ask(judge, JUDGE_SYSTEM, f"CLAIM:\n{claim}\n\nPAGE TEXT:\n{page_text[:6000]}")
+    _judge_tokens += tok
     data = extract_json(out)
     if not isinstance(data, dict) or "supported" not in data:
         print("[Judge] ответ не распарсился — вердикт false, в кэш не пишем")
@@ -299,6 +303,8 @@ def main():
             _flush(results, args.out)
 
     table = summarize(results)
+    table += (f"\n\nСудья за этот прогон: {_judge_tokens} токенов. Колонка «Токенов» в таблице считает только "
+              f"писателя и узлы графа; полная стоимость прогона = сумма обеих цифр.\n")
     _safe_write("results_table.md", table + "\n")
     print("\n" + table)
     print("\nСохранено: eval_results.json, results_table.md")
