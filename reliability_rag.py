@@ -111,20 +111,24 @@ def build_index_and_retrieve(papers: List[PaperMeta], queries: List[str], top_k:
     if not docs:
         return []
 
-    client = chromadb.EphemeralClient()
-    col = client.create_collection(name=f"pt_{uuid.uuid4().hex[:12]}")
-    for i in range(0, len(docs), 500):
-        col.add(ids=ids[i:i + 500], documents=docs[i:i + 500], metadatas=metas[i:i + 500])
+    try:
+        client = chromadb.EphemeralClient()
+        col = client.create_collection(name=f"pt_{uuid.uuid4().hex[:12]}")
+        for i in range(0, len(docs), 500):
+            col.add(ids=ids[i:i + 500], documents=docs[i:i + 500], metadatas=metas[i:i + 500])
 
-    best: Dict[str, DocumentChunk] = {}
-    for q in queries:
-        res = col.query(query_texts=[q], n_results=min(top_k, len(docs)))
-        for cid, doc, meta, dist in zip(res["ids"][0], res["documents"][0], res["metadatas"][0], res["distances"][0]):
-            relevance = round(1.0 / (1.0 + float(dist)), 4)
-            if cid not in best or relevance > best[cid].relevance_score:
-                best[cid] = DocumentChunk(chunk_id=cid, arxiv_id=meta["arxiv_id"], paper_title=meta["title"],
-                                          page_number=int(meta["page"]), text=doc, relevance_score=relevance)
-    return sorted(best.values(), key=lambda c: c.relevance_score, reverse=True)[:top_k]
+        best: Dict[str, DocumentChunk] = {}
+        for q in queries:
+            res = col.query(query_texts=[q], n_results=min(top_k, len(docs)))
+            for cid, doc, meta, dist in zip(res["ids"][0], res["documents"][0], res["metadatas"][0], res["distances"][0]):
+                relevance = round(1.0 / (1.0 + float(dist)), 4)
+                if cid not in best or relevance > best[cid].relevance_score:
+                    best[cid] = DocumentChunk(chunk_id=cid, arxiv_id=meta["arxiv_id"], paper_title=meta["title"],
+                                              page_number=int(meta["page"]), text=doc, relevance_score=relevance)
+        return sorted(best.values(), key=lambda c: c.relevance_score, reverse=True)[:top_k]
+    except Exception as e:  # сбой векторной базы не должен ронять весь граф
+        print(f"[Reliability] ChromaDB недоступна, векторный поиск пропущен: {e!r}")
+        return []
 
 
 # ---------------------------------------------------------------------------

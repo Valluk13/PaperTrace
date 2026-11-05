@@ -14,7 +14,10 @@ except ImportError:
     pass
 
 # Единый формат цитаты: "утверждение [arXiv:2411.14199, стр. 3]"
-CITE_RE = re.compile(r"\[arXiv:\s*([^\s,\]]+)\s*,\s*(?:стр\.?|p\.?)\s*(\d+)\s*\]", re.I)
+# Расширен: ловит page N / pages N / с. N и круглые скобки — иначе тезисы терялись молча
+CITE_RE = re.compile(
+    r"[\[(]\s*arXiv\s*:?\s*([^\s,\])]+)\s*[,;]\s*"
+    r"(?:стр\.?|с\.?|p(?:age)?s?\.?|pp\.?)\s*(\d+)\s*[\])]?", re.I)
 
 
 def review_language() -> str:
@@ -36,43 +39,60 @@ def get_llm(role: str = "main"):
 
 
 def ask(llm, system: str, user: str) -> Tuple[str, int]:
-    """Один вызов LLM. Возвращает (текст ответа, число токенов)."""
+    """Один вызов LLM с ретраями (переживает 429-шторм шлюза). Возвращает (текст ответа, число токенов)."""
     from langchain_core.messages import HumanMessage, SystemMessage
-    resp = llm.invoke([SystemMessage(content=system), HumanMessage(content=user)])
+    resp = None
+    for attempt in range(4):
+        try:
+            resp = llm.invoke([SystemMessage(content=system), HumanMessage(content=user)])
+            break
+        except KeyboardInterrupt:
+            raise
+        except Exception as e:
+            if attempt == 3:
+                raise
+            wait = 5 * (2 ** attempt)  # 5, 10, 20 с
+            print(f"[LLM] {type(e).__name__}, ретрай через {wait} с")
+            time.sleep(wait)
     meta = getattr(resp, "usage_metadata", None) or {}
     tokens = meta.get("total_tokens") or (resp.response_metadata or {}).get("token_usage", {}).get("total_tokens", 0)
     pause = float(os.getenv("LLM_SLEEP", "0") or 0)
     if pause:
-        time.sleep(pause)  # защита от лимитов бесплатного API
+        time.sleep(pause)  # защита от лимитов шлюза
     return str(resp.content), int(tokens or 0)
 
 
 def extract_json(text: str):
-    """Достаёт JSON из ответа модели, даже если он обёрнут в ```json ... ```. При ошибке вернёт None."""
+    """Достаёт JSON из ответа модели (```json-обёртки, висячие запятые, текст вокруг).
+    Жадный фолбэк убран: он молча терял массив тезисов при любом тексте после []."""
     if not text:
         return None
-    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip(), flags=re.I)
-    try:
-        return json.loads(text)
-    except Exception:
-        pass
-    m = re.search(r"(\[.*\]|\{.*\})", text, re.S)
-    if m:
+    t = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip(), flags=re.I)
+    for candidate in (t, re.sub(r",\s*([}\]])", r"\1", t)):  # второй проход — висячие запятые
         try:
-            return json.loads(m.group(1))
+            return json.loads(candidate)
         except Exception:
-            return None
+            pass
+    dec = json.JSONDecoder()
+    for i, ch in enumerate(t):  # каждый { или [ — отдельная попытка raw_decode
+        if ch in "{[":
+            try:
+                obj, _ = dec.raw_decode(t[i:])
+                if isinstance(obj, (list, dict)) and obj:
+                    return obj
+            except Exception:
+                continue
     return None
 
 
 def normalize_text(s: str) -> str:
     """Нижний регистр, только буквы и цифры. Нужно, чтобы сравнивать цитату с текстом PDF
     (в PDF бывают переносы строк, дефисы и лишние пробелы)."""
-    s = s.lower().replace("-\n", "")
+    s = s.lower().replace("-\n", "").replace("- ", "")
     return re.sub(r"[^0-9a-zа-яё]+", " ", s).strip()
 
 
-def quote_in_text(quote: str, text: str, min_len: int = 20) -> bool:
+def quote_in_text(quote: str, text: str, min_len: int = 12) -> bool:
     """Программная проверка: цитата реально встречается в тексте страницы."""
     q = normalize_text(quote or "")
     if len(q) < min_len:

@@ -2,7 +2,7 @@
 # Роль: Data Engineer (поиск по arXiv, проверка публикации через OpenAlex, постраничный парсинг PDF)
 # Установка: pip install arxiv pymupdf requests
 #
-# ВАЖНО: пакет arxiv должен быть версии 2.x (pip install "arxiv==2.2.0").
+# ВАЖНО: пакет arxiv должен быть версии 2.x (pip install "arxiv==2.1.3").
 # В 4.x удалён Result.download_pdf и изменился API Result — код ниже на 4.x не работает.
 
 import difflib
@@ -159,29 +159,45 @@ def parse_pdf_pages(pdf_path: str, max_pages: int = MAX_PAGES) -> Dict[int, str]
     return pages
 
 
+_client = None
+
+
+def _get_client():
+    """Один общий arxiv.Client на процесс: только так delay_seconds действует
+    между вызовами разных функций (новый Client на каждый вызов = шквал запросов = 403)."""
+    global _client
+    if _client is None:
+        import arxiv
+        _client = arxiv.Client(page_size=100, delay_seconds=3.0, num_retries=2)
+    return _client
+
+
 def get_paper_pages(arxiv_id: str, max_pages: int = 60) -> Optional[Dict[int, str]]:
-    """Страницы статьи по ID (скачивает, если ещё нет). None, если статьи нет или не скачалась.
+    """Страницы статьи по ID (скачивает, если ещё нет). None, если статьи точно нет.
+    Сетевые ошибки ПРОБОРАСЫВАЮТСЯ наверх — бенчмарк отличает «статьи нет» от «сети нет».
     Используется бенчмарком для проверки цитат."""
     import arxiv
     arxiv_id = clean_id(arxiv_id)
     filename = arxiv_id.replace("/", "_") + ".pdf"
     path = os.path.join(DOWNLOAD_DIR, filename)
-    if not os.path.exists(path):
+    if not os.path.exists(path) or os.path.getsize(path) < 10_000:  # 0-байтовый/битый PDF перекачиваем
         try:
-            client = arxiv.Client(page_size=1, delay_seconds=3.0, num_retries=2)
-            result = next(client.results(arxiv.Search(id_list=[arxiv_id])), None)
+            result = next(_get_client().results(arxiv.Search(id_list=[arxiv_id])), None)
             if result is None:
-                return None
+                return None                    # статьи точно нет
             result.download_pdf(dirpath=DOWNLOAD_DIR, filename=filename)
-        except Exception:
-            return None
+        except arxiv.UnexpectedEmptyPageError:
+            return None                        # статьи точно нет
+        except Exception as e:
+            print(f"[ArXiv] {arxiv_id}: сеть/скачивание — {e!r}")
+            raise                              # не путаем сбой сети с отсутствием статьи
     return parse_pdf_pages(path, max_pages) or None
 
 
 def _candidate_ids(queries: List[str]) -> List[str]:
     """Кандидаты: раунд-робин по вариантам запроса (по PER_QUERY с каждого), затем OpenAlex."""
     import arxiv
-    client = arxiv.Client(page_size=PER_QUERY, delay_seconds=3.0, num_retries=2)
+    client = _get_client()
 
     streams: List[List[str]] = [[] for _ in range(len(_query_variants(queries[0])))] if queries else []
     for q in queries:
@@ -237,7 +253,7 @@ def arxiv_search_node(state: AgentState) -> dict:
             filename = aid.replace("/", "_") + ".pdf"
             path = os.path.join(DOWNLOAD_DIR, filename)
             try:
-                if not os.path.exists(path):
+                if not os.path.exists(path) or os.path.getsize(path) < 10_000:  # битый PDF перекачиваем
                     result.download_pdf(dirpath=DOWNLOAD_DIR, filename=filename)
                 pages = parse_pdf_pages(path)
             except Exception as e:
