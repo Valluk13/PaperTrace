@@ -16,7 +16,9 @@ from state import AgentState, PaperMeta
 DOWNLOAD_DIR = "downloaded_pdfs"
 MAX_PAPERS = 6        # всего статей за один запуск (для КП2 хватает)
 PER_QUERY = 8         # кандидатов на один вариант запроса
-MAX_PAGES = 25        # сколько страниц PDF разбираем (дальше обычно литература и приложения)
+MAX_PAGES = 25        # сколько страниц PDF разбираем для ПИСАТЕЛЯ (дальше обычно литература и приложения)
+JUDGE_MAX_PAGES = 60  # судья намеренно видит больше: проверять факт по всей статье честнее, чем по первым 25.
+                      # Тезис, подтверждённый на стр. 40, — это «страница указана неверно», а не «статьи нет».
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
 _warned = set()
@@ -194,7 +196,7 @@ def _get_client():
     return _client
 
 
-def get_paper_pages(arxiv_id: str, max_pages: int = 60) -> Optional[Dict[int, str]]:
+def get_paper_pages(arxiv_id: str, max_pages: int = JUDGE_MAX_PAGES) -> Optional[Dict[int, str]]:
     """Страницы статьи по ID (скачивает, если ещё нет). None, если статьи точно нет.
     Сетевые ошибки ПРОБОРАСЫВАЮТСЯ наверх — бенчмарк отличает «статьи нет» от «сети нет».
     Используется бенчмарком для проверки цитат."""
@@ -259,13 +261,15 @@ def arxiv_search_node(state: AgentState) -> dict:
 
     candidates = [c for c in _candidate_ids(queries) if c not in found]
     if candidates:
-        client = arxiv.Client(page_size=100, delay_seconds=3.0, num_retries=2)
+        client = _get_client()   # общий клиент: у нового Client сбрасывается throttle delay_seconds,
+                                 # а несколько клиентов в одном прогоне = шквал запросов = 403
         try:
             batch = {clean_id(r.get_short_id()): r for r in
                      client.results(arxiv.Search(id_list=candidates[:100]))}
         except Exception as e:
-            print(f"[ArXiv Searcher] Ошибка получения метаданных: {e}")
-            batch = {}
+            # Пустой batch означал бы «статей нет» и молча превращался в пустой обзор
+            # и нулевую ячейку результата. Сбой сети — это сбой: поднимаем вверх.
+            raise RuntimeError(f"arXiv недоступен (метаданные пачки из {len(candidates[:100])} id): {e!r}") from e
         for aid in candidates:
             if len(found) >= MAX_PAPERS:
                 break

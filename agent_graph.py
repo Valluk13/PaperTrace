@@ -5,6 +5,8 @@
 
 import argparse
 import importlib
+import os
+import sys
 import time
 from typing import Literal
 
@@ -50,7 +52,9 @@ def planner_node(state: AgentState) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# 2. ЗАГРУЗКА УЗЛОВ КОМАНДЫ. Если файла ещё нет, используется заглушка (с громким предупреждением).
+# 2. ЗАГРУЗКА УЗЛОВ КОМАНДЫ. Без файла узла прогон меряет заглушку, а не систему:
+#    поэтому по умолчанию это остановка, а не предупреждение на одну строку в логе.
+#    Локальная разработка без чужого файла: ALLOW_MOCKS=1 python ...
 #    Если файл есть, но внутри ошибка (например, не установлена библиотека), ошибка НЕ скрывается.
 # ---------------------------------------------------------------------------
 def load_node(module_name: str, func_name: str, mock):
@@ -59,8 +63,13 @@ def load_node(module_name: str, func_name: str, mock):
         return getattr(module, func_name)
     except ModuleNotFoundError as e:
         if e.name == module_name:
-            print(f"\n!!! MOCK USED: нет файла {module_name}.py, вместо {func_name} работает заглушка !!!\n")
-            return mock
+            if os.getenv("ALLOW_MOCKS") == "1":
+                print(f"\n!!! MOCK USED (ALLOW_MOCKS=1): нет файла {module_name}.py, "
+                      f"вместо {func_name} работает заглушка. Эти цифры НЕ результат проекта. !!!\n")
+                return mock
+            sys.exit(f"ОСТАНОВ: нет файла {module_name}.py — узел {func_name} нечем заменить. "
+                     f"Мок намеренно отключён: прогон на заглушках измеряет заглушки. "
+                     f"Для локальной разработки: ALLOW_MOCKS=1.")
         raise
 
 
