@@ -160,6 +160,35 @@ class HarnessOfflineTest(unittest.TestCase):
         pipe.assert_not_called()
         self.assertEqual(len(again), 2, "заблокированная ячейка ушла из файла и просит повторной оплаты")
 
+    def test_memory_guard_stops_on_topic_border_and_resume_finishes(self):
+        """Векторный поиск добавляет несколько МБ на тему и не отдаёт их обратно. Прогон обязан
+        остановиться сам на границе темы (с сохранёнными ячейками и таблицей), а не быть убитым
+        OOM посреди оплаченной ячейки."""
+        with mock.patch.object(eb, "free_ram_mb", return_value=500.0):
+            cells = self._run("--dataset", "ds.json", "--modes", "b")
+        self.assertEqual(len(cells), 1, "охрана памяти не остановила прогон на границе темы")
+        with open("results_table.md", encoding="utf-8") as f:
+            self.assertIn("охраной памяти", f.read(), "в таблице нет пометки о неполном прогоне")
+        with mock.patch.object(eb, "free_ram_mb", return_value=8000.0):
+            again = self._run("--dataset", "ds.json", "--modes", "b")
+        self.assertEqual(len(again), 2, "resume после остановки по памяти не добрал вторую тему")
+
+    def test_dead_vector_search_stops_the_run_instead_of_paying_for_it(self):
+        """После лимита падений векторного поиска граф бросает ошибку, и каждая следующая тема
+        оплатила бы планировщик ради пустой ячейки. Прогон обязан встать сразу."""
+        def dead(query, full):
+            raise RuntimeError("векторный поиск не отдал ни одного чанка (3 сбоя подряд)")
+        with mock.patch.object(eb, "run_mode_bc", side_effect=dead) as pipe, \
+             mock.patch.object(eb, "rag_is_dead", return_value=True):
+            with self.assertRaises(SystemExit) as boom:
+                with mock.patch.object(sys, "argv", ["eval_benchmark.py", "--dataset", "ds.json", "--modes", "b"]):
+                    eb.main()
+        self.assertIn("векторный поиск", str(boom.exception))
+        self.assertEqual(pipe.call_count, 1, "после смерти векторного поиска прогон полез в остальные темы")
+        with open("eval_results.json", encoding="utf-8") as f:
+            cells = json.load(f)
+        self.assertEqual([c["status"] for c in cells], ["crashed"], "сбой не записан как crashed-ячейка")
+
 
 class DraftEvalTest(unittest.TestCase):
     """eval_draft.py: метрика C по черновику, без единого вызова писателя."""

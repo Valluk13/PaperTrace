@@ -15,6 +15,7 @@ CHUNK_SIZE = 500
 CHUNK_OVERLAP = 50
 TOP_K = 8
 RELIABILITY_THRESHOLD = 0.5
+RAG_FAILURE_LIMIT = 3   # столько падений векторного поиска подряд ещё терпимо; на четвёртом прогон встанет сам
 
 _rag_failures = 0   # сколько раз подряд векторный поиск упал: нули в метриках B/C могут быть его виной
 
@@ -101,6 +102,34 @@ def chunk_page(text: str, size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) 
     return chunks
 
 
+_chroma = None
+
+
+def _get_chroma():
+    """Один EphemeralClient на процесс вместо нового на каждый вызов узла.
+
+    Честно про память (замер на машине тимлида, 30 вызовов узла): до правки +198 МБ, после +180 МБ.
+    То есть общий клиент растёт почти так же быстро — утечка не в объекте клиента, а внутри
+    ephemeral-пути chromadb, примерно 6 МБ на вызов (на тему в двух режимах ~12 МБ). Правка нужна,
+    чтобы индексы не копились до конца прогона, но ночной запас памяти она не создаёт: настоящее
+    решение — одна переиспользуемая коллекция вместо create/delete на каждый вызов, его делает
+    владелец файла; замеры приложены к задаче.
+    """
+    global _chroma
+    import chromadb
+    if _chroma is None:
+        _chroma = chromadb.EphemeralClient()
+    return _chroma
+
+
+def _drop_collection(client, name: str) -> None:
+    """Коллекция живёт один вызов: с общим клиентом неудаляемые индексы копились бы до конца прогона."""
+    try:
+        client.delete_collection(name)
+    except Exception as e:
+        print(f"[Reliability] коллекция {name} не удалена (память растёт до конца прогона): {e!r}")
+
+
 def build_index_and_retrieve(papers: List[PaperMeta], queries: List[str], top_k: int = TOP_K) -> List[DocumentChunk]:
     global _rag_failures
     import chromadb  # ImportError должен убивать запуск громко, а не превращаться в пустой обзор
@@ -115,26 +144,34 @@ def build_index_and_retrieve(papers: List[PaperMeta], queries: List[str], top_k:
         return []
 
     try:
-        client = chromadb.EphemeralClient()
-        col = client.create_collection(name=f"pt_{uuid.uuid4().hex[:12]}")
-        for i in range(0, len(docs), 500):
-            col.add(ids=ids[i:i + 500], documents=docs[i:i + 500], metadatas=metas[i:i + 500])
+        client = _get_chroma()
+        name = f"pt_{uuid.uuid4().hex[:12]}"
+        col = client.create_collection(name=name)
+        try:
+            for i in range(0, len(docs), 500):
+                col.add(ids=ids[i:i + 500], documents=docs[i:i + 500], metadatas=metas[i:i + 500])
 
-        best: Dict[str, DocumentChunk] = {}
-        for q in queries:
-            res = col.query(query_texts=[q], n_results=min(top_k, len(docs)))
-            for cid, doc, meta, dist in zip(res["ids"][0], res["documents"][0], res["metadatas"][0], res["distances"][0]):
-                relevance = round(1.0 / (1.0 + float(dist)), 4)
-                if cid not in best or relevance > best[cid].relevance_score:
-                    best[cid] = DocumentChunk(chunk_id=cid, arxiv_id=meta["arxiv_id"], paper_title=meta["title"],
-                                              page_number=int(meta["page"]), text=doc, relevance_score=relevance)
-        result = sorted(best.values(), key=lambda c: c.relevance_score, reverse=True)[:top_k]
+            best: Dict[str, DocumentChunk] = {}
+            for q in queries:
+                res = col.query(query_texts=[q], n_results=min(top_k, len(docs)))
+                for cid, doc, meta, dist in zip(res["ids"][0], res["documents"][0], res["metadatas"][0], res["distances"][0]):
+                    relevance = round(1.0 / (1.0 + float(dist)), 4)
+                    if cid not in best or relevance > best[cid].relevance_score:
+                        best[cid] = DocumentChunk(chunk_id=cid, arxiv_id=meta["arxiv_id"], paper_title=meta["title"],
+                                                  page_number=int(meta["page"]), text=doc, relevance_score=relevance)
+            result = sorted(best.values(), key=lambda c: c.relevance_score, reverse=True)[:top_k]
+        finally:
+            _drop_collection(client, name)
         _rag_failures = 0
         return result
     except Exception as e:  # сбой векторной базы не роняет граф, но обязан быть слышен в логе
         _rag_failures += 1
         print(f"[Reliability] !!! ВЕКТОРНЫЙ ПОИСК УПАЛ ({_rag_failures} раз подряд): {e!r}. "
               f"Чанков нет — писатель останется без источников, метрики B/C по этой теме неверны.")
+        if _rag_failures >= RAG_FAILURE_LIMIT:
+            raise RuntimeError(
+                f"векторный поиск не отдал ни одного чанка ({_rag_failures} сбоя подряд): дальше прогон "
+                f"будет писать пустые обзоры за живые деньги. Чинить chromadb/ONNX, затем resume.") from e
         return []
 
 

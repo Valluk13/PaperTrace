@@ -90,6 +90,34 @@ def _atomic_dump(path: str, obj) -> bool:
 
 
 # ---------------------------------------------------------------------------
+# Охрана памяти: ephemeral-индекс в chromadb прибавляет несколько МБ на каждый вызов узла и не
+# отдаёт их обратно, а ночной прогон из 35 тем идёт на ноутбуке с 15 ГБ оперативной памяти.
+# Без остановки OOM приходит молча посреди оплаченной ячейки и сносит процесс вместе с итогами.
+# ---------------------------------------------------------------------------
+MEM_FLOOR_MB = 900
+
+
+def free_ram_mb() -> Optional[float]:
+    """Свободная память в МБ; на системах кроме Windows возвращает None (проверка выключается)."""
+    if sys.platform != "win32":
+        return None
+    import ctypes
+
+    class MEMORYSTATUSEX(ctypes.Structure):
+        _fields_ = [("dwLength", ctypes.c_ulong), ("dwMemoryLoad", ctypes.c_ulong),
+                    ("ullTotalPhys", ctypes.c_ulonglong), ("ullAvailPhys", ctypes.c_ulonglong),
+                    ("ullTotalPageFile", ctypes.c_ulonglong), ("ullAvailPageFile", ctypes.c_ulonglong),
+                    ("ullTotalVirtual", ctypes.c_ulonglong), ("ullAvailVirtual", ctypes.c_ulonglong),
+                    ("ullAvailExtendedVirtual", ctypes.c_ulonglong)]
+
+    st = MEMORYSTATUSEX()
+    st.dwLength = ctypes.sizeof(MEMORYSTATUSEX)
+    if not ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(st)):
+        return None
+    return st.ullAvailPhys / 1024 / 1024
+
+
+# ---------------------------------------------------------------------------
 # Кэш ответов судьи (экономит токены и время при повторных прогонах)
 # ---------------------------------------------------------------------------
 def _load_cache() -> None:
@@ -252,7 +280,7 @@ def run_mode_bc(query: str, full: bool) -> dict:
 
 
 def cell_status(run: dict, metrics: dict) -> str:
-    """Почему ячейка пуста — осознанный ответ системы или сбой. По этому resume решает, платить за неё ещё раз."""
+    """Почему ячейка пуста — осознанный ответ системы или сбой. По статусу resume решает, платить ли за неё ещё раз."""
     text = (run.get("final") or "").strip()
     if text.startswith(GUARD_BLOCK_TEXT[:20]):
         return "guard_blocked"
@@ -261,6 +289,17 @@ def cell_status(run: dict, metrics: dict) -> str:
     if not metrics.get("total_claims") and not text:
         return "crashed"
     return "ok"
+
+
+def rag_is_dead() -> bool:
+    """Лёгкий способ убить всю ночь: сломанный векторный поиск. Узел reliability падает после
+    RAG_FAILURE_LIMIT подряд пустых индексов, но до него граф уже успевает оплатить планировщик,
+    а оставшиеся темы оплатили бы его снова ради заведомо пустых ячеек. Прогон надо остановить."""
+    try:
+        import reliability_rag as rag
+    except Exception:
+        return False
+    return getattr(rag, "_rag_failures", 0) >= getattr(rag, "RAG_FAILURE_LIMIT", 3)
 
 
 # ---------------------------------------------------------------------------
@@ -417,13 +456,18 @@ def main():
     if args.limit:
         cases = cases[:args.limit]
 
+    mem_guard = os.getenv("MEM_GUARD_MB", "").strip()
+    mem_floor = int(mem_guard) if mem_guard.isdigit() else MEM_FLOOR_MB
+    stopped_low_mem = False
     for case in cases:
+        worked = False   # память смотрим после темы с реальной работой, а не после полностью пропущенной
         for m in args.modes:
             key = (case.question_id, MODE_NAMES[m])
             if key in done:
                 print(f"[Eval] {case.question_id}/{m} уже есть — пропускаю")
                 continue
             print(f"\n=== {case.question_id} | режим {m.upper()} ===")
+            worked = True
             old = pending.pop(key, None)
             if old is not None and old.review_text:
                 # Текст уже оплачен: пересчитываем метрики по нему, не гоняя писателя и граф заново.
@@ -443,6 +487,10 @@ def main():
                                                   claim_support_rate=0.0, page_accuracy_rate=0.0,
                                                   latency_sec=0.0, total_tokens=0, status="crashed"))
                     _flush(results, args.out)
+                    if rag_is_dead():
+                        sys.exit("ОСТАНОВ: векторный поиск умер — остальные темы оплатили бы планировщик "
+                                 "ради заведомо пустых ячеек. Чинить reliability_rag/chromadb, затем "
+                                 "повторный запуск этой же команды (resume добьёт недостающее).")
                     continue
             text, draft = run["final"], run["draft"]
             claims = parse_cited_claims(text)
@@ -474,9 +522,19 @@ def main():
             print({k: v for k, v in res.model_dump().items()
                    if k not in ("review_text", "draft_text", "claims", "claim_checks")})
             _flush(results, args.out)
+        avail = free_ram_mb() if worked else None
+        if avail is not None and avail < mem_floor:
+            print(f"[Eval] ОСТАНОВ по памяти: свободно {avail:.0f} МБ, планка {mem_floor} МБ. "
+                  f"Следующая тема, скорее всего, убила бы процесс посреди прогона. Ячейки сохранены — "
+                  f"повторный запуск тем же командой добирает только недостающее. "
+                  f"Причина роста — векторный поиск (ephemeral-индексы в reliability_rag), а не кэш судьи.")
+            stopped_low_mem = True
+            break
 
     _save_cache()
     table = summarize(results)
+    if stopped_low_mem:
+        table += "\n!!! Прогон остановлен охраной памяти: таблицы неполные, перезапустите той же командой.\n"
     table += (f"\n\nСудья за этот прогон: {_judge_tokens} токенов (всего накоплено — в eval_run_meta.json). "
               f"Колонка «Токенов» в таблице считает только писателя и узлы графа; полная стоимость прогона = сумма обеих цифр.\n")
     _safe_write("results_table.md", table + "\n")
