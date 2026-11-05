@@ -44,3 +44,9 @@ for query, expected in TOPICS:
 
 print(f"\nИТОГО Recall@{K_BATTLE}  = {hits6}/{total} = {hits6/total:.2f}")
 print(f"ИТОГО Recall@{K_DEEP} = {hits25}/{total} = {hits25/total:.2f}")
+print("\nКак читать: Recall@6 близок к нулю НЕ потому, что поиск плохой. Кандидаты из OpenAlex "
+      "дописываются в список после round-robin по arXiv, а в боевую выборку попадают первые "
+      f"{K_BATTLE} (MAX_PAPERS), поэтому эталонные статьи, найденные только через OpenAlex, "
+      "физически не успевают попасть в топ-6. Recall@25 показывает потолок того же поисковика. "
+      "Лечится перестановкой кандидатов в arxiv_searcher._candidate_ids — осознанно отложено, "
+      "чтобы не ломать сопоставимость с уже снятыми цифрами бенчмарка.")
