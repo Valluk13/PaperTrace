@@ -59,7 +59,9 @@ class EvalCase(BaseModel):
 
 
 class ModeEvalResult(BaseModel):
-    mode: Literal["mode_a_chat", "mode_b_vanilla_rag", "mode_c_papertrace"]
+    # mode_c_draft — тот же режим C, но посчитанный по черновику до верификатора (eval_draft.py),
+    # чтобы сравнение с B не было круговым.
+    mode: Literal["mode_a_chat", "mode_b_vanilla_rag", "mode_c_papertrace", "mode_c_draft"]
     question_id: str
     total_claims: int
     citation_existence_rate: float

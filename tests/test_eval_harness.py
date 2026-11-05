@@ -161,6 +161,69 @@ class HarnessOfflineTest(unittest.TestCase):
         self.assertEqual(len(again), 2, "заблокированная ячейка ушла из файла и просит повторной оплаты")
 
 
+class DraftEvalTest(unittest.TestCase):
+    """eval_draft.py: метрика C по черновику, без единого вызова писателя."""
+
+    def setUp(self):
+        self.work = tempfile.mkdtemp(prefix="ed_test_")
+        self.addCleanup(shutil.rmtree, self.work, True)
+        self._old_cwd = os.getcwd()
+        os.chdir(self.work)
+        self.addCleanup(os.chdir, self._old_cwd)
+        eb._cache.clear()
+        import eval_draft as ed
+        self.ed = ed
+
+    def _cells(self):
+        draft = ("Надёжный тезис [arXiv:2401.00001, стр. 1]. "
+                 "Выдуманный тезис [arXiv:2401.00002, стр. 2]. "
+                 "Ложная ссылка [arXiv:2401.99999, стр. 9].")
+        return [
+            {"mode": "mode_b_vanilla_rag", "question_id": "q01", "total_claims": 3,
+             "citation_existence_rate": 1.0, "claim_support_rate": 0.33, "page_accuracy_rate": 0.33,
+             "latency_sec": 2.0, "total_tokens": 20, "review_text": draft, "draft_text": draft},
+            {"mode": "mode_c_papertrace", "question_id": "q01", "total_claims": 1,
+             "citation_existence_rate": 1.0, "claim_support_rate": 1.0, "page_accuracy_rate": 1.0,
+             "latency_sec": 3.0, "total_tokens": 30,
+             "review_text": "Надёжный тезис [arXiv:2401.00001, стр. 1].", "draft_text": draft},
+            {"mode": "mode_c_papertrace", "question_id": "q02", "total_claims": 0,
+             "citation_existence_rate": 0.0, "claim_support_rate": 0.0, "page_accuracy_rate": 0.0,
+             "latency_sec": 0.5, "total_tokens": 5, "status": "no_sources",
+             "review_text": eb.NO_SOURCES_TEXT, "draft_text": eb.NO_SOURCES_TEXT},
+        ]
+
+    def test_draft_metrics_and_table(self):
+        with open("eval_results.json", "w", encoding="utf-8") as f:
+            json.dump(self._cells(), f)
+
+        def judge_only(llm, system, user):
+            assert "fact-checking judge" in system, "eval_draft не должен звать писателя"
+            if "self-attention" in user:
+                return json.dumps({"supported": True, "quote": "Transformers use self-attention"}), 40
+            return json.dumps({"supported": False, "quote": ""}), 40
+
+        pages = {1: "Transformers use self-attention over tokens. " * 30,
+                 2: "The model was fine-tuned on 40GB of text. " * 30}
+        with mock.patch.object(eb, "ask", side_effect=judge_only), \
+             mock.patch.object(self.ed, "get_llm", return_value=FakeLLM()), \
+             mock.patch.object(eb, "pages_of",
+                               side_effect=lambda aid: None if aid.endswith("99999") else dict(pages)), \
+             mock.patch.object(sys, "argv", ["eval_draft.py", "--results", "eval_results.json"]):
+            self.ed.main()
+
+        with open("eval_results_draft.json", encoding="utf-8") as f:
+            rows = json.load(f)
+        self.assertEqual(len(rows), 1, "строка черновика должна быть только у C с реальным текстом")
+        r = rows[0]
+        self.assertEqual(r["mode"], "mode_c_draft")
+        self.assertEqual(r["total_claims"], 3)
+        self.assertEqual(r["claims_written"], 3, "верификатор выбросил 2 тезиса из 3 — это надо публиковать")
+        self.assertEqual(r["citation_existence_rate"], 0.667)
+        self.assertEqual(r["claim_support_rate"], 0.333, "по черновику support ниже, чем по финалу")
+        with open("results_table_draft.md", encoding="utf-8") as f:
+            self.assertIn("mode_c_draft", f.read(), "новый режим не попал в таблицу сравнения")
+
+
 class PureFunctionTest(unittest.TestCase):
     def test_ligatures_and_cyrillic(self):
         lig = "The ﬁle shows a ﬂaw in the analysis."

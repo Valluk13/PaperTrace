@@ -291,7 +291,8 @@ def summarize(results: List[ModeEvalResult]) -> str:
                 f"{avg(lambda r: r.page_accuracy_rate):.2f} | {recall_cell} | "
                 f"{avg(lambda r: r.latency_sec):.0f} | {avg(lambda r: r.total_tokens):.0f} |")
 
-    modes = [m for m in MODE_NAMES.values() if any(r.mode == m for r in results)]
+    # mode_c_draft из eval_draft.py попадёт сюда так же, как три основных режима.
+    modes = [m for m in sorted({r.mode for r in results})]
     lines = ["Таблица 1. Все ячейки по каждому режиму (наборы тем между режимами могут различаться):",
              header, rule]
     for mode in modes:
@@ -392,7 +393,8 @@ def main():
     done: set = set()
     if os.path.exists(args.out) and not args.fresh:
         try:
-            prev = json.load(open(args.out, encoding="utf-8"))
+            with open(args.out, encoding="utf-8") as f:
+                prev = json.load(f)
             for item in prev:
                 r = ModeEvalResult(**item)
                 # Пустая ячейка без текста — это прошлый сбой: его добиваем.
@@ -410,7 +412,8 @@ def main():
                       f"{', '.join(q + '/' + mo.split('_')[1][0] for q, mo in sorted(pending))}")
         except Exception as e:
             print(f"[Eval] не удалось прочитать {args.out}: {e!r}")
-    cases = [EvalCase(**x) for x in json.load(open(args.dataset, encoding="utf-8"))]
+    with open(args.dataset, encoding="utf-8") as f:
+        cases = [EvalCase(**x) for x in json.load(f)]
     if args.limit:
         cases = cases[:args.limit]
 
