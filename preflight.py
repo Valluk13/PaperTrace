@@ -1,4 +1,6 @@
-# Preflight: запусти за полчаса до ночного прогона — 30 секунд, экономят ночь. Команда: python preflight.py
+# Preflight: запусти за полчаса до ночного прогона — минута, экономят ночь.
+# Команда: python preflight.py [датасет] [--guard]
+#          python preflight.py eval_dataset_big.json --guard   # ещё и прогон guard'ом по всем темам (1 запрос на тему)
 import os
 import sys
 
@@ -39,4 +41,62 @@ txt, tok = common.ask(judge, "Reply with the single word: ok", "ping")
 print(f"Судья OK ({os.getenv('JUDGE_MODEL')}), токенов={tok}")
 if not (os.getenv("OPENALEX_MAILTO") or "").strip():
     print("ПРЕДУПРЕЖДЕНИЕ: OPENALEX_MAILTO пустой — OpenAlex даст общий вежливый пул и 429 под нагрузкой")
+
+# --- Ниже то, что реально валит ночной прогон, но раньше не проверялось -------------------------
+import json
+import shutil
+
+try:
+    import arxiv as _arxiv
+    _one = next(_arxiv.Client(page_size=1, delay_seconds=1.0, num_retries=1).results(
+        _arxiv.Search(query="all:transformer", max_results=1)), None)
+    if _one is None:
+        sys.exit("ПРЕФЛАЙТ: arXiv ответил пусто на заведомый запрос — узел поиска даст 0 статей")
+    print(f"arXiv OK, первая же статья: {_one.get_short_id()}")
+except Exception as e:
+    sys.exit(f"ПРЕФЛАЙТ: arXiv не отвечает ({e!r}) — прогон начнётся и упадёт на первой теме")
+
+_dataset = sys.argv[1] if len(sys.argv) > 1 and not sys.argv[1].startswith("--") else "eval_dataset.json"
+cases = []
+if os.path.exists(_dataset):
+    try:
+        cases = json.load(open(_dataset, encoding="utf-8"))
+    except Exception as e:
+        sys.exit(f"ПРЕФЛАЙТ: не читается {_dataset}: {e!r}")
+else:
+    print(f"ПРЕДУПРЕЖДЕНИЕ: {_dataset} не найден — проверяю место «на глаз» по 35 темам")
+    cases = [{}] * 35
+
+# PDF-ы статей переживают прогон и докачиваются по ходу, но свободное место кончается внезапно.
+import arxiv_searcher as _az
+need_mb = len(cases) * _az.MAX_PAPERS * 3
+free_mb = shutil.disk_usage(".").free // (1024 * 1024)
+print(f"Места на диске: {free_mb} МБ, нужно ~{need_mb} МБ на {len(cases)} тем")
+if free_mb < need_mb:
+    sys.exit(f"ПРЕФЛАЙТ: места меньше {need_mb} МБ — докачка PDF оборвётся посреди прогона")
+
+for name in ("verifier_api", "arxiv_searcher", "reliability_rag"):
+    if not os.path.exists(f"{name}.py"):
+        sys.exit(f"ПРЕФЛАЙТ: нет файла {name}.py — граф на таких узлах останавливается (моки отключены)")
+
+if "--guard" in sys.argv:
+    # По одному запросу LLM на тему. Дешевле, чем обнаружить на 20-й теме, что guard съедает её из каждого режима.
+    from verifier_api import security_guard_node
+    blocked = []
+    for c in cases:
+        q = c.get("user_query")
+        if not q:
+            continue
+        try:
+            ok = security_guard_node({"user_query": q}).get("is_safe_query", True)
+        except Exception as e:
+            sys.exit(f"ПРЕФЛАЙТ: guard упал на теме {c.get('question_id')}: {e!r}")
+        if not ok:
+            blocked.append(c.get("question_id"))
+    if blocked:
+        print(f"ПРЕДУПРЕЖДЕНИЕ: guard блокирует {len(blocked)} тем: {', '.join(blocked)}. "
+              f"В B/C эти ячейки останутся без тезисов, и сравнение режимов по ним невозможно.")
+    else:
+        print("Guard: все темы датасета пропущены")
+
 print("ПРЕФЛАЙТ ПРОЙДЕН — можно запускать бенчмарк")
