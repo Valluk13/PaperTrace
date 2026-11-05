@@ -26,7 +26,6 @@ from state import EvalCase, ModeEvalResult
 CACHE_PATH = "eval_cache.json"
 _cache: Dict[str, dict] = {}
 _pages_cache: Dict[str, Optional[Dict[int, str]]] = {}
-_missing: set = set()
 _judge_tokens = 0   # судья оплачивается отдельно от писателя; раньше эти токены выбрасывались
 
 MODE_NAMES = {"a": "mode_a_chat", "b": "mode_b_vanilla_rag", "c": "mode_c_papertrace"}
@@ -91,17 +90,15 @@ def _save_cache() -> None:
 
 
 def pages_of(arxiv_id: str) -> Optional[Dict[int, str]]:
-    """None = статьи точно нет (кэшируется). Сетевые ошибки пробрасываются наверх:
-    сбой сети не должен превращаться в «статья не существует»."""
+    """None = статьи точно нет. Сетевые ошибки пробрасываются наверх:
+    сбой сети не должен превращаться в «статья не существует».
+    Отрицательный результат НЕ кэшируется: один таймаут arXiv не должен
+    обнулять существование ссылки во всех остальных ячейках прогона."""
     if arxiv_id in _pages_cache:
         return _pages_cache[arxiv_id]
-    if arxiv_id in _missing:
-        return None
     p = get_paper_pages(arxiv_id)  # исключение пробрасывается вызывающему
     if p:
         _pages_cache[arxiv_id] = p
-    else:
-        _missing.add(arxiv_id)
     return p
 
 
