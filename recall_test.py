@@ -1,5 +1,8 @@
 # Файл: recall_test.py
 # Замер полноты поиска (Recall) для узла arxiv_searcher.
+# Печатает ДВЕ метрики по каждой теме и в итоге:
+#   Recall@6  — «боевой» режим: в проде MAX_PAPERS = 6, система забирает только топ-6 кандидатов;
+#   Recall@25 — «глубокий» режим: диагностический потолок поисковика по топ-25 кандидатам.
 # Запуск: python recall_test.py  (займёт 15-30 минут — качает PDF, не прерывать!)
 
 import arxiv_searcher as S
@@ -19,15 +22,25 @@ TOPICS = [
     ("LLM feedback on scientific papers and peer review", ["2310.01783"]),
 ]
 
-S.MAX_PAPERS = 25   # для замера поднимаем лимит (в бою хватает 6)
+K_BATTLE = 6    # боевой лимит: столько статей реально забирает система (MAX_PAPERS в проде)
+K_DEEP = 25     # глубина диагностического прогона
 
-hits = total = 0
+S.MAX_PAPERS = K_DEEP   # делаем ОДИН глубокий прогон на тему (в бою хватает 6)
+
+hits6 = hits25 = total = 0
 for query, expected in TOPICS:
     out = S.arxiv_search_node({"user_query": query, "search_queries": [query], "found_papers": []})
-    found = {p.arxiv_id for p in out["found_papers"]}
-    ok = sum(1 for e in expected if S.clean_id(e) in found)
-    hits += ok
-    total += len(expected)
-    print(f"{ok}/{len(expected)}  {query[:60]}")
+    # found_papers идут в порядке обхода кандидатов, поэтому топ-6 — это просто первые 6
+    # из глубокого прогона: отдельный прогон с MAX_PAPERS=6 дал бы тот же набор.
+    found_ids = [S.clean_id(p.arxiv_id) for p in out["found_papers"]]
+    exp = [S.clean_id(e) for e in expected]
+    ok6 = sum(1 for e in exp if e in found_ids[:K_BATTLE])
+    ok25 = sum(1 for e in exp if e in found_ids)
+    hits6 += ok6
+    hits25 += ok25
+    total += len(exp)
+    print(f"Recall@{K_BATTLE} = {ok6}/{len(exp)} = {ok6/len(exp):.2f} | "
+          f"Recall@{K_DEEP} = {ok25}/{len(exp)} = {ok25/len(exp):.2f}   {query[:60]}")
 
-print(f"\nИТОГО Recall = {hits}/{total} = {hits/total:.2f}")
+print(f"\nИТОГО Recall@{K_BATTLE}  = {hits6}/{total} = {hits6/total:.2f}")
+print(f"ИТОГО Recall@{K_DEEP} = {hits25}/{total} = {hits25/total:.2f}")
