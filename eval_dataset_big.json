@@ -1,0 +1,311 @@
+[
+  {
+    "question_id": "q01",
+    "user_query": "Mitigating hallucination in LLM-based scientific literature review",
+    "expected_arxiv_ids": [
+      "2311.05232",
+      "2312.10997",
+      "2409.10102",
+      "2508.05660"
+    ]
+  },
+  {
+    "question_id": "q02",
+    "user_query": "Evaluating RAG systems with LLM-as-a-judge frameworks",
+    "expected_arxiv_ids": [
+      "2306.05685",
+      "2310.17631",
+      "2311.09476"
+    ]
+  },
+  {
+    "question_id": "q03",
+    "user_query": "Defending autonomous LLM agents against indirect prompt injection",
+    "expected_arxiv_ids": [
+      "2406.13352",
+      "2312.14197",
+      "2410.02644"
+    ]
+  },
+  {
+    "question_id": "q04",
+    "user_query": "Multi-agent collaboration for complex reasoning tasks in LangGraph",
+    "expected_arxiv_ids": [
+      "2411.18241",
+      "2404.17729",
+      "2501.06322"
+    ]
+  },
+  {
+    "question_id": "q05",
+    "user_query": "Self-correction and reflection mechanisms in Agentic AI",
+    "expected_arxiv_ids": [
+      "2303.11366",
+      "2303.17651",
+      "2406.15673"
+    ]
+  },
+  {
+    "question_id": "q06",
+    "user_query": "GraphRAG versus standard semantic search for document question answering",
+    "expected_arxiv_ids": [
+      "2404.16130",
+      "2405.16506",
+      "2501.00309"
+    ]
+  },
+  {
+    "question_id": "q07",
+    "user_query": "Cost-effective tool use and API routing in large language models",
+    "expected_arxiv_ids": [
+      "2406.18665",
+      "2403.12031",
+      "2305.05176"
+    ]
+  },
+  {
+    "question_id": "q08",
+    "user_query": "Long-term memory architectures for lifelong learning agents",
+    "expected_arxiv_ids": [
+      "2404.13501",
+      "2310.08560",
+      "2501.07278"
+    ]
+  },
+  {
+    "question_id": "q09",
+    "user_query": "Automated red teaming and jailbreak detection for LLM applications",
+    "expected_arxiv_ids": [
+      "2402.04249",
+      "2404.01318",
+      "2407.16667"
+    ]
+  },
+  {
+    "question_id": "q10",
+    "user_query": "Multi-modal RAG systems for scientific documents with tables and figures",
+    "expected_arxiv_ids": [
+      "2410.10594",
+      "2407.01449",
+      "2607.24799"
+    ]
+  },
+  {
+    "question_id": "q11",
+    "user_query": "Optimization of prompt workflows using evolutionary algorithms",
+    "expected_arxiv_ids": [
+      "2309.16797",
+      "2309.03409",
+      "2309.08532"
+    ]
+  },
+  {
+    "question_id": "q12",
+    "user_query": "Agentic workflows for automated systematic literature reviews",
+    "expected_arxiv_ids": [
+      "2508.05660",
+      "2312.07559",
+      "2501.05468"
+    ]
+  },
+  {
+    "question_id": "q13",
+    "user_query": "Impact of context window size on information retrieval in RAG",
+    "expected_arxiv_ids": [
+      "2411.03538",
+      "2501.01880",
+      "2410.18050"
+    ]
+  },
+  {
+    "question_id": "q14",
+    "user_query": "Benchmarking mathematical reasoning in multi-agent LLM systems",
+    "expected_arxiv_ids": [
+      "2610.26943",
+      "2404.04735",
+      "2607.04394"
+    ]
+  },
+  {
+    "question_id": "q15",
+    "user_query": "Security guardrails for preventing unauthorized tool execution in agents",
+    "expected_arxiv_ids": [
+      "2603.19469",
+      "2406.13352",
+      "2410.02644"
+    ]
+  },
+  {
+    "question_id": "q16",
+    "user_query": "Speculative decoding for accelerating LLM inference",
+    "expected_arxiv_ids": [
+      "2203.16487",
+      "2308.04623",
+      "2503.00491"
+    ]
+  },
+  {
+    "question_id": "q17",
+    "user_query": "Knowledge editing and model editing in large language models",
+    "expected_arxiv_ids": [
+      "2110.11309",
+      "2206.06520",
+      "2608.25100"
+    ]
+  },
+  {
+    "question_id": "q18",
+    "user_query": "Machine unlearning for large language models",
+    "expected_arxiv_ids": [
+      "2402.08787",
+      "2510.16629",
+      "2602.16400"
+    ]
+  },
+  {
+    "question_id": "q19",
+    "user_query": "Watermarking machine-generated text for provenance and detection",
+    "expected_arxiv_ids": [
+      "2306.05540",
+      "2504.17309",
+      "2504.03765"
+    ]
+  },
+  {
+    "question_id": "q20",
+    "user_query": "Post-training quantization for deploying large language models",
+    "expected_arxiv_ids": [
+      "2306.00978",
+      "2402.12065",
+      "2509.16989"
+    ]
+  },
+  {
+    "question_id": "q21",
+    "user_query": "Mixture-of-experts routing and sparsity in large language models",
+    "expected_arxiv_ids": [
+      "2402.14800",
+      "2410.17954",
+      "2603.11114"
+    ]
+  },
+  {
+    "question_id": "q22",
+    "user_query": "Long-context extension: RoPE scaling and position interpolation",
+    "expected_arxiv_ids": [
+      "2509.14391",
+      "2605.15514",
+      "2608.10021"
+    ]
+  },
+  {
+    "question_id": "q23",
+    "user_query": "Alignment beyond RLHF: constitutional AI and direct preference optimization",
+    "expected_arxiv_ids": [
+      "2212.08073",
+      "2305.18290",
+      "2203.02155"
+    ]
+  },
+  {
+    "question_id": "q24",
+    "user_query": "Uncertainty estimation for hallucination detection in LLMs",
+    "expected_arxiv_ids": [
+      "2506.09886",
+      "2603.22812",
+      "2606.06959"
+    ]
+  },
+  {
+    "question_id": "q25",
+    "user_query": "Benchmark data contamination and memorization in language models",
+    "expected_arxiv_ids": [
+      "2407.08716",
+      "2603.03203",
+      "2510.09259"
+    ]
+  },
+  {
+    "question_id": "q26",
+    "user_query": "Retrieval-augmented code generation",
+    "expected_arxiv_ids": [
+      "2402.12317",
+      "2509.25716"
+    ]
+  },
+  {
+    "question_id": "q27",
+    "user_query": "Differential privacy in language model training",
+    "expected_arxiv_ids": [
+      "2110.06500",
+      "2507.01154",
+      "2604.04461"
+    ]
+  },
+  {
+    "question_id": "q28",
+    "user_query": "Faithfulness and limitations of chain-of-thought reasoning",
+    "expected_arxiv_ids": [
+      "2301.13379",
+      "2410.03595",
+      "2503.09567"
+    ]
+  },
+  {
+    "question_id": "q29",
+    "user_query": "Self-consistency and sampling strategies for LLM reasoning",
+    "expected_arxiv_ids": [
+      "2203.11171",
+      "2305.17306"
+    ]
+  },
+  {
+    "question_id": "q30",
+    "user_query": "Vector index structures: HNSW versus IVF trade-offs",
+    "expected_arxiv_ids": [
+      "2411.00970",
+      "2601.11808",
+      "2505.11783"
+    ]
+  },
+  {
+    "question_id": "q31",
+    "user_query": "Citation intent classification in scientific papers",
+    "expected_arxiv_ids": [
+      "1904.01608",
+      "2304.12730",
+      "2505.21162"
+    ]
+  },
+  {
+    "question_id": "q32",
+    "user_query": "Automated generation of scientific surveys with LLMs",
+    "expected_arxiv_ids": [
+      "2406.10252",
+      "2411.18583"
+    ]
+  },
+  {
+    "question_id": "q33",
+    "user_query": "Visual instruction tuning of large multimodal models",
+    "expected_arxiv_ids": [
+      "2402.11690",
+      "2410.02713",
+      "2309.09958"
+    ]
+  },
+  {
+    "question_id": "q34",
+    "user_query": "Chunking strategies and retrieval granularity for RAG",
+    "expected_arxiv_ids": [
+      "2312.06648"
+    ]
+  },
+  {
+    "question_id": "q35",
+    "user_query": "LLM-assisted peer review and feedback on scientific papers",
+    "expected_arxiv_ids": [
+      "2310.01783"
+    ]
+  }
+]
