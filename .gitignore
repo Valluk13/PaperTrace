@@ -9,3 +9,5 @@ results_table.md
 .pytest_cache/
 run_night.log
 *.tmp
+eval_results_full45.json
+run_*.log

@@ -194,16 +194,22 @@ def run_mode_bc(query: str, full: bool) -> Tuple[str, float, int, list]:
 # Главный цикл и отчёт
 # ---------------------------------------------------------------------------
 def summarize(results: List[ModeEvalResult]) -> str:
-    lines = ["| Режим | Вопросов | Утверждений (ср.) | Существование ссылок | Подтверждено текстом | Верная страница | Recall@K | Время, с | Токенов |",
-             "|---|---|---|---|---|---|---|---|---|"]
+    lines = ["| Режим | Ячеек | Без данных | Утверждений (ср.) | Существование ссылок | Подтверждено текстом | Верная страница | Recall@K | Время, с | Токенов |",
+             "|---|---|---|---|---|---|---|---|---|---|"]
     for mode in MODE_NAMES.values():
-        rs = [r for r in results if r.mode == mode]
+        all_rs = [r for r in results if r.mode == mode]
+        if not all_rs:
+            continue
+        # Ячейка без единого тезиса — это не «плохая система», а сбой (429, блокировка guard'ом):
+        # в среднее она не входит, иначе таблица занижает метрики ровно на число упавших запросов.
+        rs = [r for r in all_rs if r.total_claims > 0]
         if not rs:
+            lines.append(f"| {mode} | {len(all_rs)} | {len(all_rs)} | — | — | — | — | — | — | — |")
             continue
         recalls = [r.search_recall for r in rs if r.search_recall is not None]
         recall_cell = f"{sum(recalls) / len(recalls):.2f}" if recalls else "—"
         avg = lambda f: sum(f(r) for r in rs) / len(rs)
-        lines.append(f"| {mode} | {len(rs)} | {avg(lambda r: r.total_claims):.1f} | "
+        lines.append(f"| {mode} | {len(all_rs)} | {len(all_rs) - len(rs)} | {avg(lambda r: r.total_claims):.1f} | "
                      f"{avg(lambda r: r.citation_existence_rate):.2f} | {avg(lambda r: r.claim_support_rate):.2f} | "
                      f"{avg(lambda r: r.page_accuracy_rate):.2f} | {recall_cell} | "
                      f"{avg(lambda r: r.latency_sec):.0f} | {avg(lambda r: r.total_tokens):.0f} |")
@@ -238,9 +244,14 @@ def main():
         try:
             prev = json.load(open(args.out, encoding="utf-8"))
             results = [ModeEvalResult(**r) for r in prev]
+            retry = [r for r in results if r.total_claims == 0]
+            results = [r for r in results if r.total_claims > 0]
             done = {(r.question_id, r.mode) for r in results}
             if done:
                 print(f"[Eval] возобновление: уже сделано ячеек {len(done)} (--fresh — начать заново)")
+            if retry:
+                print(f"[Eval] добираю {len(retry)} пустых ячеек: "
+                      f"{', '.join(r.question_id + '/' + r.mode.split('_')[1][0] for r in retry)}")
         except Exception as e:
             print(f"[Eval] не удалось прочитать {args.out}: {e!r}")
     cases = [EvalCase(**x) for x in json.load(open(args.dataset, encoding="utf-8"))]
