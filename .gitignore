@@ -11,3 +11,7 @@ run_night.log
 *.tmp
 eval_results_full45.json
 run_*.log
+judge_sample_raw.json
+mode_d_details.json
+eval_results*.json
+.idea/
