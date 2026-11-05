@@ -7,3 +7,5 @@ eval_cache.json
 eval_results.json
 results_table.md
 .pytest_cache/
+run_night.log
+*.tmp

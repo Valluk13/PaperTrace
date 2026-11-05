@@ -83,23 +83,51 @@ def _query_variants(query: str) -> List[str]:
     return variants
 
 
-def openalex_candidate_ids(query: str, per_page: int = 15) -> List[str]:
-    """arXiv ID статей из топа поиска OpenAlex. OpenAlex учитывает цитирования, поэтому
-    находит канонические обзоры, которые arXiv-релевантность выдаёт низко."""
-    import requests
-    params = {"search": query, "per_page": per_page}
+_openalex_last = [0.0]
+OPENALEX_MIN_INTERVAL = 1.2   # не чаще ~1 запроса в 1.2 с: пачка без паузы ловила 429
+
+
+def _openalex_params(base: dict) -> dict:
+    params = dict(base)
     key = os.getenv("OPENALEX_API_KEY")
     if key:
         params["api_key"] = key
-    if os.getenv("OPENALEX_MAILTO"):
-        params["mailto"] = os.getenv("OPENALEX_MAILTO")
+    mailto = os.getenv("OPENALEX_MAILTO")
+    if mailto:
+        params["mailto"] = mailto
+    return params
+
+
+def _openalex_get(params: dict, timeout: int):
+    """Запрос к OpenAlex с паузой между запросами и одним ретраем на 429.
+    Раньше 429 означал молчаливую потерю канала кандидатов — того, который и должен
+    находить канонические обзоры, низко ранжируемые на arXiv."""
+    import requests
+    resp = None
+    for attempt in (0, 1):
+        wait = _openalex_last[0] + OPENALEX_MIN_INTERVAL - time.time()
+        if wait > 0:
+            time.sleep(wait)
+        resp = requests.get("https://api.openalex.org/works", params=params, timeout=timeout)
+        _openalex_last[0] = time.time()
+        if resp.status_code == 429 and attempt == 0:
+            time.sleep(4)
+            continue
+        return resp
+    return resp
+
+
+def openalex_candidate_ids(query: str, per_page: int = 15) -> List[str]:
+    """arXiv ID статей из топа поиска OpenAlex. OpenAlex учитывает цитирования, поэтому
+    находит канонические обзоры, которые arXiv-релевантность выдаёт низко."""
+    params = _openalex_params({"search": query, "per_page": per_page})
     try:
-        resp = requests.get("https://api.openalex.org/works", params=params, timeout=15)
+        resp = _openalex_get(params, 15)
     except Exception as e:
         _warn_once(f"OpenAlex недоступен: {e}")
         return []
     if resp.status_code != 200:
-        _warn_once(f"OpenAlex вернул код {resp.status_code} (проверьте ключ и лимиты)")
+        _warn_once(f"OpenAlex вернул код {resp.status_code} (проверьте OPENALEX_MAILTO и лимиты)")
         return []
     ids = []
     for work in resp.json().get("results", []):
@@ -118,20 +146,14 @@ def fetch_openalex_venue(title: str) -> Optional[str]:
     или единственный источник это сам arXiv, вернёт None.
     Базовый API OpenAlex бесплатен и работает БЕЗ ключа: достаточно указать свою почту
     в переменной OPENALEX_MAILTO. Если ключ OPENALEX_API_KEY всё же есть, подставится сам."""
-    import requests
-    params = {"search": title, "per_page": 3}
-    key = os.getenv("OPENALEX_API_KEY")
-    if key:
-        params["api_key"] = key
-    if os.getenv("OPENALEX_MAILTO"):
-        params["mailto"] = os.getenv("OPENALEX_MAILTO")
+    params = _openalex_params({"search": title, "per_page": 3})
     try:
-        resp = requests.get("https://api.openalex.org/works", params=params, timeout=10)
+        resp = _openalex_get(params, 10)
     except Exception as e:
         _warn_once(f"OpenAlex недоступен: {e}")
         return None
     if resp.status_code != 200:
-        _warn_once(f"OpenAlex вернул код {resp.status_code} (проверьте ключ и лимиты)")
+        _warn_once(f"OpenAlex вернул код {resp.status_code} (проверьте OPENALEX_MAILTO и лимиты)")
         return None
     for work in resp.json().get("results", []):
         similarity = difflib.SequenceMatcher(None, title.lower(), (work.get("title") or "").lower()).ratio()
@@ -145,10 +167,10 @@ def fetch_openalex_venue(title: str) -> Optional[str]:
 
 def parse_pdf_pages(pdf_path: str, max_pages: int = MAX_PAGES) -> Dict[int, str]:
     """{номер страницы PDF (с 1): текст}. Это номер страницы файла, а не печатный номер на листе."""
-    import fitz  # PyMuPDF
+    import pymupdf  # алиас fitz объявлен устаревшим и будет удалён в будущих 2.x
     pages: Dict[int, str] = {}
     try:
-        doc = fitz.open(pdf_path)
+        doc = pymupdf.open(pdf_path)
         for i in range(min(len(doc), max_pages)):
             text = doc[i].get_text("text").strip()
             if text:

@@ -16,6 +16,8 @@ CHUNK_OVERLAP = 50
 TOP_K = 8
 RELIABILITY_THRESHOLD = 0.5
 
+_rag_failures = 0   # сколько раз подряд векторный поиск упал: нули в метриках B/C могут быть его виной
+
 CODE_RE = re.compile(r"(github\.com|gitlab\.com|huggingface\.co|zenodo\.org)/[\w.\-]+", re.I)
 LIMITATIONS_RE = re.compile(r"\blimitations?\b", re.I)
 HEADING_RE = re.compile(r"^(\d+(\.\d+)*\.?\s+[A-Z][A-Za-z ,:\-]{2,60}|[A-Z][A-Z ]{3,40})$")
@@ -100,7 +102,8 @@ def chunk_page(text: str, size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) 
 
 
 def build_index_and_retrieve(papers: List[PaperMeta], queries: List[str], top_k: int = TOP_K) -> List[DocumentChunk]:
-    import chromadb
+    global _rag_failures
+    import chromadb  # ImportError должен убивать запуск громко, а не превращаться в пустой обзор
     ids, docs, metas = [], [], []
     for p in papers:
         for page, text in p.pages_text.items():
@@ -125,9 +128,13 @@ def build_index_and_retrieve(papers: List[PaperMeta], queries: List[str], top_k:
                 if cid not in best or relevance > best[cid].relevance_score:
                     best[cid] = DocumentChunk(chunk_id=cid, arxiv_id=meta["arxiv_id"], paper_title=meta["title"],
                                               page_number=int(meta["page"]), text=doc, relevance_score=relevance)
-        return sorted(best.values(), key=lambda c: c.relevance_score, reverse=True)[:top_k]
-    except Exception as e:  # сбой векторной базы не должен ронять весь граф
-        print(f"[Reliability] ChromaDB недоступна, векторный поиск пропущен: {e!r}")
+        result = sorted(best.values(), key=lambda c: c.relevance_score, reverse=True)[:top_k]
+        _rag_failures = 0
+        return result
+    except Exception as e:  # сбой векторной базы не роняет граф, но обязан быть слышен в логе
+        _rag_failures += 1
+        print(f"[Reliability] !!! ВЕКТОРНЫЙ ПОИСК УПАЛ ({_rag_failures} раз подряд): {e!r}. "
+              f"Чанков нет — писатель останется без источников, метрики B/C по этой теме неверны.")
         return []
 
 
@@ -162,6 +169,9 @@ def reliability_and_rag_node(state: AgentState) -> dict:
 
     queries = state.get("search_queries") or [state["user_query"]]
     chunks = build_index_and_retrieve(reliable, queries)
+    if reliable and not chunks:
+        print(f"[Reliability] !!! {len(reliable)} надёжных статей, но 0 чанков: "
+              f"сбой индексации или пустые страницы — обзор будет пустым")
     return {"found_papers": scored, "reliable_papers": reliable, "retrieved_chunks": chunks,
             "latency_sec": round(time.time() - t0, 3), "total_tokens": tokens}
 

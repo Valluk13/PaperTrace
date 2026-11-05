@@ -1,9 +1,11 @@
-langgraph
-langchain-openai
-langchain-core
-pydantic>=2
+# Версии зафиксированы по рабочему venv и проверены живым запуском.
+# arxiv 4.x ломает API (нет Result.download_pdf), поэтому мажоры менять нельзя.
+langgraph==1.2.16
+langchain-openai==1.7.2
+langchain-core==1.6.12
+pydantic==2.14.1
 arxiv==2.1.3
-pymupdf
-requests
-chromadb
-python-dotenv
+pymupdf==1.28.2
+requests==2.32.5
+chromadb==1.5.9
+python-dotenv==1.2.4

@@ -41,19 +41,51 @@ JUDGE_SYSTEM = (
 
 
 # ---------------------------------------------------------------------------
+# Запись файлов. Блокировка файла (синхронизация облака, антивирус, редактор) —
+# штатная ситуация, а не причина убивать многочасовой прогон.
+# ---------------------------------------------------------------------------
+def _safe_write(path: str, data: str, *, retries: int = 4) -> bool:
+    tmp = f"{path}.{os.getpid()}.tmp"          # PID: параллельные процессы не затирают чужой tmp
+    try:
+        with open(tmp, "w", encoding="utf-8") as f:
+            f.write(data)
+            f.flush()
+            os.fsync(f.fileno())
+        for attempt in range(retries):
+            try:
+                os.replace(tmp, path)          # атомарно: либо старый файл, либо новый
+                return True
+            except PermissionError:
+                time.sleep(0.3 * (2 ** attempt))   # 0.3, 0.6, 1.2, 2.4 с
+        print(f"[Eval] {path} заблокирован, запись пропущена (данные в памяти целы)")
+    except Exception as e:
+        print(f"[Eval] запись {path} не удалась: {e!r}")
+    try:
+        os.remove(tmp)
+    except OSError:
+        pass
+    return False
+
+
+def _atomic_dump(path: str, obj) -> bool:
+    """Атомарная запись: сбой в середине ночи не оставит обрезанный JSON."""
+    return _safe_write(path, json.dumps(obj, ensure_ascii=False, indent=2))
+
+
+# ---------------------------------------------------------------------------
 # Кэш ответов судьи (экономит токены и время при повторных прогонах)
 # ---------------------------------------------------------------------------
 def _load_cache() -> None:
     if os.path.exists(CACHE_PATH):
         try:
-            _cache.update(json.load(open(CACHE_PATH, encoding="utf-8")))
+            with open(CACHE_PATH, encoding="utf-8") as f:
+                _cache.update(json.load(f))
         except Exception:
             pass
 
 
 def _save_cache() -> None:
-    with open(CACHE_PATH, "w", encoding="utf-8") as f:
-        json.dump(_cache, f, ensure_ascii=False)
+    _safe_write(CACHE_PATH, json.dumps(_cache, ensure_ascii=False))
 
 
 def pages_of(arxiv_id: str) -> Optional[Dict[int, str]]:
@@ -178,13 +210,10 @@ def summarize(results: List[ModeEvalResult]) -> str:
     return "\n".join(lines)
 
 
-def _atomic_dump(path: str, obj) -> None:
-    """Атомарная запись: сбой в середине ночи не оставит обрезанный JSON."""
-    tmp = path + ".tmp"
-    with open(tmp, "w", encoding="utf-8") as f:
-        json.dump(obj, f, ensure_ascii=False, indent=2)
-        f.flush()
-        os.replace(tmp, path)
+def _flush(results: List[ModeEvalResult], out_path: str) -> None:
+    """Перезаписываем после каждой ячейки: если процесс умрёт, потеряна одна ячейка, а не весь прогон."""
+    _atomic_dump(out_path, [r.model_dump() for r in results])
+    _safe_write("results_table.md", summarize(results) + "\n")
 
 
 def main():
@@ -218,7 +247,6 @@ def main():
     if args.limit:
         cases = cases[:args.limit]
 
-    results: List[ModeEvalResult] = []
     for case in cases:
         for m in args.modes:
             if (case.question_id, MODE_NAMES[m]) in done:
@@ -238,7 +266,7 @@ def main():
                                               total_claims=0, citation_existence_rate=0.0,
                                               claim_support_rate=0.0, page_accuracy_rate=0.0,
                                               latency_sec=0.0, total_tokens=0))
-                _atomic_dump(args.out, [r.model_dump() for r in results])
+                _flush(results, args.out)
                 continue
             claims = parse_cited_claims(text)
             loose = len(re.findall(r"arXiv\s*:", text or "", re.I))
@@ -257,11 +285,10 @@ def main():
                                  total_tokens=tokens, search_recall=recall, **metrics)
             results.append(res)
             print(res.model_dump())
-            _atomic_dump(args.out, [r.model_dump() for r in results])
+            _flush(results, args.out)
 
     table = summarize(results)
-    with open("results_table.md", "w", encoding="utf-8") as f:
-        f.write(table + "\n")
+    _safe_write("results_table.md", table + "\n")
     print("\n" + table)
     print("\nСохранено: eval_results.json, results_table.md")
 
