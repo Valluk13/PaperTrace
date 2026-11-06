@@ -1,0 +1,119 @@
+{
+  "per_answer": [
+    {
+      "question_id": "q01",
+      "ids": [
+        "2510.24476",
+        "2604.01461",
+        "2512.02527"
+      ],
+      "ids_exist": [
+        "2510.24476",
+        "2604.01461",
+        "2512.02527"
+      ],
+      "ids_dead": [],
+      "ids_net_unavailable": [],
+      "sentences": 6,
+      "sentences_citing": 3,
+      "sentences_with_page": 0,
+      "has_dead_link": false
+    },
+    {
+      "question_id": "q02",
+      "ids": [
+        "2309.15217",
+        "2311.09476",
+        "2306.05685"
+      ],
+      "ids_exist": [
+        "2309.15217",
+        "2311.09476",
+        "2306.05685"
+      ],
+      "ids_dead": [],
+      "ids_net_unavailable": [],
+      "sentences": 6,
+      "sentences_citing": 3,
+      "sentences_with_page": 0,
+      "has_dead_link": false
+    },
+    {
+      "question_id": "q03",
+      "ids": [
+        "2505.06311",
+        "2604.24118",
+        "2606.26479"
+      ],
+      "ids_exist": [
+        "2505.06311",
+        "2604.24118",
+        "2606.26479"
+      ],
+      "ids_dead": [],
+      "ids_net_unavailable": [],
+      "sentences": 8,
+      "sentences_citing": 3,
+      "sentences_with_page": 0,
+      "has_dead_link": false
+    },
+    {
+      "question_id": "q04",
+      "ids": [
+        "2501.06322",
+        "2411.18241",
+        "2507.02170"
+      ],
+      "ids_exist": [
+        "2501.06322",
+        "2411.18241",
+        "2507.02170"
+      ],
+      "ids_dead": [],
+      "ids_net_unavailable": [],
+      "sentences": 6,
+      "sentences_citing": 3,
+      "sentences_with_page": 0,
+      "has_dead_link": false
+    },
+    {
+      "question_id": "q05",
+      "ids": [
+        "2303.11366",
+        "2405.06682",
+        "2503.23037",
+        "2607.13104"
+      ],
+      "ids_exist": [
+        "2303.11366",
+        "2405.06682",
+        "2503.23037",
+        "2607.13104"
+      ],
+      "ids_dead": [],
+      "ids_net_unavailable": [],
+      "sentences": 6,
+      "sentences_citing": 4,
+      "sentences_with_page": 0,
+      "has_dead_link": false
+    }
+  ],
+  "id_status": {
+    "2510.24476": true,
+    "2604.01461": true,
+    "2512.02527": true,
+    "2309.15217": true,
+    "2311.09476": true,
+    "2306.05685": true,
+    "2505.06311": true,
+    "2604.24118": true,
+    "2606.26479": true,
+    "2501.06322": true,
+    "2411.18241": true,
+    "2507.02170": true,
+    "2303.11366": true,
+    "2405.06682": true,
+    "2503.23037": true,
+    "2607.13104": true
+  }
+}
