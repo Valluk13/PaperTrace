@@ -139,6 +139,7 @@ def main():
     answers = [a for a in answers if (a.get("answer_text") or "").strip()]
     if not answers:
         sys.exit("Заполнены ли ответы? Пусто — считать нечего.")
+    product = answers[0].get("product") or "внешний продукт с поиском"
 
     all_ids = list(dict.fromkeys(i for a in answers for i in ID_RE.findall(a.get("answer_text") or "")))
     status = check_ids(all_ids)
@@ -165,10 +166,10 @@ def main():
     md = [
         "# Режим D: внешний продукт с поиском против нашего режима C (Задача 2)",
         "",
-        f"Вход: {len(answers)} ответов внешнего продукта (DeepSeek / Perplexity / ChatGPT с веб-поиском —",
-        "что было доступно) на темы q01–q05 из eval_dataset_big.json; тексты получены вручную, промпт —",
-        "формулировка темы как есть. Ссылки извлечены регуляркой arXiv-ID, каждая проверена скачиванием",
-        "с arXiv (pages_of); то же правило «существует = скачивается», что и в режимах A/B/C.",
+        f"Вход: {len(answers)} ответов внешнего продукта ({product}) на темы q01–q05",
+        "из eval_dataset_big.json; формулировка темы подаётся как есть. Ссылки извлечены",
+        "регуляркой arXiv-ID, каждая проверена скачиванием с arXiv (pages_of); то же",
+        "правило «существует = скачивается», что и в режимах A/B/C.",
         "",
         "| Метрика | Наш режим C | Внешний продукт |",
         "|---|---|---|",
