@@ -115,8 +115,13 @@ def route_after_security(state: AgentState) -> Literal["planner", "end"]:
 
 
 def route_after_rag(state: AgentState) -> Literal["writer_verifier", "planner"]:
-    if not state.get("reliable_papers") and state.get("search_iterations", 0) < MAX_SEARCH_ITERATIONS:
-        print("[Router] Мало надёжных статей, возвращаемся к планировщику")
+    # Возврат к планировщику по любому пустому результату поиска: без надёжных статей ИЛИ без чанков
+    # (статьи есть, но векторный поиск упал или не дал совпадений). Раньше пустые чанки при живых
+    # статьях шли к писателю и ячейка получала no_sources без единой второй попытки поиска.
+    if state.get("search_iterations", 0) < MAX_SEARCH_ITERATIONS and (
+        not state.get("reliable_papers") or not state.get("retrieved_chunks")
+    ):
+        print("[Router] Пустой результат поиска (статьи или чанки) — возвращаемся к планировщику")
         return "planner"
     return "writer_verifier"
 

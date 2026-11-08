@@ -109,6 +109,18 @@ def quote_in_text(quote: str, text: str, min_len: int = 12) -> bool:
     return q in normalize_text(text or "")
 
 
+def normalize_arxiv_id(raw) -> str:
+    """'arXiv:arXiv:2408.07413v2' -> '2408.07413'.
+
+    Модель возвращает id с префиксом (он есть в заголовке фрагмента), format_claims добавляет
+    свой — двойной префикс не находил статью и обнулял все три метрики ячейки.
+    """
+    s = str(raw or "").strip()
+    while s.lower().startswith("arxiv:"):
+        s = s[6:].strip()
+    return re.sub(r"v\d+$", "", s)
+
+
 def parse_cited_claims(text: str) -> List[Tuple[str, str, int]]:
     """Режет текст на (утверждение, arxiv_id, страница) по тегам [arXiv:ID, стр. N].
     Текст после последнего тега игнорируется."""
@@ -116,11 +128,12 @@ def parse_cited_claims(text: str) -> List[Tuple[str, str, int]]:
     for m in CITE_RE.finditer(text or ""):
         claim = text[pos:m.start()].strip(" \n\t.;")
         if claim:
-            claims.append((claim, m.group(1).strip(), int(m.group(2))))
+            claims.append((claim, normalize_arxiv_id(m.group(1)), int(m.group(2))))
         pos = m.end()
     return claims
 
 
 def format_claims(items: List[Dict]) -> str:
     """[{'text','arxiv_id','page'}] -> единый текст с цитатами."""
-    return " ".join(f"{i['text'].strip().rstrip('.')} [arXiv:{i['arxiv_id']}, стр. {i['page']}]." for i in items)
+    return " ".join(f"{i['text'].strip().rstrip('.')} "
+                    f"[arXiv:{normalize_arxiv_id(i['arxiv_id'])}, стр. {i['page']}]." for i in items)

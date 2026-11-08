@@ -6,7 +6,13 @@ downloaded_pdfs/
 .pytest_cache/
 *.tmp
 run_*.log
+repair_*.log
+*.bak-*
 
 # Измерительные артефакты коммитим (были в gitignore — и любой замер становился одноразовым):
 # eval_results*.json теперь содержит тексты обзоров и вердикты судьи, то есть метрики
 # пересчитываются из файла без повторной оплаты прогона. eval_cache.json — оплаченные вердикты.
+.zcode/
+AGENTS.md
+MEMORY.md
+sample_semantic.log
