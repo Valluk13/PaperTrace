@@ -9,8 +9,8 @@ import difflib
 import os
 import re
 import time
-from typing import Dict, List, Optional
 
+from common import normalize_arxiv_id
 from state import AgentState, PaperMeta
 
 DOWNLOAD_DIR = "downloaded_pdfs"
@@ -37,17 +37,17 @@ def _warn_once(msg: str) -> None:
 
 
 def clean_id(raw_id: str) -> str:
-    """'2411.14199v2' -> '2411.14199'"""
-    return re.sub(r"v\d+$", "", raw_id.strip())
+    """'arXiv:2411.14199v2' -> '2411.14199' (префикс модель возвращает из заголовка фрагмента)"""
+    return normalize_arxiv_id(raw_id)
 
 
-def _content_terms(query: str) -> List[str]:
+def _content_terms(query: str) -> list[str]:
     """Значимые слова запроса (без стоп-слов, дефисы -> пробелы)."""
     words = query.lower().replace("-", " ").split()
     return [w for w in words if w.isalnum() and w not in _STOPWORDS and len(w) > 1]
 
 
-def _phrase_groups(query: str) -> List[str]:
+def _phrase_groups(query: str) -> list[str]:
     """Фразы из подряд идущих значимых слов: 'mitigating hallucination in LLM-based
     literature review' -> ['mitigating hallucination', 'literature review'].
     arXiv нормализует дефисы, поэтому фразы в кавычках находят 'LLM-based' и 'retrieval-augmented'."""
@@ -64,7 +64,7 @@ def _phrase_groups(query: str) -> List[str]:
     return [" ".join(g) for g in groups]
 
 
-def _query_variants(query: str) -> List[str]:
+def _query_variants(query: str) -> list[str]:
     """Несколько формулировок одного запроса: сырая + фразовые. arXiv API плохо ранжирует
     естественноязыковые запросы (топ выдачи забит свежими нерелевантными работами),
     но хорошо ранжирует точные фразы. Перебор вариантов сильно повышает полноту."""
@@ -119,7 +119,7 @@ def _openalex_get(params: dict, timeout: int):
     return resp
 
 
-def openalex_candidate_ids(query: str, per_page: int = 15) -> List[str]:
+def openalex_candidate_ids(query: str, per_page: int = 15) -> list[str]:
     """arXiv ID статей из топа поиска OpenAlex. OpenAlex учитывает цитирования, поэтому
     находит канонические обзоры, которые arXiv-релевантность выдаёт низко."""
     params = _openalex_params({"search": query, "per_page": per_page})
@@ -143,7 +143,7 @@ def openalex_candidate_ids(query: str, per_page: int = 15) -> List[str]:
     return ids
 
 
-def fetch_openalex_venue(title: str) -> Optional[str]:
+def fetch_openalex_venue(title: str) -> str | None:
     """Название журнала/конференции, если статья опубликована. Если статья не найдена
     или единственный источник это сам arXiv, вернёт None.
     Базовый API OpenAlex бесплатен и работает БЕЗ ключа: достаточно указать свою почту
@@ -167,10 +167,10 @@ def fetch_openalex_venue(title: str) -> Optional[str]:
     return None
 
 
-def parse_pdf_pages(pdf_path: str, max_pages: int = MAX_PAGES) -> Dict[int, str]:
+def parse_pdf_pages(pdf_path: str, max_pages: int = MAX_PAGES) -> dict[int, str]:
     """{номер страницы PDF (с 1): текст}. Это номер страницы файла, а не печатный номер на листе."""
     import pymupdf  # алиас fitz объявлен устаревшим и будет удалён в будущих 2.x
-    pages: Dict[int, str] = {}
+    pages: dict[int, str] = {}
     try:
         doc = pymupdf.open(pdf_path)
         for i in range(min(len(doc), max_pages)):
@@ -196,7 +196,7 @@ def _get_client():
     return _client
 
 
-def get_paper_pages(arxiv_id: str, max_pages: int = JUDGE_MAX_PAGES) -> Optional[Dict[int, str]]:
+def get_paper_pages(arxiv_id: str, max_pages: int = JUDGE_MAX_PAGES) -> dict[int, str] | None:
     """Страницы статьи по ID (скачивает, если ещё нет). None, если статьи точно нет.
     Сетевые ошибки ПРОБОРАСЫВАЮТСЯ наверх — бенчмарк отличает «статьи нет» от «сети нет».
     Используется бенчмарком для проверки цитат."""
@@ -218,12 +218,12 @@ def get_paper_pages(arxiv_id: str, max_pages: int = JUDGE_MAX_PAGES) -> Optional
     return parse_pdf_pages(path, max_pages) or None
 
 
-def _candidate_ids(queries: List[str]) -> List[str]:
+def _candidate_ids(queries: list[str]) -> list[str]:
     """Кандидаты: раунд-робин по вариантам запроса (по PER_QUERY с каждого), затем OpenAlex."""
     import arxiv
     client = _get_client()
 
-    streams: List[List[str]] = [[] for _ in range(len(_query_variants(queries[0])))] if queries else []
+    streams: list[list[str]] = [[] for _ in range(len(_query_variants(queries[0])))] if queries else []
     for q in queries:
         variants = _query_variants(q)
         if len(streams) < len(variants):
@@ -238,17 +238,35 @@ def _candidate_ids(queries: List[str]) -> List[str]:
             except Exception as e:
                 print(f"[ArXiv Searcher] Ошибка запроса '{variant[:60]}': {e}")
 
-    candidates: List[str] = []
+    candidates: list[str] = []
     n = max((len(s) for s in streams), default=0)
     for j in range(n):  # раунд-робин: берём лучшие из каждого варианта вперемешку
         for s in streams:
             if j < len(s) and s[j] not in candidates:
                 candidates.append(s[j])
+    openalex_ids: list[str] = []
     for q in queries:
         for aid in openalex_candidate_ids(q):
-            if aid not in candidates:
-                candidates.append(aid)
-    return candidates
+            if aid not in candidates and aid not in openalex_ids:
+                openalex_ids.append(aid)
+    # Пересортировка перед обрезкой MAX_PAPERS: чередуем arXiv-кандидатов с OpenAlex-кандидатами.
+    # Раньше OpenAlex (цитационно-взвешенный канал, находящий канонические обзоры) дописывался
+    # в хвост и почти не попадал в первые 6 — Recall@6 = 0.04 (recall_results.md).
+    return _interleave(candidates, openalex_ids)
+
+
+def _interleave(arxiv_candidates: list[str], openalex_ids: list[str]) -> list[str]:
+    """Чередование двух каналов кандидатов: по одному из каждого, пока оба не исчерпаны."""
+    merged: list[str] = []
+    ai = oi = 0
+    while ai < len(arxiv_candidates) or oi < len(openalex_ids):
+        if ai < len(arxiv_candidates):
+            merged.append(arxiv_candidates[ai])
+            ai += 1
+        if oi < len(openalex_ids):
+            merged.append(openalex_ids[oi])
+            oi += 1
+    return merged
 
 
 def arxiv_search_node(state: AgentState) -> dict:
@@ -257,7 +275,7 @@ def arxiv_search_node(state: AgentState) -> dict:
     t0 = time.time()
     queries = state.get("search_queries") or [state["user_query"]]
 
-    found: Dict[str, PaperMeta] = {p.arxiv_id: p for p in state.get("found_papers", [])}
+    found: dict[str, PaperMeta] = {p.arxiv_id: p for p in state.get("found_papers", [])}
 
     candidates = [c for c in _candidate_ids(queries) if c not in found]
     if candidates:
@@ -297,7 +315,7 @@ def arxiv_search_node(state: AgentState) -> dict:
             "latency_sec": round(time.time() - t0, 3), "total_tokens": 0}
 
 
-def evaluate_search_recall(found_papers: List[PaperMeta], expected_arxiv_ids: List[str]) -> float:
+def evaluate_search_recall(found_papers: list[PaperMeta], expected_arxiv_ids: list[str]) -> float:
     """Метрика участника 2: какая доля эталонных статей найдена."""
     if not expected_arxiv_ids:
         return 1.0
