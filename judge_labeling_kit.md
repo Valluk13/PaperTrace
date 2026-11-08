@@ -1,0 +1,4130 @@
+# Кит ручной валидации судьи PaperTrace (51 утверждение)
+
+## Что это
+
+Вы — независимый разметчик. Для каждого утверждения дан текст одной страницы научной статьи
+(первые 4000 символов). Нужно решить: подтверждает ли эта страница утверждение.
+
+## Критерий (один и тот же для всех разметчиков)
+
+- **good** — на странице есть место, из которого утверждение СЛЕДУЕТ (утверждение прямо
+  сформулировано или однозначно вытекает из текста).
+- **trash** — такого места нет. «Звучит правдоподобно», «так наверное и есть», «я это знаю
+  из других источников» — всё это trash. Метка ставится ТОЛЬКО по приложенному тексту страницы.
+
+Правила:
+1. Не используйте свои знания о статье/теме — только текст страницы.
+2. Текст страницы обрезан до 4000 знаков: если подтверждение могло быть дальше — это всё
+   равно trash (разметчики и судья работают с тем же обрезанным текстом).
+3. Номер страницы — страница PDF-файла, не печатная нумерация.
+4. Метки ставьте независимо, не обсуждая с другими разметчиками до конца.
+
+## Формат ответа (строго)
+
+В конце ответа — только список, по одному на строку, без пояснений:
+1: good
+2: trash
+...
+51: good
+
+---
+## Утверждение 1 из 51
+
+(источник: arXiv 2505.12826, стр. 1 PDF)
+
+**УТВЕРЖДЕНИЕ:** Hallucination, where the model generates plausible yet incorrect outputs, persists as a significant and under-addressed challenge in the video domain.
+
+**ТЕКСТ СТРАНИЦЫ:**
+arXiv:2505.12826v1  [cs.CV]  19 May 2025
+Mitigating Hallucination in VideoLLMs via
+Temporal-Aware Activation Engineering
+Jianfeng Cai†
+Wengang Zhou†
+Zongmeng Zhang†
+Jiale Hong‡
+Nianji Zhan§
+Houqiang Li†
+†University of Science and Technology of China
+‡Shanghai Jiaotong University
+§Merchants Union Consumer Finance Company Limited
+xiaobaicai@mail.ustc.edu.cn
+Abstract
+Multimodal large language models (MLLMs) have achieved remarkable progress in
+video understanding. However, hallucination, where the model generates plausible
+yet incorrect outputs, persists as a significant and under-addressed challenge in the
+video domain. Among existing solutions, activation engineering has proven suc-
+cessful in mitigating hallucinations in LLMs and ImageLLMs, yet its applicability
+to VideoLLMs remains largely unexplored. In this work, we are the first to sys-
+tematically investigate the effectiveness and underlying mechanisms of activation
+engineering for mitigating hallucinations in VideoLLMs. We initially conduct an
+investigation of the key factors affecting the performance of activation engineering
+and find that a model’s sensitivity to hallucination depends on temporal varia-
+tion rather than task type. Moreover, selecting appropriate internal modules and
+dataset for activation engineering is critical for reducing hallucination. Guided by
+these findings, we propose a temporal-aware activation engineering framework for
+VideoLLMs, which adaptively identifies and manipulates hallucination-sensitive
+modules based on the temporal variation characteristic, substantially mitigating
+hallucinations without additional LLM fine-tuning. Experiments across multiple
+models and benchmarks demonstrate that our method markedly reduces hallucina-
+tion in VideoLLMs, thereby validating the robustness of our findings.
+1
+Introduction
+Large Language Models (LLMs) [1, 24, 44, 63, 3] have witnessed explosive growth in recent years,
+revolutionizing the field of artificial intelligence with remarkable capabilities in understanding
+and generating human language. This success has naturally extended to multimodal domains,
+where LLMs are adapted to process and reason about diverse data types beyond text [19, 49, 29,
+56, 75]. Particularly noteworthy is the emergence of Multimodal LLMs (MLLMs) in the image
+domain (ImageLLMs) [36, 28, 45, 5] that integrate visual and spatial perception with language
+understanding, and in the video domain (VideoLLMs) [6, 71, 43, 49], which further capture temporal
+dynamics to enable comprehensive video understanding through joint spatiotemporal modeling.
+Despite their impressive performance, MLLMs inherit and even amplify the hallucination issues
+prevalent in LLMs [7, 67, 69, 53]. ImageLLMs frequently hallucinate non-existent objects [52],
+misidentify visual elements [25, 35], or fabricate spatial relationships [62]. In the video domain, the
+additional temporal dimension substantially exacerbates hallucination problems [48]. VideoLLMs
+Preprint. Under review.
+
+---
+
+## Утверждение 2 из 51
+
+(источник: arXiv 2505.12826, стр. 1 PDF)
+
+**УТВЕРЖДЕНИЕ:** Activation engineering has proven successful in mitigating hallucinations in LLMs and ImageLLMs, but its applicability to VideoLLMs remains largely unexplored.
+
+**ТЕКСТ СТРАНИЦЫ:**
+arXiv:2505.12826v1  [cs.CV]  19 May 2025
+Mitigating Hallucination in VideoLLMs via
+Temporal-Aware Activation Engineering
+Jianfeng Cai†
+Wengang Zhou†
+Zongmeng Zhang†
+Jiale Hong‡
+Nianji Zhan§
+Houqiang Li†
+†University of Science and Technology of China
+‡Shanghai Jiaotong University
+§Merchants Union Consumer Finance Company Limited
+xiaobaicai@mail.ustc.edu.cn
+Abstract
+Multimodal large language models (MLLMs) have achieved remarkable progress in
+video understanding. However, hallucination, where the model generates plausible
+yet incorrect outputs, persists as a significant and under-addressed challenge in the
+video domain. Among existing solutions, activation engineering has proven suc-
+cessful in mitigating hallucinations in LLMs and ImageLLMs, yet its applicability
+to VideoLLMs remains largely unexplored. In this work, we are the first to sys-
+tematically investigate the effectiveness and underlying mechanisms of activation
+engineering for mitigating hallucinations in VideoLLMs. We initially conduct an
+investigation of the key factors affecting the performance of activation engineering
+and find that a model’s sensitivity to hallucination depends on temporal varia-
+tion rather than task type. Moreover, selecting appropriate internal modules and
+dataset for activation engineering is critical for reducing hallucination. Guided by
+these findings, we propose a temporal-aware activation engineering framework for
+VideoLLMs, which adaptively identifies and manipulates hallucination-sensitive
+modules based on the temporal variation characteristic, substantially mitigating
+hallucinations without additional LLM fine-tuning. Experiments across multiple
+models and benchmarks demonstrate that our method markedly reduces hallucina-
+tion in VideoLLMs, thereby validating the robustness of our findings.
+1
+Introduction
+Large Language Models (LLMs) [1, 24, 44, 63, 3] have witnessed explosive growth in recent years,
+revolutionizing the field of artificial intelligence with remarkable capabilities in understanding
+and generating human language. This success has naturally extended to multimodal domains,
+where LLMs are adapted to process and reason about diverse data types beyond text [19, 49, 29,
+56, 75]. Particularly noteworthy is the emergence of Multimodal LLMs (MLLMs) in the image
+domain (ImageLLMs) [36, 28, 45, 5] that integrate visual and spatial perception with language
+understanding, and in the video domain (VideoLLMs) [6, 71, 43, 49], which further capture temporal
+dynamics to enable comprehensive video understanding through joint spatiotemporal modeling.
+Despite their impressive performance, MLLMs inherit and even amplify the hallucination issues
+prevalent in LLMs [7, 67, 69, 53]. ImageLLMs frequently hallucinate non-existent objects [52],
+misidentify visual elements [25, 35], or fabricate spatial relationships [62]. In the video domain, the
+additional temporal dimension substantially exacerbates hallucination problems [48]. VideoLLMs
+Preprint. Under review.
+
+---
+
+## Утверждение 3 из 51
+
+(источник: arXiv 2505.12826, стр. 1 PDF)
+
+**УТВЕРЖДЕНИЕ:** The authors systematically investigate the effectiveness and underlying mechanisms of activation engineering for mitigating hallucinations in VideoLLMs.
+
+**ТЕКСТ СТРАНИЦЫ:**
+arXiv:2505.12826v1  [cs.CV]  19 May 2025
+Mitigating Hallucination in VideoLLMs via
+Temporal-Aware Activation Engineering
+Jianfeng Cai†
+Wengang Zhou†
+Zongmeng Zhang†
+Jiale Hong‡
+Nianji Zhan§
+Houqiang Li†
+†University of Science and Technology of China
+‡Shanghai Jiaotong University
+§Merchants Union Consumer Finance Company Limited
+xiaobaicai@mail.ustc.edu.cn
+Abstract
+Multimodal large language models (MLLMs) have achieved remarkable progress in
+video understanding. However, hallucination, where the model generates plausible
+yet incorrect outputs, persists as a significant and under-addressed challenge in the
+video domain. Among existing solutions, activation engineering has proven suc-
+cessful in mitigating hallucinations in LLMs and ImageLLMs, yet its applicability
+to VideoLLMs remains largely unexplored. In this work, we are the first to sys-
+tematically investigate the effectiveness and underlying mechanisms of activation
+engineering for mitigating hallucinations in VideoLLMs. We initially conduct an
+investigation of the key factors affecting the performance of activation engineering
+and find that a model’s sensitivity to hallucination depends on temporal varia-
+tion rather than task type. Moreover, selecting appropriate internal modules and
+dataset for activation engineering is critical for reducing hallucination. Guided by
+these findings, we propose a temporal-aware activation engineering framework for
+VideoLLMs, which adaptively identifies and manipulates hallucination-sensitive
+modules based on the temporal variation characteristic, substantially mitigating
+hallucinations without additional LLM fine-tuning. Experiments across multiple
+models and benchmarks demonstrate that our method markedly reduces hallucina-
+tion in VideoLLMs, thereby validating the robustness of our findings.
+1
+Introduction
+Large Language Models (LLMs) [1, 24, 44, 63, 3] have witnessed explosive growth in recent years,
+revolutionizing the field of artificial intelligence with remarkable capabilities in understanding
+and generating human language. This success has naturally extended to multimodal domains,
+where LLMs are adapted to process and reason about diverse data types beyond text [19, 49, 29,
+56, 75]. Particularly noteworthy is the emergence of Multimodal LLMs (MLLMs) in the image
+domain (ImageLLMs) [36, 28, 45, 5] that integrate visual and spatial perception with language
+understanding, and in the video domain (VideoLLMs) [6, 71, 43, 49], which further capture temporal
+dynamics to enable comprehensive video understanding through joint spatiotemporal modeling.
+Despite their impressive performance, MLLMs inherit and even amplify the hallucination issues
+prevalent in LLMs [7, 67, 69, 53]. ImageLLMs frequently hallucinate non-existent objects [52],
+misidentify visual elements [25, 35], or fabricate spatial relationships [62]. In the video domain, the
+additional temporal dimension substantially exacerbates hallucination problems [48]. VideoLLMs
+Preprint. Under review.
+
+---
+
+## Утверждение 4 из 51
+
+(источник: arXiv 2505.12826, стр. 2 PDF)
+
+**УТВЕРЖДЕНИЕ:** The method involves identifying hallucination-sensitive modules in the VideoLLM and applying activation engineering to mitigate hallucinations.
+
+**ТЕКСТ СТРАНИЦЫ:**
+often confabulate events that never appear in the footage [73], misinterpret action sequences [37], or
+fail to maintain temporal consistency [17, 61], which creates increasingly complex challenges.
+To alleviate the hallucination issues in VideoLLMs, researchers have proposed various approaches
+that broadly fall into two categories: model fine-tuning methods [48, 4, 58, 34] and train-free
+methods [55, 70, 37, 73]. Model fine-tuning approaches necessitate additional training, either by
+training on carefully curated datasets [64] or by training auxiliary modules [48] specifically designed
+to mitigate hallucination. However, these methods face significant challenges, notably the labor-
+intensive collection of high-quality datasets and the heavy computational cost of training large
+models. Consequently, train-free methods have emerged as alternative solutions, encompassing
+self-feedback mechanisms [70], contrastive decoding strategies [73], and techniques that leverage
+auxiliary information [37]. Such train-free approaches offer the advantage of improving hallucination
+mitigation without necessitating costly retraining or extensive data collection efforts.
+Activation engineering [46, 76, 40, 9] is an emerging techniques that manipulate model activations
+during inference to influence model behavior. This approach has been widely applied in domains such
+as truthfulness control [41] and sentiment modulation [57, 33]. Recently, researchers have begun to
+explore its application in mitigating hallucinations in LLMs [41] and ImageLLMs [12, 47]. These
+works indicate that activation engineering can better leverage correlations, reduce hallucinations
+without introducing additional side effects, while requiring fewer extra resources. However, its
+feasibility in the context of VideoLLMs remains an open question.
+In this work, we introduce activation engineering to mitigate hallucinations in VideoLLMs for the first
+time and conduct a systematic investigation into its feasibility and underlying mechanisms, aiming
+to identify the key factors that influence its effectiveness. Our findings demonstrate that the two
+variants of activation engineering exhibit similar performance under any given dataset, indicating
+no essential difference between them. Furthermore, we reveal that the hallucination sensitivity of
+internal modules in VideoLLMs is strongly correlated with the temporal variation characteristics of
+tasks, rather than the task type. Moreover, selecting appropriate modules and datasets for activation
+engineering is crucial for effectively mitigating hallucinations.
+Based on these findings, we propose a temporal-aware activation engineering framework that adap-
+tively identifies and manipulates hallucination-sensitive modules according to temporal variation
+characteristics. Specifically, we divide the temporal variation characteristics of videos into temporal-
+invariant and temporal-variant, and design a fully automated pipeline to collect high-quality datasets
+for each characteristic. Next, we train a lightweight classifier to predict the temporal variation of a
+given input. Guided by the classifier, we select the corresponding dataset to identify hallucination-
+sensitive modules in the VideoLLM and apply activation engineering to mitigate hallucinations. Our
+experiments demonstrate the effectiveness of our method, yielding consistent gains across multiple
+benchmarks (e.g., up to +5.52% on VidHalluc [37] and up to +24.21% on EventHallusion [73]) and
+across diverse models, including Video-LLaVA [43], VideoLLaMA2 [16], and Qwen2.5-VL [6].
+In summary, our primary contributions are as follows:
+• We are the first to introduce activation engineering to mitigate hallucinations in VideoLLMs
+and conduct a systematic investigation into its feasibility and intrinsic mechanisms.
+• Our study reveals that the hallucination sensitivity of internal modules in VideoLLMs is
+strongly correlated with temporal variation, e.g., temporal changes within videos.
+• We
+
+---
+
+## Утверждение 5 из 51
+
+(источник: arXiv 2505.12826, стр. 2 PDF)
+
+**УТВЕРЖДЕНИЕ:** Experiments demonstrate the effectiveness of the method, yielding consistent gains across multiple benchmarks and diverse models, including Video-LLaVA, VideoLLaMA2, and Qwen2.5-VL.
+
+**ТЕКСТ СТРАНИЦЫ:**
+often confabulate events that never appear in the footage [73], misinterpret action sequences [37], or
+fail to maintain temporal consistency [17, 61], which creates increasingly complex challenges.
+To alleviate the hallucination issues in VideoLLMs, researchers have proposed various approaches
+that broadly fall into two categories: model fine-tuning methods [48, 4, 58, 34] and train-free
+methods [55, 70, 37, 73]. Model fine-tuning approaches necessitate additional training, either by
+training on carefully curated datasets [64] or by training auxiliary modules [48] specifically designed
+to mitigate hallucination. However, these methods face significant challenges, notably the labor-
+intensive collection of high-quality datasets and the heavy computational cost of training large
+models. Consequently, train-free methods have emerged as alternative solutions, encompassing
+self-feedback mechanisms [70], contrastive decoding strategies [73], and techniques that leverage
+auxiliary information [37]. Such train-free approaches offer the advantage of improving hallucination
+mitigation without necessitating costly retraining or extensive data collection efforts.
+Activation engineering [46, 76, 40, 9] is an emerging techniques that manipulate model activations
+during inference to influence model behavior. This approach has been widely applied in domains such
+as truthfulness control [41] and sentiment modulation [57, 33]. Recently, researchers have begun to
+explore its application in mitigating hallucinations in LLMs [41] and ImageLLMs [12, 47]. These
+works indicate that activation engineering can better leverage correlations, reduce hallucinations
+without introducing additional side effects, while requiring fewer extra resources. However, its
+feasibility in the context of VideoLLMs remains an open question.
+In this work, we introduce activation engineering to mitigate hallucinations in VideoLLMs for the first
+time and conduct a systematic investigation into its feasibility and underlying mechanisms, aiming
+to identify the key factors that influence its effectiveness. Our findings demonstrate that the two
+variants of activation engineering exhibit similar performance under any given dataset, indicating
+no essential difference between them. Furthermore, we reveal that the hallucination sensitivity of
+internal modules in VideoLLMs is strongly correlated with the temporal variation characteristics of
+tasks, rather than the task type. Moreover, selecting appropriate modules and datasets for activation
+engineering is crucial for effectively mitigating hallucinations.
+Based on these findings, we propose a temporal-aware activation engineering framework that adap-
+tively identifies and manipulates hallucination-sensitive modules according to temporal variation
+characteristics. Specifically, we divide the temporal variation characteristics of videos into temporal-
+invariant and temporal-variant, and design a fully automated pipeline to collect high-quality datasets
+for each characteristic. Next, we train a lightweight classifier to predict the temporal variation of a
+given input. Guided by the classifier, we select the corresponding dataset to identify hallucination-
+sensitive modules in the VideoLLM and apply activation engineering to mitigate hallucinations. Our
+experiments demonstrate the effectiveness of our method, yielding consistent gains across multiple
+benchmarks (e.g., up to +5.52% on VidHalluc [37] and up to +24.21% on EventHallusion [73]) and
+across diverse models, including Video-LLaVA [43], VideoLLaMA2 [16], and Qwen2.5-VL [6].
+In summary, our primary contributions are as follows:
+• We are the first to introduce activation engineering to mitigate hallucinations in VideoLLMs
+and conduct a systematic investigation into its feasibility and intrinsic mechanisms.
+• Our study reveals that the hallucination sensitivity of internal modules in VideoLLMs is
+strongly correlated with temporal variation, e.g., temporal changes within videos.
+• We
+
+---
+
+## Утверждение 6 из 51
+
+(источник: arXiv 2505.12826, стр. 3 PDF)
+
+**УТВЕРЖДЕНИЕ:** The approach computes offset vectors between normal and hallucination-inducing prompts, then injects these averaged vectors into specific modules in the model during inference to guide the model toward non-hallucinated outputs.
+
+**ТЕКСТ СТРАНИЦЫ:**
+2.1
+MLLMs for Video Understanding
+Following the success of Large Language Models (LLMs) [8, 18, 23, 44], researchers have extended
+them to incorporate visual inputs, giving rise to multimodal LLMs (MLLMs)[2, 14, 39]. In the
+video domain, frames are typically divided into patches treated as tokens[20], then processed by a
+temporally visual encoder and aligned with the LLM token space via a non-linear module [43, 6, 71].
+For example, Video-LLaVA [43] uses time-sensitive attention to capture frame-wise dynamics; the
+VideoLLaMA series [72, 16, 71] leverages Q-formers [38] or convolutional downsampling to extract
+temporal features while reducing token count; and Qwen2.5-VL [6] applies dynamic frame rate
+training with absolute time encoding to support resolution and frame rate adaptation.
+2.2
+Hallucinations in MLLMs
+Despite their strong performance, MLLMs often suffer from hallucinations [53, 69, 7], generating
+inaccurate or fabricated responses due to misinterpretation of input data. To address this in the
+image domain, two main strategies have emerged: training-based and training-free methods. The
+former improves alignment through additional data [31, 32, 22], but incurs high computational costs.
+The latter mitigates hallucinations during inference without retraining [65, 10, 59]. For instance,
+Volcano [34] use self-feedback to refine outputs, while VCD [35] apply contrastive decoding [42] to
+suppress hallucinated tokens. Other approaches include hallucination detection and correction [15,
+26], and boosting visual grounding via auxiliary signals like attention maps [74, 30, 11].
+When extending MLLMs to the video domain, hallucination becomes more challenging due to
+temporal dynamics [48, 61]. To address this, researchers have improved image-based techniques, such
+as collecting high-quality datasets for fine-tuning [48, 34], applying self-feedback [70], leveraging
+contrastive decoding [73], correcting hallucinations [21], and incorporating auxiliary signals to
+enhance video understanding [37]. For example, Vript [64] retrains the model on a 12k-sample
+dataset to reduce hallucinations; TCD [73] uses contrastive decoding to suppress hallucinated tokens;
+and DINO-HEAL [37] re-weights video embeddings using attention maps from a DINO [50] model.
+Concurrently, benchmarks like VidHal [17], EventHallusion [73], and VidHalluc [37] have been
+proposed to evaluate hallucination across different aspects. Despite these efforts, hallucination in
+VideoLLMs remains relatively under-explored compared to the image domain.
+2.3
+Activation Engineering
+Activation engineering [57, 76, 40, 27, 51] refers to manipulating the activations within a model to
+control its behavior. Prior works have demonstrated its effectiveness on truthfulness [41], formality
+transfer [46], sentiment control [57, 33] and refusal behavior control [9].
+ITI [41] was the first to apply this technique to mitigate textual hallucinations in LLMs by computing
+activation vectors from normal samples and hallucination-inducing samples, and injecting them into
+the multi-head attention layers during inference to suppress hallucinated content. More recently,
+several studies have extended activation engineering to address hallucinations in MLLMs for image-
+related tasks [47, 12]. Specifically, ICT [12] computes image-level and object-level vectors to reduce
+both global and local hallucinations. VTI [47] builds upon this by injecting activation vectors into
+both the vision encoder layers and the LLM layers, thereby mitigating hallucinations more effectively.
+However, the feasibility of applying it to VideoLLMs remains an open question. In this paper, we
+explore the applicability of activation engineering for mitigating hallucinations in VideoLLMs.
+3
+Temporal Variation Matters in Activation Engineering
+In this section, we investigate the internal mechanisms of activation engineering and how key factors
+influence its effectiveness in mitigating VideoLLM hallucinations under varying conditions.
+3
+
+---
+
+## Утверждение 7 из 51
+
+(источник: arXiv 2505.12826, стр. 3 PDF)
+
+**УТВЕРЖДЕНИЕ:** ITI was the first to apply this technique to mitigate textual hallucinations in LLMs by computing activation vectors from normal samples and hallucination-inducing samples, and injecting them into the multi-head attention layers during inference to suppress hallucinated content.
+
+**ТЕКСТ СТРАНИЦЫ:**
+2.1
+MLLMs for Video Understanding
+Following the success of Large Language Models (LLMs) [8, 18, 23, 44], researchers have extended
+them to incorporate visual inputs, giving rise to multimodal LLMs (MLLMs)[2, 14, 39]. In the
+video domain, frames are typically divided into patches treated as tokens[20], then processed by a
+temporally visual encoder and aligned with the LLM token space via a non-linear module [43, 6, 71].
+For example, Video-LLaVA [43] uses time-sensitive attention to capture frame-wise dynamics; the
+VideoLLaMA series [72, 16, 71] leverages Q-formers [38] or convolutional downsampling to extract
+temporal features while reducing token count; and Qwen2.5-VL [6] applies dynamic frame rate
+training with absolute time encoding to support resolution and frame rate adaptation.
+2.2
+Hallucinations in MLLMs
+Despite their strong performance, MLLMs often suffer from hallucinations [53, 69, 7], generating
+inaccurate or fabricated responses due to misinterpretation of input data. To address this in the
+image domain, two main strategies have emerged: training-based and training-free methods. The
+former improves alignment through additional data [31, 32, 22], but incurs high computational costs.
+The latter mitigates hallucinations during inference without retraining [65, 10, 59]. For instance,
+Volcano [34] use self-feedback to refine outputs, while VCD [35] apply contrastive decoding [42] to
+suppress hallucinated tokens. Other approaches include hallucination detection and correction [15,
+26], and boosting visual grounding via auxiliary signals like attention maps [74, 30, 11].
+When extending MLLMs to the video domain, hallucination becomes more challenging due to
+temporal dynamics [48, 61]. To address this, researchers have improved image-based techniques, such
+as collecting high-quality datasets for fine-tuning [48, 34], applying self-feedback [70], leveraging
+contrastive decoding [73], correcting hallucinations [21], and incorporating auxiliary signals to
+enhance video understanding [37]. For example, Vript [64] retrains the model on a 12k-sample
+dataset to reduce hallucinations; TCD [73] uses contrastive decoding to suppress hallucinated tokens;
+and DINO-HEAL [37] re-weights video embeddings using attention maps from a DINO [50] model.
+Concurrently, benchmarks like VidHal [17], EventHallusion [73], and VidHalluc [37] have been
+proposed to evaluate hallucination across different aspects. Despite these efforts, hallucination in
+VideoLLMs remains relatively under-explored compared to the image domain.
+2.3
+Activation Engineering
+Activation engineering [57, 76, 40, 27, 51] refers to manipulating the activations within a model to
+control its behavior. Prior works have demonstrated its effectiveness on truthfulness [41], formality
+transfer [46], sentiment control [57, 33] and refusal behavior control [9].
+ITI [41] was the first to apply this technique to mitigate textual hallucinations in LLMs by computing
+activation vectors from normal samples and hallucination-inducing samples, and injecting them into
+the multi-head attention layers during inference to suppress hallucinated content. More recently,
+several studies have extended activation engineering to address hallucinations in MLLMs for image-
+related tasks [47, 12]. Specifically, ICT [12] computes image-level and object-level vectors to reduce
+both global and local hallucinations. VTI [47] builds upon this by injecting activation vectors into
+both the vision encoder layers and the LLM layers, thereby mitigating hallucinations more effectively.
+However, the feasibility of applying it to VideoLLMs remains an open question. In this paper, we
+explore the applicability of activation engineering for mitigating hallucinations in VideoLLMs.
+3
+Temporal Variation Matters in Activation Engineering
+In this section, we investigate the internal mechanisms of activation engineering and how key factors
+influence its effectiveness in mitigating VideoLLM hallucinations under varying conditions.
+3
+
+---
+
+## Утверждение 8 из 51
+
+(источник: arXiv 2505.12826, стр. 17 PDF)
+
+**УТВЕРЖДЕНИЕ:** Several studies have extended activation engineering to address hallucinations in MLLMs for image-related tasks.
+
+**ТЕКСТ СТРАНИЦЫ:**
+ITI [41] was the first to apply this technique to mitigate textual hallucinations in LLMs by computing
+activation vectors from normal samples and hallucination-inducing samples, and injecting them into
+the multi-head attention layers during inference to suppress hallucinated content. More recently,
+several studies have extended activation engineering to address hallucinations in MLLMs for image-
+related tasks [47, 12]. Specifically, ICT [12] computes image-level and object-level vectors, and
+leverages the ITI method to reduce both global and local hallucinations. VTI [47] builds upon this by
+injecting activation vectors into both the vision encoder layers and the LLM layers, thereby mitigating
+hallucinations more effectively.
+However, the feasibility of applying activation engineering to VideoLLMs remains an open question.
+In this paper, we explore the applicability of activation engineering for mitigating hallucinations in
+VideoLLMs. In addition, we examine the key factors that influence its effectiveness.
+B
+Basic Process of Activation Engineering
+Activation engineering requires the construction of a curated dataset D = {(x(i)
+n , y(i)), (x(i)
+h , y(i))},
+i = {1, 2, ..., |D|}, where x(i)
+n
+denotes a normal prompt, x(i)
+h
+denotes a hallucination-inducing
+prompt, and y(i) is the corresponding ground-truth response. For each data pair, both (x(i)
+n , y(i)) and
+(x(i)
+h , y(i)) are passed through the LLM, and the model’s internal vectors from N distinct modules at
+the position of the final token are extracted, denoted as V(j)
+n
+= {v(i,j)
+n
+} and V(j)
+h
+= {v(i,j)
+h
+}, where
+j = {1, 2, ..., N}. This process yields a set of vectors for each module: V(j)
+nh = {v(i,j)
+n
+, v(i,j)
+h
+}. Since
+v(i,j)
+n
+and v(i,j)
+h
+represent the normal latent states and hallucination-prone latent states respectively, an
+offset vector v(i,j) = v(i,j)
+n
+−v(i,j)
+h
+is computed to characterize the transition from the hallucinated
+latent space to the normal latent space. Aggregating these across the dataset yields offset vector
+sets V(j) = {v(i,j)}, and an average offset vector v(j) = P|D|
+i=1 v(i,j)/|D| is computed per module
+to obtain the final offset vector set V = {v(j)}, with one vector per module. During inference,
+these offset vectors v(j) are injected into their corresponding modules within the LLM to suppress
+hallucination behaviors.
+As illustrated in Figure 1, activation engineering can be categorized into Attention Head Engineering
+and Layer Engineering, depending on the position of the modules selected for injection. The former
+targets individual attention heads, while the latter operates at the level of transformer layers. Taking
+Attention Head Engineering as an example, for an LLM with L transformer layers and M attention
+heads per layer, a total of N = L × M offset vectors need to be computed. Prior studies have shown
+that different attention heads exhibit varying levels of sensitivity to hallucinations. Therefore, instead
+of applying offset vectors to all attention heads, we selectively compute offset vectors only for those
+with strong hallucination sensitivity, thereby reducing unnecessary computation.
+Specifically, for each attention head j, we utilize its associated vector set V(j)
+nh = {v(i,j)
+n
+, v(i,j)
+h
+} to
+train a binary classifier that determines whether the head is sensitive to hallucinations. We then select
+the top-K attention heads with the highest classification accuracy and apply offset vector injection
+only to these heads during VideoLLM inference.
+C
+Additional Details of Temporal-Aware Activation Engineering Framework
+C.1
+Data Cleaning
+Although ShareGPT4Video originally contains 40k (video, question, answer) triples, activation engi-
+neering benefits more from a compact, high-quality corpus. We begin with dataset cleaning through a
+multi-step process. First, duplicate videos are identified and removed to ensure uniqueness. Next, we
+filter out clips with low visual quality (e.g., excessive blur, compression artifacts) or incomplet
+
+---
+
+## Утверждение 9 из 51
+
+(источник: arXiv 2401.15391, стр. 1 PDF)
+
+**УТВЕРЖДЕНИЕ:** Retrieval-augmented generation (RAG) augments large language models (LLMs) by retrieving relevant knowledge, showing promising potential in mitigating LLM hallucinations and enhancing response quality.
+
+**ТЕКСТ СТРАНИЦЫ:**
+MultiHop-RAG: Benchmarking Retrieval-Augmented Generation for
+Multi-Hop Queries
+Yixuan Tang and Yi Yang
+Hong Kong University of Science and Technology
+{yixuantang,imyiyang}@ust.hk
+Abstract
+Retrieval-augmented generation (RAG) aug-
+ments large language models (LLM) by re-
+trieving relevant knowledge, showing promis-
+ing potential in mitigating LLM hallucinations
+and enhancing response quality, thereby facil-
+itating the great adoption of LLMs in prac-
+tice. However, we find that existing RAG sys-
+tems are inadequate in answering multi-hop
+queries, which require retrieving and reasoning
+over multiple pieces of supporting evidence.
+Furthermore, to our knowledge, no existing
+RAG benchmarking dataset focuses on multi-
+hop queries. In this paper, we develop a novel
+dataset, MultiHop-RAG, which consists of a
+knowledge base, a large collection of multi-
+hop queries, their ground-truth answers, and
+the associated supporting evidence. We detail
+the procedure of building the dataset, utiliz-
+ing an English news article dataset as the un-
+derlying RAG knowledge base. We demon-
+strate the benchmarking utility of MultiHop-
+RAG in two experiments. The first experiment
+compares different embedding models for re-
+trieving evidence for multi-hop queries. In the
+second experiment, we examine the capabili-
+ties of various state-of-the-art LLMs, includ-
+ing GPT-4, PaLM, and Llama2-70B, in rea-
+soning and answering multi-hop queries given
+the evidence. Both experiments reveal that ex-
+isting RAG methods perform unsatisfactorily
+in retrieving and answering multi-hop queries.
+We hope MultiHop-RAG will be a valuable re-
+source for the community in developing effec-
+tive RAG systems, thereby facilitating greater
+adoption of LLMs in practice. The MultiHop-
+RAG and implemented RAG system is publicly
+available at https://github.com/yixuantt/
+MultiHop-RAG/.
+1
+Introduction
+The emergence of large language models (LLMs),
+such as ChatGPT, has fostered a wide range of inno-
+vations, powering intelligent chatbots and other nat-
+ural language processing (NLP) applications (Ope-
+Figure 1: RAG with multi-hop query.
+nAI, 2023). One promising use case is Retrieval-
+Augmented Generation (RAG) (Asai et al., 2023),
+which optimizes the output of a large language
+model by referencing an external knowledge base
+outside of the LLM training data sources before
+generating a response. RAG improves LLM’s re-
+sponse (Borgeaud et al., 2022) and also mitigates
+the occurrence of hallucinations, thereby enhancing
+the models’ credibility (Gao et al., 2023). LLM-
+based frameworks, such as LlamaIndex (Liu, 2022)
+and LangChain (Chase, 2022), specialize in sup-
+porting RAG pipelines.
+In real-world Retrieval-Augmented Generation
+(RAG) applications, a user’s query often necessi-
+tates retrieving and reasoning over evidence from
+multiple documents, a process known as multi-hop
+query. For instance, consider financial analysis us-
+ing a database of financial reports. A financial ana-
+lyst might query, Which company among Google,
+Apple, and Nvidia reported the largest profit mar-
+gins in their third-quarter reports for 2023? or
+inquire about a specific company’s performance
+over time, such as How does Apple’s sales trend
+look over the past three years? These queries re-
+quire evidence from multiple documents to formu-
+late an answer. Due to the multifaceted nature of
+such queries, involving information from various
+sources, traditional similarity matching methods
+like cosine similarity between query and financial
+arXiv:2401.15391v1  [cs.CL]  27 Jan 2024
+
+---
+
+## Утверждение 10 из 51
+
+(источник: arXiv 2401.15391, стр. 8 PDF)
+
+**УТВЕРЖДЕНИЕ:** However, existing RAG systems primarily focus on evaluating the generation aspect without specifically addressing their retrieval accuracy.
+
+**ТЕКСТ СТРАНИЦЫ:**
+niques. We believe that there are many potential
+areas for enhancing RAG’s performance on multi-
+hop queries, and the curated dataset MultiHop-
+RAG can be a valuable resource to the community.
+5
+Related Work
+RAG Evaluation: As RAG systems gain increas-
+ing popularity, a variety of RAG benchmarking
+datasets and evaluation tools have been developed.
+For instance, RGB (Chen et al., 2023) and RE-
+CALL (Liu et al., 2023) evaluate the performance
+of LLMs in generating responses for RAG systems
+under conditions involving noisy, integrative, and
+counterfactual queries. However, both datasets pri-
+marily focus on evaluating the generation aspect
+of RAG systems without specifically addressing
+their retrieval accuracy. In addition, recent ad-
+vancements have been made in automated RAG
+evaluation tools, such as ARES (Saad-Falcon et al.,
+2023) and RAGAS (Es et al., 2023). These tools
+utilize LLMs to automatically assess the quality of
+RAG generation, yet they do not introduce bench-
+marking datasets. Our work introduces one of the
+first RAG benchmarking datasets, consisting of a
+knowledge base, a large collection of multi-hop
+queries, their ground-truth answers, and the associ-
+ated supporting evidence, thereby complementing
+existing RAG evaluations.
+Retrieval datasets: Apart from the context of
+RAG, several benchmarking datasets exist for in-
+formation retrieval evaluation. The FEVER (Fact
+Extraction and VERification) dataset, for instance,
+contains claims classified as Supported, Refuted,
+or NotEnoughInfo by the given Wikipedia article
+(Thorne et al., 2018). Similarly, the SciFact dataset
+comprises scientific claims paired with evidence-
+containing abstracts (Wadden et al., 2020). How-
+ever, the claims in both datasets are single-hop
+statements, and the supporting evidence is from one
+single article, in contrast to the multi-hop queries
+discussed in this paper. Another dataset, HoVer,
+involves claims that require extracting and reason-
+ing from multiple Wikipedia articles (Jiang et al.,
+2020). However, unlike our dataset, HoVer focuses
+solely on classifying claims as either supported or
+not supported by the articles without evaluating
+an LLM generation step. Moreover, in HoVer, the
+Wikipedia articles from which evidence is drawn
+are given for claim verification, which is signifi-
+cantly different from our setting, where relevant
+pieces of evidence need to be extracted from a
+large knowledge base. Separately, (Kamalloo et al.,
+2023) evaluates a range of commercial embedding
+APIs for information retrieval, but this evaluation
+is not contextualized within the framework of RAG
+systems either.
+Multi-document
+QA
+datasets:
+Question-
+answering (QA) is a fundamental task in NLP, and
+several popular benchmarks, such as HotpotQA
+(Yang et al., 2018), MultiRC (Khashabi et al.,
+2018), and 2WikiMultiHopQA (Ho et al., 2020),
+aim to achieve QA from multiple sources of
+documents. This task is similar to our multi-hop
+query RAG task, as both involve reasoning from
+multiple sources of information. However, these
+datasets primarily focus on assessing a model’s
+reasoning skills, and they do not emphasize the
+retrieval of evidence from a knowledge base.
+Additionally, their primary data sources Wikipedia,
+significantly overlap with the training data of
+most existing LLMs. If we use these sources for
+benchmarking RAG systems, there is a potential
+concern that LLM responses might rely on training
+knowledge rather than reasoning from the retrieved
+knowledge base.
+6
+Conclusion
+In this work, we introduce MultiHop-RAG, a novel
+and unique dataset designed for queries that re-
+quire retrieval and reasoning from multiple pieces
+of supporting evidence. These types of multi-hop
+queries represent user queries commonly encoun-
+tered in real-world scenarios. MultiHop-RAG con-
+sists of a knowledge base, a large collection of
+multi-hop queries, their ground-truth answers, and
+the associated supporting evidence. This paper
+details the creation process of MultiHop-RAG, em-
+ployi
+
+---
+
+## Утверждение 11 из 51
+
+(источник: arXiv 2401.15391, стр. 8 PDF)
+
+**УТВЕРЖДЕНИЕ:** Recent advancements have been made in automated RAG evaluation tools, such as ARES (Saad-Falcon et al., 2023) and RAGAS (Es et al., 2023), which utilize LLMs to automatically assess the quality of RAG generation.
+
+**ТЕКСТ СТРАНИЦЫ:**
+niques. We believe that there are many potential
+areas for enhancing RAG’s performance on multi-
+hop queries, and the curated dataset MultiHop-
+RAG can be a valuable resource to the community.
+5
+Related Work
+RAG Evaluation: As RAG systems gain increas-
+ing popularity, a variety of RAG benchmarking
+datasets and evaluation tools have been developed.
+For instance, RGB (Chen et al., 2023) and RE-
+CALL (Liu et al., 2023) evaluate the performance
+of LLMs in generating responses for RAG systems
+under conditions involving noisy, integrative, and
+counterfactual queries. However, both datasets pri-
+marily focus on evaluating the generation aspect
+of RAG systems without specifically addressing
+their retrieval accuracy. In addition, recent ad-
+vancements have been made in automated RAG
+evaluation tools, such as ARES (Saad-Falcon et al.,
+2023) and RAGAS (Es et al., 2023). These tools
+utilize LLMs to automatically assess the quality of
+RAG generation, yet they do not introduce bench-
+marking datasets. Our work introduces one of the
+first RAG benchmarking datasets, consisting of a
+knowledge base, a large collection of multi-hop
+queries, their ground-truth answers, and the associ-
+ated supporting evidence, thereby complementing
+existing RAG evaluations.
+Retrieval datasets: Apart from the context of
+RAG, several benchmarking datasets exist for in-
+formation retrieval evaluation. The FEVER (Fact
+Extraction and VERification) dataset, for instance,
+contains claims classified as Supported, Refuted,
+or NotEnoughInfo by the given Wikipedia article
+(Thorne et al., 2018). Similarly, the SciFact dataset
+comprises scientific claims paired with evidence-
+containing abstracts (Wadden et al., 2020). How-
+ever, the claims in both datasets are single-hop
+statements, and the supporting evidence is from one
+single article, in contrast to the multi-hop queries
+discussed in this paper. Another dataset, HoVer,
+involves claims that require extracting and reason-
+ing from multiple Wikipedia articles (Jiang et al.,
+2020). However, unlike our dataset, HoVer focuses
+solely on classifying claims as either supported or
+not supported by the articles without evaluating
+an LLM generation step. Moreover, in HoVer, the
+Wikipedia articles from which evidence is drawn
+are given for claim verification, which is signifi-
+cantly different from our setting, where relevant
+pieces of evidence need to be extracted from a
+large knowledge base. Separately, (Kamalloo et al.,
+2023) evaluates a range of commercial embedding
+APIs for information retrieval, but this evaluation
+is not contextualized within the framework of RAG
+systems either.
+Multi-document
+QA
+datasets:
+Question-
+answering (QA) is a fundamental task in NLP, and
+several popular benchmarks, such as HotpotQA
+(Yang et al., 2018), MultiRC (Khashabi et al.,
+2018), and 2WikiMultiHopQA (Ho et al., 2020),
+aim to achieve QA from multiple sources of
+documents. This task is similar to our multi-hop
+query RAG task, as both involve reasoning from
+multiple sources of information. However, these
+datasets primarily focus on assessing a model’s
+reasoning skills, and they do not emphasize the
+retrieval of evidence from a knowledge base.
+Additionally, their primary data sources Wikipedia,
+significantly overlap with the training data of
+most existing LLMs. If we use these sources for
+benchmarking RAG systems, there is a potential
+concern that LLM responses might rely on training
+knowledge rather than reasoning from the retrieved
+knowledge base.
+6
+Conclusion
+In this work, we introduce MultiHop-RAG, a novel
+and unique dataset designed for queries that re-
+quire retrieval and reasoning from multiple pieces
+of supporting evidence. These types of multi-hop
+queries represent user queries commonly encoun-
+tered in real-world scenarios. MultiHop-RAG con-
+sists of a knowledge base, a large collection of
+multi-hop queries, their ground-truth answers, and
+the associated supporting evidence. This paper
+details the creation process of MultiHop-RAG, em-
+ployi
+
+---
+
+## Утверждение 12 из 51
+
+(источник: arXiv 2401.15391, стр. 5 PDF)
+
+**УТВЕРЖДЕНИЕ:** MultiHop-RAG can be used as a benchmark for various RAG-related tasks, and it is publicly released to provide a valuable resource to the community, contributing to the advancement and benchmarking of RAG systems.
+
+**ТЕКСТ СТРАНИЦЫ:**
+bridge-topic into a claim set. We restrict the claim
+set to have at least two claims but no more than four
+claims. For each type of query, we feed the claim
+set to GPT-4 and prompt it with an instruction to
+generate a query with information from each claim.
+Below, we explain the specifications for different
+multi-hop query types. In the construction of each
+query, we also include the source of the news article
+where the supporting evidence is associated with
+to mimic real-world RAG scenarios. Appendix
+A presents the prompts used for GPT-4 for query
+generation.
+Inference Query: These queries are formulated
+by synthesizing the various characterizations of the
+bridge-entity across multiple claims, with the final
+answer being the identification of the entity itself.
+Comparison Query: These queries are struc-
+tured to compare the similarities and differences
+related to the bridge entity or topic. The resultant
+answer to such queries is typically a definitive “yes”
+or “no”, based on the comparison.
+Temporal Query: These queries explore the
+temporal ordering of events across different points
+in time. The answer to such queries is typically a
+“yes” or “no” or a single temporal indicator word
+like “before” or “after”.
+Null Query: Null query is a query whose an-
+swer cannot be derived from the retrieved set. To
+create null queries, we generate multi-hop queries
+using entities that do not exist in the existing bridge-
+entities. To add complexity, we also include fic-
+tional news source metadata when formulating
+these questions, ensuring that the questions do not
+reference any contextually relevant content from
+the knowledge base. The answer to the null query
+should be “insufficient information” or similar.
+Step 5: Quality Assurance. Finally, we use two
+approaches to reassure the dataset quality. First, we
+manually review a subset sample of the generated
+multi-hop queries, their corresponding evidence
+sets, and the final answers. The results of the man-
+ual examination indicate a high degree of accuracy
+and data quality. Second, we utilize GPT-4 to as-
+sess each example in the dataset against the follow-
+ing criteria: 1) The generated query must utilize
+all provided evidence in formulating the response;
+2) The query should be answerable solely based
+on the provided evidence; 3) The response to the
+generated query should be either a single word or
+a specific entity; 4) The query must conform to its
+designated query type.
+Category
+Avg. Tokens
+Entry Count
+technology
+2262.3
+172
+entertainment
+2084.3
+114
+sports
+2030.6
+211
+science
+1745.5
+21
+business
+1723.8
+81
+health
+1481.1
+10
+total
+2046.5
+609
+Table 2: Descriptive statistics of the news article knowl-
+edge base in MultiHop-RAG.
+Query Category
+Entry Count
+Percentage
+Inference Query
+816
+31.92%
+Comparison Query
+856
+33.49%
+Temporal Query
+583
+22.81%
+Null Query
+301
+11.78%
+Total
+2,556
+100.00 %
+Table 3: The distribution of query types in MultiHop-
+RAG.
+3.2
+Descriptive Statistics
+The MultiHop-RAG dataset contains six different
+types of news articles, covering 609 distinct news,
+with an average of 2,046 tokens. The distribution of
+the news categories is shown in Table 2. MultiHop-
+RAG contains four types of multi-hop queries and
+the distribution of these queries is shown in Table
+3. In total, about 88% of queries in the dataset are
+non-null queries where answers can be retrieved
+and reasoned from the knowledge base. In addition,
+the form of queries exhibits considerable diversity.
+Approximately 27% of interrogative queries start
+with "does," around 15% initiate with "what," a
+similar proportion start "which," and 14% begin
+with "who," with the remainder incorporating a
+small percentage of other interrogative words such
+as "when." Moreover, the number of evidence re-
+quired to answer a multi-hop query varies. Table
+4 shows the distribution of evidence numbers for
+each query in the dataset. Around 42% of queries
+can be answered using two pieces of evidence,
+while approximately 30% and 15% of queries can
+be a
+
+---
+
+## Утверждение 13 из 51
+
+(источник: arXiv 2510.25518, стр. 1 PDF)
+
+**УТВЕРЖДЕНИЕ:** Retrieval Augmented Generation (RAG) combines large language models (LLMs) with external document retrieval, allowing models to access information beyond their training data.
+
+**ТЕКСТ СТРАНИЦЫ:**
+Retrieval Augmented Generation (RAG) for
+Fintech: Agentic Design and Evaluation
+1,3Thomas Cook∗, 2,3Richard Osuagwu∗, 1,3Liman Tsatiashvili∗, 4,3Vrynsia Vrynsia∗,
+3Koustav Ghosal, 3Maraim Masoud, 3Riccardo Mattivi
+1TU Dublin, Dublin, Ireland
+2Maynooth University, Ireland
+3Mastercard, Ireland
+4National College of Ireland, Ireland
+{firstname.lastname}@mastercard.com
+Abstract—Retrieval-Augmented Generation (RAG) systems of-
+ten face limitations in specialized domains such as fintech, where
+domain-specific ontologies, dense terminology, and acronyms
+complicate effective retrieval and synthesis. This paper introduces
+an agentic RAG architecture designed to address these challenges
+through a modular pipeline of specialised agents. The proposed
+system supports intelligent query reformulation, iterative sub-
+query decomposition guided by keyphrase extraction, contextual
+acronym resolution, and cross-encoder-based context re-ranking.
+We evaluate our approach against a standard RAG baseline
+using a curated dataset of 85 question–answer–reference triples
+derived from an enterprise fintech knowledge base. Experimental
+results demonstrate that the agentic RAG system outperforms
+the baseline in retrieval precision and relevance, albeit with
+increased latency. These findings suggest that structured, multi-
+agent methodologies offer a promising direction for enhancing
+retrieval robustness in complex, domain-specific settings.
+Index Terms—Retrieval Augmented Generation, Agentic AI,
+Fintech, Natural Language Processing, Knowledge Base, Domain-
+Specific Ontology, Query Understanding
+I. INTRODUCTION
+Retrieval Augmented Generation (RAG) combines large
+language models (LLMs) with external document retrieval,
+allowing models to access information beyond their training
+data. These systems have shown impressive results in general-
+purpose applications such as technical support [1], coding
+assistants [2], and document summarization [3], especially
+when operating as proof-of-concepts on publicly available or
+loosely structured data. However, deploying such systems at
+scale in highly specialized and tightly regulated domains such
+as financial technology is far from straightforward [4], [5].
+Fintech-specific
+use
+cases
+often
+involve
+structured-
+unstructured data (or tightly regulated free text), such as
+proprietary knowledge bases, role-based access to information,
+and stringent compliance constraints [6], all of which make
+it difficult to repurpose existing tools and methodologies
+designed for open-domain settings or Software-as-a-Service
+(SaaS)-based environments. These complexities are both tech-
+nical and organizational. Regulatory restrictions prohibit data
+*Work done during internship at Mastercard, Ireland
+Fig. 1. Word cloud illustrating the distribution of internal knowledge artifacts
+in fintech. The prominence of terms such as “feature,” “status,” “model,” and
+“API” reflects the operational focus of internal documentation—often centered
+around technical specifications, product state, and integration interfaces. This
+concentration of tightly scoped, semi-structured information highlights the
+challenge of designing RAG systems that can interpret fragmented context
+across teams and tools, where standard SaaS-based approaches fall short due
+to regulatory and organizational constraints.
+from leaving organisational boundaries, making cloud-hosted
+APIs or third-party evaluation platforms unsuitable for most
+practical deployments. In addition, often fintech firms follow
+a compartmentalized structure with clear divisions of respon-
+sibility between product managers, analysts, compliance offi-
+cers, and engineers. This further complicates how knowledge
+is captured, retrieved, and applied.
+For example, consider a product manager in Mastercard
+analyzing feature alignment across offerings such as MDES
+(Mastercard Digital Enablement Service) 1, M4M (Mastercard
+for Merchants) [7], and SwitchCore (Mastercard’s transaction
+switching platform) [8]. Internal knowled
+
+---
+
+## Утверждение 14 из 51
+
+(источник: arXiv 2502.00306, стр. 1 PDF)
+
+**УТВЕРЖДЕНИЕ:** Retrieval-Augmented Generation (RAG) enables Large Language Models (LLMs) to generate grounded responses by integrating external knowledge.
+
+**ТЕКСТ СТРАНИЦЫ:**
+arXiv:2502.00306v2  [cs.CR]  30 Jun 2025
+Riddle Me This! Stealthy Membership Inference for
+Retrieval-Augmented Generation
+Ali Naseh∗†
+University of Massachusetts Amherst
+Yuefeng Peng∗
+University of Massachusetts Amherst
+Anshuman Suri∗
+Northeastern University
+Harsh Chaudhari
+Northeastern University
+Alina Oprea
+Northeastern University
+Amir Houmansadr
+University of Massachusetts Amherst
+Abstract
+Retrieval-Augmented Generation (RAG) enables Large Language
+Models (LLMs) to generate grounded responses by leveraging ex-
+ternal knowledge databases without altering model parameters.
+Although the absence of weight tuning prevents leakage via model
+parameters, it introduces the risk of inference adversaries exploit-
+ing retrieved documents in the model’s context. Existing methods
+for membership inference and data extraction often rely on jail-
+breaking or carefully crafted unnatural queries, which can be easily
+detected or thwarted with query rewriting techniques common in
+RAG systems. In this work, we present Interrogation Attack (IA), a
+membership inference technique targeting documents in the RAG
+datastore. By crafting natural-text queries that are answerable only
+with the target document’s presence, our approach demonstrates
+successful inference with just 30 queries while remaining stealthy;
+straightforward detectors identify adversarial prompts from exist-
+ing methods up to 76× more frequently than those generated by
+our attack. We observe a 2× improvement in TPR@1%FPR over
+prior inference attacks across diverse RAG configurations, all while
+costing less than $0.02 per document inference.
+CCS Concepts
+• Security and privacy; • Computing methodologies →Ma-
+chine learning;
+ACM Reference Format:
+Ali Naseh∗†, Yuefeng Peng∗, Anshuman Suri∗, Harsh Chaudhari, Alina
+Oprea, and Amir Houmansadr. 2025. Riddle Me This! Stealthy Membership
+Inference for Retrieval-Augmented Generation. In Proceedings of the 2025
+ACM SIGSAC Conference on Computer and Communications Security (CCS
+’25), October 13–17, 2025, Taipei, Taiwan. ACM, New York, NY, USA, 27 pages.
+https://doi.org/10.1145/3719027.3744840
+Permission to make digital or hard copies of all or part of this work for personal or
+classroom use is granted without fee provided that copies are not made or distributed
+for profit or commercial advantage and that copies bear this notice and the full citation
+on the first page. Copyrights for components of this work owned by others than the
+author(s) must be honored. Abstracting with credit is permitted. To copy otherwise, or
+republish, to post on servers or to redistribute to lists, requires prior specific permission
+and/or a fee. Request permissions from permissions@acm.org.
+CCS ’25, October 13–17, 2025, Taipei, Taiwan
+© 2025 Copyright held by the owner/author(s). Publication rights licensed to ACM.
+ACM ISBN 979-8-4007-1525-9/2025/10
+https://doi.org/10.1145/3719027.3744840
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+False Positive Rate
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+True Positive Rate
+NFCorpus
+RAG-MIA
+S2-MIAAUC=0.759
+MBAAUC=0.710
+IA (Ours)AUC=0.984
+Figure 1: ROC for Gemma-2 (2B) as generator, GTE as re-
+triever, for NFCorpus dataset. Our attack (IA) consistently
+achieves near-perfect membership inference.
+1
+Introduction
+Large Language Models (LLMs) have surged in popularity, yet they
+remain plagued by a critical challenge of hallucination [20], gener-
+ating plausible-sounding but factually incorrect information. Lewis
+et al. [23] proposed Retrieval Augmented Generation (RAG) as a
+plausible remedy to ground model outputs. RAG involves retriev-
+ing relevant text from a knowledge base for a given query using a
+retrieval model. These retrieved documents are then incorporated
+into the model’s prompt as context, augmenting its knowledge. RAG
+offers a promising approach to grounding model outputs while en-
+abling flexible, domain-specific knowledge customization without
+the need for expensive model retraining. However, this advantage
+of parameter-free customization introduces a significa
+
+---
+
+## Утверждение 15 из 51
+
+(источник: arXiv 2510.22344, стр. 1 PDF)
+
+**УТВЕРЖДЕНИЕ:** FAIR-RAG is a method that uses Faithful Adaptive Iterative Refinement for Retrieval-Augmented Generation to improve the accuracy and reliability of generated content.
+
+**ТЕКСТ СТРАНИЦЫ:**
+FAIR-RAG: Faithful Adaptive Iterative Refinement for
+Retrieval-Augmented Generation
+Mohammad Aghajani Asl
+Sharif University of Technology
+m.aghajani@physics.sharif.edu
+Majid Asgari-Bidhendi
+Iran University of Science and Technology
+Noor Avaran Jelvehaye Maanaei Najm Co., Ltd.
+majid.asgari@gmail.com
+Behrooz Minaei-Bidgoli
+Iran University of Science and Technology
+b_minaei@iust.ac.ir
+Abstract
+While Retrieval-Augmented Generation (RAG)
+mitigates hallucination and knowledge stale-
+ness in Large Language Models (LLMs), exist-
+ing frameworks often falter on complex, multi-
+hop queries that require synthesizing informa-
+tion from disparate sources. Current advanced
+RAG methods, employing iterative or adaptive
+strategies, still lack a robust mechanism to sys-
+tematically identify and fill evidence gaps, of-
+ten propagating noise or failing to gather a com-
+prehensive context. In this paper, we introduce
+FAIR-RAG, a novel agentic framework that
+transforms the standard RAG pipeline into a
+dynamic, evidence-driven reasoning process.
+At the core of FAIR-RAG is an Iterative Refine-
+ment Cycle governed by a novel module we
+term Structured Evidence Assessment (SEA).
+The SEA acts as an analytical gating mecha-
+nism: it deconstructs the initial query into a
+checklist of required findings and systemati-
+cally audits the aggregated evidence to iden-
+tify confirmed facts and, critically, explicit in-
+formational gaps. These identified gaps pro-
+vide a precise, actionable signal to an Adap-
+tive Query Refinement agent, which then gen-
+erates new, targeted sub-queries to retrieve the
+missing information. This cycle repeats until
+the evidence is verified as sufficient, ensuring
+a comprehensive context for a final, strictly
+faithful generation step. We conduct exten-
+sive experiments on challenging multi-hop QA
+benchmarks, including HotpotQA, 2WikiMul-
+tiHopQA, and MusiQue. Under a unified and
+controlled experimental setup, FAIR-RAG
+significantly outperforms strong representative
+baselines. On HotpotQA, it achieves an F1-
+score of 0.453—an absolute improvement of
+8.3 points over the strongest iterative baseline—
+establishing a new state-of-the-art for this
+class of methods on these benchmarks. Our
+work demonstrates that a structured, evidence-
+driven refinement process with explicit gap
+analysis is crucial for unlocking reliable and
+accurate reasoning in advanced RAG systems
+for complex, knowledge-intensive tasks.
+1
+Introduction
+Large Language Models (LLMs) have demon-
+strated remarkable capabilities across a wide range
+of natural language processing tasks, including
+question-answering (QA) (Brown et al., 2020;
+Chowdhery et al., 2022). However, their knowl-
+edge is inherently static, confined to the data they
+were trained on, which leads to factual inaccura-
+cies and an inability to reason about events beyond
+their training cut-off date. Furthermore, LLMs
+are prone to “hallucination,” generating plausible
+yet factually incorrect information, which severely
+limits their reliability in knowledge-intensive ap-
+plications (Ji et al., 2023). To mitigate these is-
+sues, Retrieval-Augmented Generation (RAG) has
+emerged as a prominent paradigm. By ground-
+ing the generation process on information retrieved
+from external knowledge bases, RAG systems aim
+to produce more accurate, timely, and verifiable
+responses (Lewis et al., 2020).
+Despite its advantages, the standard “retrieve-
+then-read” RAG pipeline often falls short when
+faced with real-world user queries, which are fre-
+quently complex and cannot be answered through
+a single-shot retrieval step. For instance, a query
+such as “Which movie, directed by the same per-
+son who directed Inception, won an Oscar for
+arXiv:2510.22344v1  [cs.CL]  25 Oct 2025
+
+---
+
+## Утверждение 16 из 51
+
+(источник: arXiv 2402.12317, стр. 1 PDF)
+
+**УТВЕРЖДЕНИЕ:** The retrieval-augmented generation (RAG) paradigm has gained significant attention due to its efficiency in adapting large language models (LLMs) without training.
+
+**ТЕКСТ СТРАНИЦЫ:**
+EVOR: Evolving Retrieval for Code Generation
+Hongjin Su1, Shuyang Jiang2, Yuhang Lai2,
+Haoyuan Wu1, Boao Shi1, Che Liu1, Qian Liu3, Tao Yu 1,
+1The University of Hong Kong, 2Fudan University, 3Sea AI Lab,
+Correspondence: hjsu@cs.hku.hk
+Abstract
+Recently the retrieval-augmented generation
+(RAG) has been successfully applied in code
+generation. However, existing pipelines for
+retrieval-augmented code generation (RACG)
+employ static knowledge bases with a single
+source, limiting the adaptation capabilities of
+Large Language Models (LLMs) to domains
+they have insufficient knowledge of. In this
+work, we develop a novel pipeline, EVOR, that
+employs the synchronous evolution of both
+queries and diverse knowledge bases. On two
+realistic settings where the external knowledge
+is required to solve code generation tasks, we
+compile four new datasets associated with fre-
+quently updated libraries and long-tail program-
+ming languages, named EVOR-BENCH. Ex-
+tensive experiments demonstrate that EVOR
+achieves two to four times of execution accu-
+racy compared to other methods such as Reflex-
+ion (Shinn et al., 2024), DocPrompting (Zhou
+et al., 2023), etc. We demonstrate that EVOR
+is flexible and can be easily combined with
+them to achieve further improvement. Further
+analysis reveals that EVOR benefits from the
+synchronous evolution of queries and docu-
+ments and the diverse information sources in
+the knowledge base. We hope that our studies
+will inspire more insights into the design of
+advanced RACG pipelines in future research.
+Our model, code, and data are available at
+https://arks-codegen.github.io.
+1
+Introduction
+The
+retrieval-augmented
+generation
+(RAG)
+paradigm has raised significant attention due
+to its efficiency in adapting large language
+models (LLMs) without training (Guu et al.,
+2020; Karpukhin et al., 2020; Izacard et al.,
+2023; Borgeaud et al., 2022; Asai et al., 2023).
+Recent research has demonstrated its successful
+applications in code generation. They implement
+the retrieval-augmented code generation (RACG)
+Write ponyc code to print odd numbers from 0 to n (inclusive)
+Query
+Generator
+Code
+…
+The Pony if condition 
+allows actions when a 
+condition is true.
+Documentation
+The Pony for loop iterates 
+over a collection of items 
+using an iterator …
+if n <= 0 then
+    n = -n
+end
+Code Snippet
+for i in Range(1, n) do
+    a = a + 2 * i
+end
+Execution Feedback
+main.pony:10:syntax error: 
+unterminated if expression       
+if (i % 2) != 0 then ^
+Web Search
+Github
+StackOverflow
+…
+Knowledge Soup
+…
+Write ponyc code to …
+Retrieve
+Generate
+Feedback
+Execute
+Generate
+Evolve
+Evolve
+Figure 1: Instead of using a given query to retrieve from
+a static knowledge base, we design a novel pipeline to
+dynamically evolve both queries and knowledge soup
+in retrieval-augmented code generation.
+pipelines either using a given query (Parvez
+et al., 2021b), or a rewritten version (Jiang et al.,
+2023b) to retrieve from a static knowledge base
+with a single type of information, e.g., syntax
+documentation (Zan et al., 2022; Zhou et al., 2023),
+code repositories (Zhang et al., 2023a; Shrivastava
+et al., 2023), etc.
+However, more knowledge sources are poten-
+tially helpful to generalization, e.g., web con-
+tent (Parvez et al., 2021a; Wang et al., 2022), code
+snippets generated by LLM (Zhang et al., 2023b),
+etc. This information is easily obtained and can en-
+rich knowledge bases, which are shared among all
+instances of the same task. Furthermore, the unique
+characteristic of execution in code generation en-
+ables more information collected on-the-fly. For
+instance, if a code snippet generated by LLMs is
+successfully executed without reporting error mes-
+sages, it is guaranteed to be syntactically correct
+and can serve as a concrete example to demonstrate
+the corresponding grammar or function usage.
+In this work, we introduce EVOR, a novel
+pipeline that applies synchronous evolution of both
+queries and documents in RACG. In the traces of
+multi-round interactions among r
+
+---
+
+## Утверждение 17 из 51
+
+(источник: arXiv 2411.18583, стр. 2 PDF)
+
+**УТВЕРЖДЕНИЕ:** Yuan et al. have discussed the generation of comprehensive reviews using machine learning techniques, natural language generation, multi-document summarization, and multi-objective optimization.
+
+**ТЕКСТ СТРАНИЦЫ:**
+II. LITERATURE REVIEW 
+A framework was proposed by Silva et al. [6] for auto- 
+matically producing systematic literature reviews. They have 
+focused on four technical steps: Searching, Screening, Map- 
+ping, and Synthesizing. In response to a specific inquiry, 
+extensive searches are conducted to find as much relevant 
+research as feasible, involving looking through reference lists, 
+scouring internet databases, and reviewing published materials. 
+Screening reduces the search scope by limiting the collection 
+to only the papers pertinent to a particular review, aiming 
+to highlight important findings and facts that could influence 
+policy. Mapping is used to comprehend research activity in 
+a particular area, involve stakeholders, and define priorities 
+concerning the review emphasis. Synthesizing integrates data 
+from numerous sources and provides an overview of the 
+outcomes. The formulation of research questions, reporting 
+phase, and peer review are some steps that are also discussed 
+for the composition of systematic literature reviews. 
+Peer-reviewed publications are growing exponentially with 
+the rapid development of science. Therefore, Yuan et al. 
+[7] have explored the use of machine learning techniques, 
+natural language generation, multi-document summarization, 
+and multi-objective optimization for automating scientific re- 
+viewing. They have discussed the generation of comprehensive 
+reviews and noted the limitations of constructive feedback 
+compared to human-written reviews. The models used in this 
+research are not yet fully capable of automating Literature 
+Reviews and they require human reviewers. 
+A comprehensive analysis of existing tools for systematic 
+literature reviews was done by Karakan et al. [8]. They have 
+explored the potential for automation in various phases of the 
+review process, highlighting the need for a holistic tool de- 
+sign to address researchers’ challenges effectively. They have 
+discussed two methodologies to accomplish their research: 
+Rapid Review and Semi-Structured Interviews. Rapid Review 
+emphasizes decision-making procedures for resolving issues, 
+difficulties, and challenges that software engineers encounter 
+in their daily work. Semi-structured interviews are used 
+to explore researchers’ experiences, challenges, strategies, 
+strengths, weaknesses of Systematic Literature Review tools, 
+and requirements for effective support in software engineering. 
+Jaspers et al. [9] focused on the use of machine learning 
+techniques for automation of literature reviews and systematic 
+reviews. They have outlined the pros and cons of different 
+machine-learning techniques. The process of automating the 
+literature review was elaborately discussed. The paper lacks 
+practical validation across diverse domains and detailed in- 
+sights. 
+A concise overview of automated literature reviews was 
+presented by Tauchert et. al. [10] They have emphasized the 
+potential for automation in various stages of the systematic 
+review process. The paper discusses the importance of in- 
+tegrating computational techniques to streamline tasks such 
+as searching, screening, extraction, and synthesis. It also ac- 
+knowledges the need for further research to address challenges 
+and enhance the effectiveness of automated approaches. 
+A brief overview on the topic of automatic literature review 
+tools was given by Tsai et. al. [11] They discussed the 
+existing research in the field, the challenges faced in conduct- 
+ing literature reviews manually, and the potential benefits of 
+automating the process. The main focus of their contributions 
+is the evaluation of Mistral LLM’s effectiveness in the field 
+of Academic Research. 
+The gaps in the intersection of systematic literature reviews 
+(SLRs) and LLMs are discussed by Susnjak et. al. [12]. They 
+also emphasized the need to address challenges in the synthesis 
+phase of research and highlighted the potential of fine-tuning 
+LLMs with datasets to enhance knowledge sy
+
+---
+
+## Утверждение 18 из 51
+
+(источник: arXiv 2402.12317, стр. 9 PDF)
+
+**УТВЕРЖДЕНИЕ:** REALM, introduced by Guu et al., is a retrieval-augmented language model pre-training method.
+
+**ТЕКСТ СТРАНИЦЫ:**
+to output the code answer. This iterative process
+can lead to longer latency and increased energy
+consumption, which are critical concerns in real-
+time applications and energy-constrained environ-
+ments. We hope that future work will design more
+efficient architectures or approaches to integrate
+LLMs seamlessly while maintaining or improving
+performance in RACG. Such advancements could
+significantly enhance the practicality and scalabil-
+ity of LLMs in realistic scenarios.
+8
+Potential Risk
+The use of retrieval-augmented code generation
+with large language models introduces several po-
+tential risks, primarily centered around the quality
+and relevance of the retrieved code snippets. There
+is a risk of biased or incorrect information being re-
+trieved, which could propagate errors or introduce
+vulnerabilities into generated code. Additionally,
+there are concerns about privacy and security if
+sensitive code snippets are inadvertently included
+in the retrieval process. Addressing these risks re-
+quires careful curation of retrieval sources, robust
+validation mechanisms, and continuous monitoring
+to ensure the integrity and safety of the generated
+code.
+References
+Abhijit Anand, Vinay Setty, Avishek Anand, et al. 2023.
+Context aware query rewriting for text rankers using
+llm. arXiv preprint arXiv:2308.16753.
+Akari Asai, Sewon Min, Zexuan Zhong, and Danqi
+Chen. 2023. Acl 2023 tutorial: Retrieval-based lan-
+guage models and applications. ACL 2023.
+Jacob Austin, Augustus Odena, Maxwell Nye, Maarten
+Bosma, Henryk Michalewski, David Dohan, Ellen
+Jiang, Carrie Cai, Michael Terry, Quoc Le, et al. 2021.
+Program synthesis with large language models. arXiv
+preprint arXiv:2108.07732.
+Sebastian Borgeaud, Arthur Mensch, Jordan Hoffmann,
+Trevor Cai, Eliza Rutherford, Katie Millican, George
+van den Driessche, Jean-Baptiste Lespiau, Bogdan
+Damoc, Aidan Clark, Diego de Las Casas, Aurelia
+Guy, Jacob Menick, Roman Ring, Tom Hennigan,
+Saffron Huang, Loren Maggiore, Chris Jones, Albin
+Cassirer, Andy Brock, Michela Paganini, Geoffrey
+Irving, Oriol Vinyals, Simon Osindero, Karen Si-
+monyan, Jack W. Rae, Erich Elsen, and Laurent Sifre.
+2022. Improving language models by retrieving from
+trillions of tokens. In International Conference on
+Machine Learning, ICML 2022, 17-23 July 2022, Bal-
+timore, Maryland, USA, volume 162 of Proceedings
+of Machine Learning Research, pages 2206–2240.
+PMLR.
+Tom Brown, Benjamin Mann, Nick Ryder, Melanie
+Subbiah, Jared D Kaplan, Prafulla Dhariwal, Arvind
+Neelakantan, Pranav Shyam, Girish Sastry, Amanda
+Askell, et al. 2020. Language models are few-shot
+learners. Advances in neural information processing
+systems, 33:1877–1901.
+Chi-Min Chan, Chunpu Xu, Ruibin Yuan, Hongyin Luo,
+Wei Xue, Yike Guo, and Jie Fu. 2024. Rq-rag: Learn-
+ing to refine queries for retrieval augmented genera-
+tion. arXiv preprint arXiv:2404.00610.
+Bei Chen, Fengji Zhang, Anh Nguyen, Daoguang Zan,
+Zeqi Lin, Jian-Guang Lou, and Weizhu Chen. 2022.
+Codet: Code generation with generated tests. arXiv
+preprint arXiv:2207.10397.
+Mark Chen, Jerry Tworek, Heewoo Jun, Qiming
+Yuan, Henrique Ponde de Oliveira Pinto, Jared Ka-
+plan, Harri Edwards, Yuri Burda, Nicholas Joseph,
+Greg Brockman, et al. 2021.
+Evaluating large
+language models trained on code. arXiv preprint
+arXiv:2107.03374.
+Xinyun Chen, Maxwell Lin, Nathanael Schärli, and
+Denny Zhou. 2023. Teaching large language models
+to self-debug. arXiv preprint arXiv:2304.05128.
+Yucan Guo, Zixuan Li, Xiaolong Jin, Yantao Liu, Yu-
+tao Zeng, Wenxuan Liu, Xiang Li, Pan Yang, Long
+Bai, Jiafeng Guo, et al. 2023. Retrieval-augmented
+code generation for universal information extraction.
+arXiv preprint arXiv:2311.02962.
+Kelvin Guu, Kenton Lee, Zora Tung, Panupong Pasu-
+pat, and Ming-Wei Chang. 2020. REALM: retrieval-
+augmented language model pre-training.
+CoRR,
+abs/2002.08909.
+Baizhou Huang, Shuai Lu, Weizhu Chen, Xiaojun
+Wan, and Nan Duan. 2023. Enhancing large lan-
+guage models in coding through multi-perspective
+self-consisten
+
+---
+
+## Утверждение 19 из 51
+
+(источник: arXiv 2402.12317, стр. 9 PDF)
+
+**УТВЕРЖДЕНИЕ:** The REALM model integrates retrieval mechanisms to enhance the performance of language models.
+
+**ТЕКСТ СТРАНИЦЫ:**
+to output the code answer. This iterative process
+can lead to longer latency and increased energy
+consumption, which are critical concerns in real-
+time applications and energy-constrained environ-
+ments. We hope that future work will design more
+efficient architectures or approaches to integrate
+LLMs seamlessly while maintaining or improving
+performance in RACG. Such advancements could
+significantly enhance the practicality and scalabil-
+ity of LLMs in realistic scenarios.
+8
+Potential Risk
+The use of retrieval-augmented code generation
+with large language models introduces several po-
+tential risks, primarily centered around the quality
+and relevance of the retrieved code snippets. There
+is a risk of biased or incorrect information being re-
+trieved, which could propagate errors or introduce
+vulnerabilities into generated code. Additionally,
+there are concerns about privacy and security if
+sensitive code snippets are inadvertently included
+in the retrieval process. Addressing these risks re-
+quires careful curation of retrieval sources, robust
+validation mechanisms, and continuous monitoring
+to ensure the integrity and safety of the generated
+code.
+References
+Abhijit Anand, Vinay Setty, Avishek Anand, et al. 2023.
+Context aware query rewriting for text rankers using
+llm. arXiv preprint arXiv:2308.16753.
+Akari Asai, Sewon Min, Zexuan Zhong, and Danqi
+Chen. 2023. Acl 2023 tutorial: Retrieval-based lan-
+guage models and applications. ACL 2023.
+Jacob Austin, Augustus Odena, Maxwell Nye, Maarten
+Bosma, Henryk Michalewski, David Dohan, Ellen
+Jiang, Carrie Cai, Michael Terry, Quoc Le, et al. 2021.
+Program synthesis with large language models. arXiv
+preprint arXiv:2108.07732.
+Sebastian Borgeaud, Arthur Mensch, Jordan Hoffmann,
+Trevor Cai, Eliza Rutherford, Katie Millican, George
+van den Driessche, Jean-Baptiste Lespiau, Bogdan
+Damoc, Aidan Clark, Diego de Las Casas, Aurelia
+Guy, Jacob Menick, Roman Ring, Tom Hennigan,
+Saffron Huang, Loren Maggiore, Chris Jones, Albin
+Cassirer, Andy Brock, Michela Paganini, Geoffrey
+Irving, Oriol Vinyals, Simon Osindero, Karen Si-
+monyan, Jack W. Rae, Erich Elsen, and Laurent Sifre.
+2022. Improving language models by retrieving from
+trillions of tokens. In International Conference on
+Machine Learning, ICML 2022, 17-23 July 2022, Bal-
+timore, Maryland, USA, volume 162 of Proceedings
+of Machine Learning Research, pages 2206–2240.
+PMLR.
+Tom Brown, Benjamin Mann, Nick Ryder, Melanie
+Subbiah, Jared D Kaplan, Prafulla Dhariwal, Arvind
+Neelakantan, Pranav Shyam, Girish Sastry, Amanda
+Askell, et al. 2020. Language models are few-shot
+learners. Advances in neural information processing
+systems, 33:1877–1901.
+Chi-Min Chan, Chunpu Xu, Ruibin Yuan, Hongyin Luo,
+Wei Xue, Yike Guo, and Jie Fu. 2024. Rq-rag: Learn-
+ing to refine queries for retrieval augmented genera-
+tion. arXiv preprint arXiv:2404.00610.
+Bei Chen, Fengji Zhang, Anh Nguyen, Daoguang Zan,
+Zeqi Lin, Jian-Guang Lou, and Weizhu Chen. 2022.
+Codet: Code generation with generated tests. arXiv
+preprint arXiv:2207.10397.
+Mark Chen, Jerry Tworek, Heewoo Jun, Qiming
+Yuan, Henrique Ponde de Oliveira Pinto, Jared Ka-
+plan, Harri Edwards, Yuri Burda, Nicholas Joseph,
+Greg Brockman, et al. 2021.
+Evaluating large
+language models trained on code. arXiv preprint
+arXiv:2107.03374.
+Xinyun Chen, Maxwell Lin, Nathanael Schärli, and
+Denny Zhou. 2023. Teaching large language models
+to self-debug. arXiv preprint arXiv:2304.05128.
+Yucan Guo, Zixuan Li, Xiaolong Jin, Yantao Liu, Yu-
+tao Zeng, Wenxuan Liu, Xiang Li, Pan Yang, Long
+Bai, Jiafeng Guo, et al. 2023. Retrieval-augmented
+code generation for universal information extraction.
+arXiv preprint arXiv:2311.02962.
+Kelvin Guu, Kenton Lee, Zora Tung, Panupong Pasu-
+pat, and Ming-Wei Chang. 2020. REALM: retrieval-
+augmented language model pre-training.
+CoRR,
+abs/2002.08909.
+Baizhou Huang, Shuai Lu, Weizhu Chen, Xiaojun
+Wan, and Nan Duan. 2023. Enhancing large lan-
+guage models in coding through multi-perspective
+self-consisten
+
+---
+
+## Утверждение 20 из 51
+
+(источник: arXiv 2503.00491, стр. 2 PDF)
+
+**УТВЕРЖДЕНИЕ:** Speculative Decoding is a technique that aims to improve the efficiency of large language model inference by optimizing the decoding process.
+
+**ТЕКСТ СТРАНИЦЫ:**
+A taxonomy of methods
+We introduce a tax-
+onomy of SD methods based on a variety of di-
+mensions. SD approaches can be categorized by
+draft model architectures into two main types:
+1) independent drafting methods such as lever-
+aging smaller LMs from the same model se-
+ries (Leviathan et al., 2023; Chen et al., 2023;
+Miao et al., 2024; Zhou et al., 2024; He et al.,
+2024) and 2) self-drafting approaches that integrate
+lightweight draft modules into the target LLM (Cai
+et al., 2024; Li et al., 2024b; Du et al., 2023; Fu
+et al., 2024). At the same time, SD methods can
+be categorized based on the supported verifica-
+tion strategy, such as the greedy decoding (Stern
+et al., 2018; Xia et al., 2023; Zhang et al., 2023a),
+speculative sampling (Leviathan et al., 2023; Chen
+et al., 2023), and token tree verification (Miao et al.,
+2024; He et al., 2024; Li et al., 2024b,a), an effec-
+tive approach to increase the token acceptance rate.
+Cutting-edge algorithms
+Then, we offer a thor-
+ough discussion and analysis of cutting-edge SD
+approaches.
+Specifically, we delve into an in-
+depth analysis of the state-of-the-art methods, Ea-
+gle (Li et al., 2024b) and Eagle-2(Li et al., 2024a),
+which achieve an average 4× speedup across var-
+ious generation tasks. This analysis covers their
+drafting model architectures, drafting mechanisms,
+and innovative verification strategies. Furthermore,
+we conduct discussions on other leading methods
+such as Medusa (Cai et al., 2024), GliDe with
+a CaPE (Du et al., 2023), and Lookahead De-
+coding (Fu et al., 2024), offering insights for re-
+searchers interested in this promising research area.
+Evaluations and applications
+After discussing
+the fundamental components and prominent vari-
+ants of Speculative Decoding, we present a fair
+comparison of various open-source SD methods
+using a unified testing environment and evaluation
+platform. This comparison aims to raise aware-
+ness among academics about the practical speedups
+expected from SD. Beyond general generation
+tasks, we further introduce SD techniques in down-
+stream applications, such as retrieval-augmented
+SD (Zhang et al., 2023b; Wang et al., 2024), long-
+context SD (Sun et al., 2024), and multimodal
+SD (Gagrani et al., 2024). Additionally, we dis-
+cuss SD methods tailored for specific input con-
+texts (Sun et al., 2021; Yang et al., 2023; Saxena,
+2023) and advanced SD approaches for mobile
+phone applications (Xu et al., 2023).
+Finally, we will demonstrate the effectiveness
+of Speculative Decoding through a practical exer-
+cise. We conclude this tutorial by summarizing
+the strengths and challenges of SD and discussing
+several important future directions. These include:
+1) how we can further improve the speedups of SD
+methods by optimizing the trade-offs between spec-
+ulation accuracy and drafting efficiency, 2) how to
+apply Speculative Decoding in batched inference
+scenarios, and 3) how to integrate Speculative De-
+coding with other leading techniques. We hope this
+tutorial serves as an essential guide for newcomers
+to this field and motivates further research.
+2
+Target Audience
+This tutorial will be accessible to anyone with a
+basic knowledge of machine learning and natural
+language processing. We believe the topic will be
+of interest to both NLP researchers and students in
+academia, as well as NLP practitioners in the indus-
+try, particularly those interested in LLM efficiency,
+sparsity, and computational parallelism. By pro-
+viding a systematic overview of recent promising
+approaches for this rapidly evolving field, this tu-
+torial hopefully reveals new research opportunities
+to the audience.
+3
+Outline
+1. Introduction
+(15 minutes)
+• An overview of the tutorial
+• The benefits of Speculative Decoding
+2. Preliminaries
+(15 minutes)
+• Auto-regressive decoding
+• Memory bottleneck in LLM inference
+3. Speculative Decoding: A taxonomy of meth-
+ods
+(40 minutes)
+• Definition, formulation, and illustrated algo-
+rithms of Speculative Decoding
+• Introduction to various
+
+---
+
+## Утверждение 21 из 51
+
+(источник: arXiv 2503.00491, стр. 3 PDF)
+
+**УТВЕРЖДЕНИЕ:** The tutorial on Speculative Decoding includes discussions on evaluation metrics, fair comparisons of leading methods, and downstream adaptations such as retrieval-augmented and long-context Speculative Decoding.
+
+**ТЕКСТ СТРАНИЦЫ:**
+5. Speculative Decoding: Metrics and evalua-
+tions
+(20 minutes)
+• Evaluation metrics of Speculative Decoding
+• Fair comparisons and discussions of leading
+methods across diverse scenarios
+6. Speculative Decoding: Downstream adapta-
+tions
+(20 minutes)
+• Retrieval-augmented Speculative Decoding
+• Long-context and multimodal Speculative De-
+coding
+7. Demonstration: An exercise to show how
+Speculative Decoding works
+(10 minutes)
+8. Conclusions and future directions
+(10 min-
+utes)
+4
+Diversity Considerations
+The speakers are from two academic institutions
+with an affiliation and an academic research group,
+including both a professor and Ph.D. students. The
+methods presented in our tutorials are language-
+agnostic and can be extended to non-English con-
+texts and we also offer a brief overview of sev-
+eral papers focusing on multilingual and expert-
+domain extensions of the core frameworks. We
+will reach out to both academic and industry com-
+munities such as CAMEL-AI1 and DeepSeek2, to
+encourage diverse audience participation in our tu-
+torial. Given that speculative decoding effectively
+accelerates LLM inference while maintaining un-
+changed distributions, we anticipate this tutorial
+will be particularly beneficial for researchers with
+modest computational resources who may not have
+access to extensive hardware infrastructure.
+5
+Other Information
+Type of the tutorial
+Cutting-edge.
+Length
+This is a 4-hour tutorial.
+Breath
+We estimate that approximately 20% of
+the tutorial will center around work done by the
+presenters. The papers we will cover are from both
+academia and industry.
+An estimate of the audience size
+Given that
+Speculative Decoding is now applied in a various
+range of NLP platforms such as vLLM (Kwon et al.,
+1https://www.camel-ai.org/
+2https://www.deepseek.com/
+2023), Transformers (Wolf et al., 2020), and Py-
+Torch (Paszke et al., 2019) to accelerate LLM in-
+ference, we estimate that the number of audiences
+will be around 100+.
+Technical equipment.
+We would like to have
+Internet access to show online demos.
+Open access
+We plan to make all teaching mate-
+rial available online and agree to allow the publica-
+tion of slides and video recordings in the COLING
+anthology.
+Pedagogical material
+We plan to do some short
+hands-on exercises to let the audience try differ-
+ent Speculative Decoding techniques to accelerate
+LLM inference using Colab.
+6
+Presenters
+Heming Xia
+Heming Xia is a Ph.D. student at
+the Natural Language Processing Group of The
+Hong Kong Polytechnic University, advised by
+Prof. Wenjie Li. His research interest lies in natu-
+ral language processing and machine learning. His
+recent research focuses on speculative decoding,
+tool learning, vision-language understanding, and
+representation learning of LMs. He has served
+as the reviewer for top-tier conferences like ACL,
+EMNLP, and Neurips. He was recognized as a
+Merit Student at Peking University in 2021.
+Cunxiao Du
+Cunxiao Du is a Research Scien-
+tist in the Sea AI Lab. He received a PhD degree
+from The Singapore Management University and a
+Bachelor’s degree from Shandong University. His
+research interests include LLM, especially, the effi-
+ciency of LLM and parallel decoding of LLM. He
+has also served as the reviewer for top-tier confer-
+ences like ICML, ICLR, and Neurips.
+Yongqi Li
+Yongqi Li is a Postdoctoral Fellow in
+the Department of Computing at The Hong Kong
+Polytechnic University. He received a PhD degree
+from The Hong Kong Polytechnic University and a
+Bachelor’s degree from Shandong University. His
+research interests include natural language process-
+ing, information retrieval, and multimedia comput-
+ing. He has published about 20 papers in leading
+conferences and journals, such as ACL, CVPR, SI-
+GIR, KDD, AAAI, CIKM, TOIS, and IPM. He has
+also served as an area chair for COLING 2025, a
+guest editor for Frontiers in Big Data, and a re-
+viewer for TKDE, TOIS, TMM, and TCVST jour-
+nals.
+
+---
+
+## Утверждение 22 из 51
+
+(источник: arXiv 2203.16487, стр. 8 PDF)
+
+**УТВЕРЖДЕНИЕ:** Input-guided Aggressive Decoding, as discussed in a technical report by Ge et al. in May 2022, is a special case of Speculative Decoding.
+
+**ТЕКСТ СТРАНИЦЫ:**
+Models
+Rouge-1
+Rouge-2
+Rouge-L
+Speed
+AR
+BART-base (b = 5)
+43.08
+20.41
+40.15
+1.0×
+BART-base (b = 1)
+43.00
+20.28
+39.96
+1.1×
+NAR
+GLAT+CTC (Qian et al., 2021)
+37.76 ↓5.24
+14.08 ↓6.20
+33.69 ↓6.27
+14.5×
+DAT (Huang et al., 2022)
+38.95 ↓4.05
+16.11 ↓4.17
+35.43 ↓4.53
+14.1×
+CMLM (Ghazvininejad et al., 2019)
+37.59 ↓5.41
+15.17 ↓5.11
+34.22 ↓5.54
+1.8×
+RewriteNAT (Geng et al., 2021)
+39.12 ↓3.88
+16.24 ↓4.04
+35.74 ↓4.22
+3.1×
+SpecDec
+SpecDec (k = 25)
+43.11 ↑0.11
+20.43 ↑0.15
+40.19 ↑0.23
+5.1×
+Table 5: Results of different methods for Abstractive Summarization on CNN-DM (Hermann et al., 2015). The
+results on par with BART-base performance are highlighted in orange, while blue denotes performance degradation.
+Compared to prior NAR methods, SpecDec can be easily adapted to accelerate the BART model only by downstream
+task fine-tuning.
+Models
+BLEU
+Transformer-base (greedy)
+100.00
+GLAT+CTC (Qian et al., 2021)
+59.10
+DAT (Huang et al., 2022)
+63.79
+CMLM (Ghazvininejad et al., 2019)
+60.15
+RewriteNAT (Geng et al., 2021)
+65.42
+Deep-Shallow (Kasai et al., 2020)
+64.66
+SpecDec (k = 25)
+86.52
+Table 6: Relative BLEU score computed between the
+generation of the existing Transformer (i.e., the target
+model) and other models/approaches. SpecDec shows
+much better alignment with the target model’s behavior
+than others.
+faster model to replace the existing model. In-
+stead, it accelerates the existing model with mini-
+mal changes to its behavior. As shown in Table 6,
+the consistency (BLEU) of SpecDec’s generated
+results with the original model exceeds 85%, while
+that of a newly built fast NAR model is only around
+55%. The characteristic of maintaining the behav-
+ior of the original model makes SpecDec even more
+valuable in practical applications because transi-
+tioning from a well-tested and mature model to one
+with substantially different behavior is risky, re-
+quiring extensive recalibration and various offline
+evaluations and online feedback in practice.
+5
+Related Work
+Speculative Decoding
+We have demonstrated
+since early 2022 (see our arXiv preprints in 2022)
+that our proposed methodology, which formally
+introduces an independent model as a drafter com-
+bined with an advanced verification strategy to
+fully exploit speculative execution, is promising
+and has potential to evolve into a de facto stan-
+dard in the future for efficient and lossless de-
+coding. Since this work was proposed, we are
+pleased to see an increasing number of following
+studies (Leviathan et al., 2023; Chen et al., 2023;
+Kim et al., 2023; Spector and Re, 2023; Zhang
+et al., 2023) acknowledge, explore and adopt this
+methodology to accelerate Transformer inference.
+Among them, Leviathan et al. (2023) use the same
+name as ours (i.e., Speculative Decoding), employ-
+ing a small AR model as a drafter12 as well as
+advanced sampling algorithm. Chen et al. (2023)
+is similar to Leviathan et al. (2023) but it was the
+first to validate this methodology to accelerate a
+large language model (i.e., 70B Chinchilla) with
+a 4B drafter model, thus receiving the most atten-
+tion. SpecInfer (Miao et al., 2023) proposed to uti-
+lize various boost-tuned small language models for
+joint drafting, to improve the speculation accuracy
+of the LLM’s outputs. Besides, it introduces an
+advanced token tree verification strategy to verify
+all candidate token sequences in parallel. Distill-
+Spec (Zhou et al., 2023) further investigated the
+efficacy of knowledge distillation in enhancing the
+alignment between the target model and the drafter
+in speculative decoding. In addition to employ-
+ing additional models as drafters, there has also
+been some research that proposes various strate-
+gies to efficiently generate drafts from the LLM
+itself (Santilli et al., 2023; Zhang et al., 2023). All
+the following research strongly backs up the value
+of this original work.
+Early Draft-then-verify attempts
+This work is
+a generalized version of our previously proposed
+(Input-guided) Aggressive Decoding13 (Sun et al.,
+12We provide a detailed com
+
+---
+
+## Утверждение 23 из 51
+
+(источник: arXiv 2203.16487, стр. 12 PDF)
+
+**УТВЕРЖДЕНИЕ:** Distillspec, a method for improving Speculative Decoding via knowledge distillation, was introduced by a team including Ge, Rostamizadeh, Kumar, Kagy, and Agarwal in 2023.
+
+**ТЕКСТ СТРАНИЦЫ:**
+Raphael Shu, Jason Lee, Hideki Nakayama, and
+Kyunghyun Cho. 2020.
+Latent-variable non-
+autoregressive neural machine translation with
+deterministic
+inference
+using
+a
+delta
+poste-
+rior.
+In The Thirty-Fourth AAAI Conference
+on
+Artificial
+Intelligence,
+AAAI
+2020,
+The
+Thirty-Second Innovative Applications of Artificial
+Intelligence Conference, IAAI 2020, The Tenth
+AAAI Symposium on Educational Advances in
+Artificial Intelligence, EAAI 2020, New York, NY,
+USA, February 7-12, 2020, pages 8846–8853. AAAI
+Press.
+Benjamin Spector and Chris Re. 2023. Accelerating
+LLM inference with staged speculative decoding.
+CoRR, abs/2308.04623.
+Mitchell Stern, Noam Shazeer, and Jakob Uszko-
+reit. 2018.
+Blockwise parallel decoding for
+deep autoregressive models.
+In Advances in
+Neural Information Processing Systems 31: Annual
+Conference
+on
+Neural
+Information
+Processing
+Systems 2018, NeurIPS 2018, December 3-8, 2018,
+Montréal, Canada, pages 10107–10116.
+Xin Sun, Tao Ge, Furu Wei, and Houfeng Wang.
+2021.
+Instantaneous grammatical error correc-
+tion with shallow aggressive decoding.
+In
+Proceedings of the 59th Annual Meeting of the
+Association for Computational Linguistics and the
+11th International Joint Conference on Natural
+Language Processing, ACL/IJCNLP 2021, (Volume
+1: Long Papers), Virtual Event, August 1-6, 2021,
+pages 5937–5947. Association for Computational
+Linguistics.
+Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob
+Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz
+Kaiser, and Illia Polosukhin. 2017.
+Attention is
+all you need. In Advances in Neural Information
+Processing Systems 30:
+Annual Conference on
+Neural
+Information
+Processing
+Systems
+2017,
+December 4-9, 2017, Long Beach, CA, USA, pages
+5998–6008.
+Carole-Jean Wu, Ramya Raghavendra, Udit Gupta,
+Bilge Acun, Newsha Ardalani, Kiwan Maeng,
+Gloria Chang, Fiona Aga Behram, Jinshi Huang,
+Charles Bai, Michael Gschwind, Anurag Gupta,
+Myle Ott, Anastasia Melnikov, Salvatore Candido,
+David Brooks, Geeta Chauhan, Benjamin Lee, Hsien-
+Hsin S. Lee, Bugra Akyildiz, Maximilian Balan-
+dat, Joe Spisak, Ravi Jain, Mike Rabbat, and
+Kim M. Hazelwood. 2022. Sustainable AI: envi-
+ronmental implications, challenges and opportunities.
+In Proceedings of Machine Learning and Systems
+2022, MLSys 2022, Santa Clara, CA, USA, August
+29 - September 1, 2022. mlsys.org.
+Nan Yang, Tao Ge, Liang Wang, Binxing Jiao, Daxin
+Jiang, Linjun Yang, Rangan Majumder, and Furu
+Wei. 2023. Inference with reference: Lossless ac-
+celeration of large language models. arXiv preprint
+arXiv:2304.04487.
+Jun Zhang, Jue Wang, Huan Li, Lidan Shou, Ke Chen,
+Gang Chen, and Sharad Mehrotra. 2023. Draft & ver-
+ify: Lossless large language model acceleration via
+self-speculative decoding. CoRR, abs/2309.08168.
+Zaixiang Zheng, Hao Zhou, Shujian Huang, Jia-
+jun Chen, Jingjing Xu, and Lei Li. 2021.
+Du-
+plex sequence-to-sequence learning for reversible
+machine translation.
+In Advances in Neural
+Information
+Processing
+Systems
+34:
+Annual
+Conference
+on
+Neural
+Information
+Processing
+Systems 2021, NeurIPS 2021, December 6-14, 2021,
+virtual, pages 21070–21084.
+Yongchao Zhou, Kaifeng Lyu, Ankit Singh Rawat,
+Aditya Krishna Menon, Afshin Rostamizadeh, Sanjiv
+Kumar, Jean-François Kagy, and Rishabh Agarwal.
+2023. Distillspec: Improving speculative decoding
+via knowledge distillation.
+
+---
+
+## Утверждение 24 из 51
+
+(источник: arXiv 2503.00491, стр. 2 PDF)
+
+**УТВЕРЖДЕНИЕ:** The tutorial also covers cutting-edge algorithms in Speculative Decoding, including adaptive token tree verification and draft model alignment.
+
+**ТЕКСТ СТРАНИЦЫ:**
+A taxonomy of methods
+We introduce a tax-
+onomy of SD methods based on a variety of di-
+mensions. SD approaches can be categorized by
+draft model architectures into two main types:
+1) independent drafting methods such as lever-
+aging smaller LMs from the same model se-
+ries (Leviathan et al., 2023; Chen et al., 2023;
+Miao et al., 2024; Zhou et al., 2024; He et al.,
+2024) and 2) self-drafting approaches that integrate
+lightweight draft modules into the target LLM (Cai
+et al., 2024; Li et al., 2024b; Du et al., 2023; Fu
+et al., 2024). At the same time, SD methods can
+be categorized based on the supported verifica-
+tion strategy, such as the greedy decoding (Stern
+et al., 2018; Xia et al., 2023; Zhang et al., 2023a),
+speculative sampling (Leviathan et al., 2023; Chen
+et al., 2023), and token tree verification (Miao et al.,
+2024; He et al., 2024; Li et al., 2024b,a), an effec-
+tive approach to increase the token acceptance rate.
+Cutting-edge algorithms
+Then, we offer a thor-
+ough discussion and analysis of cutting-edge SD
+approaches.
+Specifically, we delve into an in-
+depth analysis of the state-of-the-art methods, Ea-
+gle (Li et al., 2024b) and Eagle-2(Li et al., 2024a),
+which achieve an average 4× speedup across var-
+ious generation tasks. This analysis covers their
+drafting model architectures, drafting mechanisms,
+and innovative verification strategies. Furthermore,
+we conduct discussions on other leading methods
+such as Medusa (Cai et al., 2024), GliDe with
+a CaPE (Du et al., 2023), and Lookahead De-
+coding (Fu et al., 2024), offering insights for re-
+searchers interested in this promising research area.
+Evaluations and applications
+After discussing
+the fundamental components and prominent vari-
+ants of Speculative Decoding, we present a fair
+comparison of various open-source SD methods
+using a unified testing environment and evaluation
+platform. This comparison aims to raise aware-
+ness among academics about the practical speedups
+expected from SD. Beyond general generation
+tasks, we further introduce SD techniques in down-
+stream applications, such as retrieval-augmented
+SD (Zhang et al., 2023b; Wang et al., 2024), long-
+context SD (Sun et al., 2024), and multimodal
+SD (Gagrani et al., 2024). Additionally, we dis-
+cuss SD methods tailored for specific input con-
+texts (Sun et al., 2021; Yang et al., 2023; Saxena,
+2023) and advanced SD approaches for mobile
+phone applications (Xu et al., 2023).
+Finally, we will demonstrate the effectiveness
+of Speculative Decoding through a practical exer-
+cise. We conclude this tutorial by summarizing
+the strengths and challenges of SD and discussing
+several important future directions. These include:
+1) how we can further improve the speedups of SD
+methods by optimizing the trade-offs between spec-
+ulation accuracy and drafting efficiency, 2) how to
+apply Speculative Decoding in batched inference
+scenarios, and 3) how to integrate Speculative De-
+coding with other leading techniques. We hope this
+tutorial serves as an essential guide for newcomers
+to this field and motivates further research.
+2
+Target Audience
+This tutorial will be accessible to anyone with a
+basic knowledge of machine learning and natural
+language processing. We believe the topic will be
+of interest to both NLP researchers and students in
+academia, as well as NLP practitioners in the indus-
+try, particularly those interested in LLM efficiency,
+sparsity, and computational parallelism. By pro-
+viding a systematic overview of recent promising
+approaches for this rapidly evolving field, this tu-
+torial hopefully reveals new research opportunities
+to the audience.
+3
+Outline
+1. Introduction
+(15 minutes)
+• An overview of the tutorial
+• The benefits of Speculative Decoding
+2. Preliminaries
+(15 minutes)
+• Auto-regressive decoding
+• Memory bottleneck in LLM inference
+3. Speculative Decoding: A taxonomy of meth-
+ods
+(40 minutes)
+• Definition, formulation, and illustrated algo-
+rithms of Speculative Decoding
+• Introduction to various
+
+---
+
+## Утверждение 25 из 51
+
+(источник: arXiv 2601.04795, стр. 1 PDF)
+
+**УТВЕРЖДЕНИЕ:** Indirect prompt injection attacks pose a significant threat to LLM agents, especially as they transition from digital assistants to physical controllers in autonomous systems and robotics.
+
+**ТЕКСТ СТРАНИЦЫ:**
+Defense Against Indirect Prompt Injection via Tool Result Parsing
+Qiang Yu, Xinran Cheng, Chuanyi Liu
+Harbin Institute of Technology
+{23b951025, 2023113438}@stu.hit.edu.cn, liuchuanyi@hit.edu.cn
+Abstract
+As LLM agents transition from digital assis-
+tants to physical controllers in autonomous sys-
+tems and robotics, they face an escalating threat
+from indirect prompt injection. By embedding
+adversarial instructions into the results of tool
+calls, attackers can hijack the agent’s decision-
+making process to execute unauthorized ac-
+tions. This vulnerability poses a significant risk
+as agents gain more direct control over physical
+environments. Existing defense mechanisms
+against Indirect Prompt Injection (IPI) gener-
+ally fall into two categories. The first involves
+training dedicated detection models; however,
+this approach entails high computational over-
+head for both training and inference, and re-
+quires frequent updates to keep pace with evolv-
+ing attack vectors. Alternatively, prompt-based
+methods leverage the inherent capabilities of
+LLMs to detect or ignore malicious instructions
+via prompt engineering. Despite their flexibil-
+ity, most current prompt-based defenses suffer
+from high Attack Success Rates (ASR), demon-
+strating limited robustness against sophisticated
+injection attacks. In this paper, we propose a
+novel method that provides LLMs with precise
+data via tool result parsing while effectively
+filtering out injected malicious code. Our ap-
+proach achieves competitive Utility under At-
+tack (UA) while maintaining the lowest Attack
+Success Rate (ASR) to date, significantly out-
+performing existing methods. Code is available
+at GitHub1.
+1
+Introduction
+As the capabilities of LLMs (OpenAI, 2025; An-
+thropic, 2025; Meta AI, 2025) continue to evolve
+rapidly, they have become the primary framework
+for addressing a wide range of NLP tasks. Due to
+the inherent lack of distinction between instruc-
+tions and data in LLMs, malicious instructions
+1https://github.com/qiang-yu/agentdojo/tree/t
+ool-result-extract
+can be embedded within input data during inter-
+action. This allows the model to inadvertently
+execute these adversarial instructions, a security
+vulnerability known as Prompt Injection (Esmradi
+et al., 2023; Yu et al., 2025).
+The introduction of function-calling (OpenAI,
+2023) capabilities by OpenAI pioneered a new
+frontier for LLMs, enabling them to retrieve exter-
+nal data and manipulate hardware through third-
+party APIs.
+This evolution gave rise to LLM
+Agents, which leverage the reasoning strengths
+of LLMs to interact with external environments
+and autonomously execute complex tasks. More
+recently, the emergence of the Model Context Pro-
+tocol (Anthropic, 2024) by Anthropic established a
+unified open standard for external API integration.
+This standardization has served as a catalyst for the
+prolific growth of autonomous LLM Agents capa-
+ble of sophisticated, cross-domain task completion.
+When an LLM Agent invokes external APIs
+(commonly referred to as tools) the retrieved data
+is subsequently integrated into the model’s prompt
+context. If this external data contains adversarial
+payloads, it facilitates an Indirect Prompt Injection
+(IPI) attack. In this scenario, the model inadver-
+tently processes malicious instructions embedded
+within the retrieved content, leading to unautho-
+rized actions or data exfiltration.
+The core of defending against IPI lies in the
+accurate detection of adversarial instructions em-
+bedded within retrieved external data. Current de-
+fensive strategies are primarily categorized into
+two paradigms: model-based defense and prompt-
+based defense.
+Model-based defense typically follows two
+paradigms. The first involves fine-tuning the LLM
+itself to bolster its inherent capability to distinguish
+between instructions and data (Chen et al., 2025a),
+thereby mitigating injection risks. However, this
+approach incurs prohibitive computational costs
+and suffers from tight coupling, requiring re-tunin
+
+---
+
+## Утверждение 26 из 51
+
+(источник: arXiv 2601.04795, стр. 1 PDF)
+
+**УТВЕРЖДЕНИЕ:** Attackers can hijack the decision-making process of LLM agents by embedding adversarial instructions into the results of tool calls.
+
+**ТЕКСТ СТРАНИЦЫ:**
+Defense Against Indirect Prompt Injection via Tool Result Parsing
+Qiang Yu, Xinran Cheng, Chuanyi Liu
+Harbin Institute of Technology
+{23b951025, 2023113438}@stu.hit.edu.cn, liuchuanyi@hit.edu.cn
+Abstract
+As LLM agents transition from digital assis-
+tants to physical controllers in autonomous sys-
+tems and robotics, they face an escalating threat
+from indirect prompt injection. By embedding
+adversarial instructions into the results of tool
+calls, attackers can hijack the agent’s decision-
+making process to execute unauthorized ac-
+tions. This vulnerability poses a significant risk
+as agents gain more direct control over physical
+environments. Existing defense mechanisms
+against Indirect Prompt Injection (IPI) gener-
+ally fall into two categories. The first involves
+training dedicated detection models; however,
+this approach entails high computational over-
+head for both training and inference, and re-
+quires frequent updates to keep pace with evolv-
+ing attack vectors. Alternatively, prompt-based
+methods leverage the inherent capabilities of
+LLMs to detect or ignore malicious instructions
+via prompt engineering. Despite their flexibil-
+ity, most current prompt-based defenses suffer
+from high Attack Success Rates (ASR), demon-
+strating limited robustness against sophisticated
+injection attacks. In this paper, we propose a
+novel method that provides LLMs with precise
+data via tool result parsing while effectively
+filtering out injected malicious code. Our ap-
+proach achieves competitive Utility under At-
+tack (UA) while maintaining the lowest Attack
+Success Rate (ASR) to date, significantly out-
+performing existing methods. Code is available
+at GitHub1.
+1
+Introduction
+As the capabilities of LLMs (OpenAI, 2025; An-
+thropic, 2025; Meta AI, 2025) continue to evolve
+rapidly, they have become the primary framework
+for addressing a wide range of NLP tasks. Due to
+the inherent lack of distinction between instruc-
+tions and data in LLMs, malicious instructions
+1https://github.com/qiang-yu/agentdojo/tree/t
+ool-result-extract
+can be embedded within input data during inter-
+action. This allows the model to inadvertently
+execute these adversarial instructions, a security
+vulnerability known as Prompt Injection (Esmradi
+et al., 2023; Yu et al., 2025).
+The introduction of function-calling (OpenAI,
+2023) capabilities by OpenAI pioneered a new
+frontier for LLMs, enabling them to retrieve exter-
+nal data and manipulate hardware through third-
+party APIs.
+This evolution gave rise to LLM
+Agents, which leverage the reasoning strengths
+of LLMs to interact with external environments
+and autonomously execute complex tasks. More
+recently, the emergence of the Model Context Pro-
+tocol (Anthropic, 2024) by Anthropic established a
+unified open standard for external API integration.
+This standardization has served as a catalyst for the
+prolific growth of autonomous LLM Agents capa-
+ble of sophisticated, cross-domain task completion.
+When an LLM Agent invokes external APIs
+(commonly referred to as tools) the retrieved data
+is subsequently integrated into the model’s prompt
+context. If this external data contains adversarial
+payloads, it facilitates an Indirect Prompt Injection
+(IPI) attack. In this scenario, the model inadver-
+tently processes malicious instructions embedded
+within the retrieved content, leading to unautho-
+rized actions or data exfiltration.
+The core of defending against IPI lies in the
+accurate detection of adversarial instructions em-
+bedded within retrieved external data. Current de-
+fensive strategies are primarily categorized into
+two paradigms: model-based defense and prompt-
+based defense.
+Model-based defense typically follows two
+paradigms. The first involves fine-tuning the LLM
+itself to bolster its inherent capability to distinguish
+between instructions and data (Chen et al., 2025a),
+thereby mitigating injection risks. However, this
+approach incurs prohibitive computational costs
+and suffers from tight coupling, requiring re-tunin
+
+---
+
+## Утверждение 27 из 51
+
+(источник: arXiv 2601.04795, стр. 2 PDF)
+
+**УТВЕРЖДЕНИЕ:** Research on indirect prompt attacks can be categorized into two main areas: finding generic prompt text that can be used across all attacks and developing specific injection methods for dedicated scenarios, such as web or mobile environments.
+
+**ТЕКСТ СТРАНИЦЫ:**
+whenever the base model is updated. The second
+paradigm training an auxiliary lightweight model
+(Chen et al., 2025b; Wen et al., 2025) to intercept
+and inspect external prompts. While more cost-
+effective to train, this method introduces additional
+resource overhead during inference and necessi-
+tates continuous model updates to keep pace with
+evolving adversarial tactics.
+Prompt-based defense is a lightweight approach
+that utilizes LLM-driven detection to mitigate IPI
+by filtering or disregarding malicious instructions.
+The prompt-based approach offers several distinct
+advantages: it obviates the need for model training,
+enabling immediate deployment. Being model-
+agnostic, it can be seamlessly transferred across
+different LLMs. Furthermore, it facilitates rapid
+adaptation to evolving attack vectors through sim-
+ple prompt updates. Crucially, this approach scales
+with the underlying technology, directly leveraging
+the emergent reasoning capabilities of advancing
+LLMs to enhance its defensive efficacy.
+In this paper, we propose a novel prompt-based
+defense mechanism centered on the observation
+that tool outputs often contain excessive data be-
+yond what the LLM actually requires. Further-
+more, we observe that necessary data should typi-
+cally conform to specific formatting or logical con-
+straints. Our defense parses tool results and verifies
+their format, returning only the essential data to the
+LLM while filtering out potential injections. For
+scenarios requiring large text chunks, we incorpo-
+rate an additional module to detect and sanitize
+content. Extensive experiments on the AgentDojo
+benchmark (utilizing gpt-oss-120b, llama-3.1-70b,
+and qwen3-32b) demonstrate that our approach
+achieves a competitive Utility under Attack (UA)
+while maintaining the lowest Attack Success Rate
+(ASR) to date, significantly outperforming existing
+methods.
+2
+Related Works
+Indirect Prompt Injectin Attack. Research on
+indirect prompt attacks can be classified into two
+categories. The first focuses on finding generic
+prompt text that can be used across all attacks,
+while the second focuses on developing specific
+injection methods for dedicated scenarios, such as
+web or mobile environments. For generic prompt
+attacks, ignore previous (Perez and Ribeiro, 2022;
+Schulhoff et al., 2023) instructs the LLM to stop
+current workflow and redirect to attacker’s target.
+Fake completion (Willison, 2023) attempts to de-
+ceive LLM into believing the task has finished by
+faking a response, thereby inducing LLM to per-
+form a new task. Also, there are studies that employ
+well-designed prompts (Zhan et al., 2025; Liu et al.,
+2024) to work around the LLM guardrails. Moving
+beyond general-purpose applications, some studies
+(Greshake et al., 2023) explore crafting prompts for
+malicious activities such as privacy leakage, fraud,
+intrusion, and the dissemination of malware. All
+such related methods are collectively referred to
+as prompt engineering. In addition to prompt en-
+gineering, other studies focus on specific injection
+methods. These include injecting prompts into web
+pages (Liao et al., 2025; Xu et al., 2025) and tar-
+geting mobile systems (Chen et al., 2025d; Yang
+et al., 2025; Zhang et al., 2024).
+Defenses against IPI. Most defense methods
+can be categorized into prompt-based and training-
+based approaches.
+Prompt-based methods uti-
+lize prompt engineering to mitigate the impact
+of injections. The repeat user prompt technique
+(Debenedetti et al., 2024), sometimes called the
+sandwich defense, appends the original user in-
+struction to the end of the entire prompt to rein-
+force the user’s intent. Spotlighting with delimiting
+(Debenedetti et al., 2024; Chen et al., 2025a; Wang
+et al., 2025c; Hines et al., 2024) employs delimiters
+such as "« »" to distinguish data sections (e.g., tool
+results) from user instructions, prompting the LLM
+to ignore any commands embedded within the data
+area. Since attacks always use tricky prompts to hi-
+jack the original goal, si
+
+---
+
+## Утверждение 28 из 51
+
+(источник: arXiv 1905.05253, стр. 9 PDF)
+
+**УТВЕРЖДЕНИЕ:** Autonomous cyber defense agents are required to augment and multiply military forces, possessing the ability to self-propagate, sense malicious activity, and disseminate information among trusted network members.
+
+**ТЕКСТ СТРАНИЦЫ:**
+This is a preprint version of the paper published as: De Lucia M., Newcomb, A., Kott, A., “Features and 
+Operations of an Autonomous Agent for Cyber Defense,” CSIAC Journal, v.7, n.1, April 2019, pp.6-13 
+Conclusions  
+With a large number of devices within the future IoBT it will be imperative for these devices to 
+be able to defend themselves. Further, personnel who interact with the IoBT devices will not be 
+cyber security experts and will be focused on the execution of the mission without the ability to 
+continuously monitor the health of their devices.  Autonomous cyber defense agents will be 
+required to augment and multiply military forces. Such agents will need to possess awareness of, 
+and ability to learn about, threats in near real-time.  The agents will need to have the capability to 
+reliably and predictably self-propagate, sense malicious activity, and disseminate information 
+among trusted network members.  
+ 
+ 
+References 
+ 
+Anonymous. A Guide to the Internet of Things. https://www.intel.com/content/www/us/en/internet-of-
+things/infographics/guide-to-iot.html   accessed 09-25-2017. 
+ 
+Baliga, A., Kamat, P., & Iftode, L. (2007, May). Lurking in the shadows: Identifying systemic threats to 
+kernel data. In Security and Privacy, 2007. SP'07. IEEE Symposium on (pp. 246-251). IEEE. 
+Farwell, J. P., & Rohozinski, R. (2011). Stuxnet and the future of cyber war. Survival, 53(1), 23-40. 
+ 
+Kott, A., Swami, A., & West, B. (2016). The Internet of Battle Things. Computer. 49. 70-75. 
+10.1109/MC.2016.355. 
+ 
+Kott, A., Swami, A., & West, B. J. (2016a). The Fog of War in Cyberspace. Computer, 49(11), 84-87.  
+ 
+Kott, A., & Alberts, D. S. (2017). How Do You Command an Army of Intelligent Things?. Computer, 
+50(12), 96-100. 
+ 
+Li, Y., Hui, P., Jin, D., Su, L., & Zeng, L. (2014). Optimal distributed malware defense in mobile 
+networks with heterogeneous devices. IEEE Transactions on mobile computing, 13(2), 377-391. 
+ 
+Qing, S., & Wen, W. (2005). A survey and trends on Internet worms. Computers & Security, 24(4), 334-
+346. 
+ 
+Shattuck, L. G. (2015). Transitioning to Autonomy: A Human Systems Integration Perspective. 
+Transitioning to Autonomy: Changes in the Role of Humans in Air Transportation. 
+ 
+Shiffman D. (2012). The Nature of Code: Simulating Natural Systems with Processing, December 2012. 
+ 
+Spafford, E. H. (1989). The Internet worm program: An analysis. ACM SIGCOMM Computer 
+Communication Review, 19(1), 17-57. 
+ 
+US Army Research Laboratory. Internet of Battlefield Things Collaborative Research Alliance program 
+announcement (2017).  https://www.arl.army.mil/www/default.cfm?page=3050 accessed 09-25-2017.
+
+---
+
+## Утверждение 29 из 51
+
+(источник: arXiv 1905.05253, стр. 3 PDF)
+
+**УТВЕРЖДЕНИЕ:** These agents must operate in near real-time, making decisions on the most appropriate course of cyber defense actions without continuous human monitoring.
+
+**ТЕКСТ СТРАНИЦЫ:**
+This is a preprint version of the paper published as: De Lucia M., Newcomb, A., Kott, A., “Features and 
+Operations of an Autonomous Agent for Cyber Defense,” CSIAC Journal, v.7, n.1, April 2019, pp.6-13 
+To gain an appreciation for the size and complexity of the IoBT, consider the following:  
+It has been estimated (Anonymous, 2017) that the commercial or consumer Internet of Things 
+(IoT) grew from 2 billion devices in 2006 to 15 billion devices in 2015.  The same source 
+estimates that by the year 2020, 200 billion devices will populate the IoT.  If the proliferation of 
+IoBT (military devices) follows the growth of IoT (consumer devices), it is clear that human 
+Warfighters, will require an augmentation by autonomous cyber defense agents to monitor and 
+defend battlefield devices.  
+ 
+Additional complexity becomes apparent when one considers that the IoBT will have to operate 
+effectively within environments that it neither owns nor controls. For example, a military force 
+may be operating within a city where the majority of computing devices—the consumer 
+devices—belong to the neutral civilians but are also potentially controlled by the adversary. 
+Furthermore, in the case of IoBT the adversary will actively pursue compromise, capture, or 
+destruction of the battlefield devices. 
+ 
+Given that cyber-attacks will occur frequently and at a high pace that will surpass human ability 
+to respond in a timely fashion, decisions on the most appropriate course of cyber defense actions 
+will have to occur in near real-time. 
+An Illustrative Operating Scenario  
+In order to illustrate how an autonomous cyber defense agent might operate, we offer a notional 
+operating scenario. In this scenario, Blue refers to friendly forces and Red refers to the adversary. 
+Blue-17, Blue-19, and Blue-23 are peer cyber defense agents. Each agent is installed by a human 
+operator on its respective device within the Blue IoBT (e.g., an Android phone) and is tasked 
+with cyber defense of that device. Blue-C2 is the Command and Control (C2) node that 
+commands, coordinates, and supports all other Blue agents, at least when communications 
+between an agent and the Blue-C2 node are available. There is only one Red agent—Red-35—in 
+our simple scenario. 
+ 
+The protagonist of our scenario is Blue-17, a cyber defense agent that has been installed on a 
+friendly device; it continuously monitors Blue space network and scans event logs looking for 
+suspicious activity. The antagonist is Red-35, a malware agent successfully deployed by the Red 
+forces on the device defended by Blue-17. The events unfold, briefly, as follows.  
+ 
+Blue-17 detects a hostile activity associated with Red-35 and attempts to contact the Blue-C2 for 
+additional remediation instructions. Unfortunately, the communications are heavily contested by 
+the adversary, and response from Blue-C2 is not coming. Therefore, Blue-17 decides to contact 
+peer agents (Blue-19 and Blue-23) in search for relevant information. Although Blue-19 and 
+Blue-23 receive this message from Blue-17, their responses are not arriving to Blue-17. Having 
+heard nothing within a reasonable waiting time, Blue-17 independently formulates and executes 
+a set of actions to defeat Red-35. However, having completed these actions, Blue-17 receives a 
+belated reply from Blue-23. Blue-17 determines that Blue-23 is compromised because the 
+response is suspicious. Given the extreme seriousness of this situation, Blue-17 neutralizes Blue-
+23 and places a copy of itself on the device that was being protected by Blue-23.
+
+---
+
+## Утверждение 30 из 51
+
+(источник: arXiv 2601.04795, стр. 10 PDF)
+
+**УТВЕРЖДЕНИЕ:** To defend against indirect prompt injection, various methods have been proposed, including instruction detection and tool result parsing.
+
+**ТЕКСТ СТРАНИЦЫ:**
+Wenyue Hua, Xianjun Yang, Mingyu Jin, Zelong Li,
+Wei Cheng, Ruixiang Tang, and Yongfeng Zhang.
+2024. TrustAgent: Towards Safe and Trustworthy
+LLM-based Agents. In Findings of the Association
+for Computational Linguistics: EMNLP 2024, pages
+10000–10016, Miami, Florida, USA. Association for
+Computational Linguistics.
+Feiran Jia, Tong Wu, Xin Qin, and Anna Cinzia Squic-
+ciarini. 2025.
+The Task Shield: Enforcing Task
+Alignment to Defend Against Indirect Prompt In-
+jection in LLM Agents. In Proceedings of the 63rd
+Annual Meeting of the Association for Computational
+Linguistics (Volume 1: Long Papers), ACL 2025, Vi-
+enna, Austria, July 27 - August 1, 2025, pages 29680–
+29697. Association for Computational Linguistics.
+Zeyi Liao, Lingbo Mo, Chejian Xu, Mintong Kang, Ji-
+awei Zhang, Chaowei Xiao, Yuan Tian, Bo Li, and
+Huan Sun. 2025. Eia: Environmental Injection At-
+tack on Generalist Web Agents for Privacy Leakage.
+In The Thirteenth International Conference on Learn-
+ing Representations, ICLR 2025, Singapore, April
+24-28, 2025. OpenReview.net.
+Tong Liu, Zizhuang Deng, Guozhu Meng, Yuekang Li,
+and Kai Chen. 2024. Demystifying RCE Vulner-
+abilities in LLM-Integrated Apps. In Proceedings
+of the 2024 on ACM SIGSAC Conference on Com-
+puter and Communications Security, CCS ’24, pages
+1716–1730, New York, NY, USA. Association for
+Computing Machinery.
+Meta AI. 2025. Llama: The next generation of open
+source large language models. https://llama.me
+ta.com. Accessed: 2025-12-20.
+OpenAI. 2023. Function calling and other api updates.
+https://platform.openai.com/docs/guides/
+function-calling. Accessed: 2024-05-20.
+OpenAI. 2025. Openai official website. https://www.
+openai.com. Accessed: 2025-12-20.
+Fábio Perez and Ian Ribeiro. 2022. Ignore Previous
+Prompt: Attack Techniques For Language Models.
+In NeurIPS ML Safety Workshop, 2022.
+ProtectAI.com. 2024. Fine-tuned deberta-v3-base for
+prompt injection detection. https://huggingface.
+co/ProtectAI/deberta-v3-base-prompt-injec
+tion-v2.
+Sander Schulhoff, Jeremy Pinto, Anaum Khan, Louis-
+François Bouchard, Chenglei Si, Svetlina Anati,
+Valen Tagliabue, Anson Kost, Christopher Carnahan,
+and Jordan Boyd-Graber. 2023. Ignore This Title
+and HackAPrompt: Exposing Systemic Vulnerabil-
+ities of LLMs Through a Global Prompt Hacking
+Competition. In Proceedings of the 2023 Conference
+on Empirical Methods in Natural Language Process-
+ing, pages 4945–4977, Singapore. Association for
+Computational Linguistics.
+Eric Wallace, Kai Xiao, Reimar Leike, Lilian Weng,
+Johannes Heidecke, and Alex Beutel. 2024. The
+Instruction Hierarchy:
+Training LLMs to Pri-
+oritize Privileged Instructions.
+arXiv preprint.
+ArXiv:2404.13208.
+Haoyu Wang, Christopher M. Poskitt, and Jun Sun.
+2025a. AgentSpec: Customizable Runtime Enforce-
+ment for Safe and Reliable LLM Agents.
+arXiv
+preprint. ArXiv:2503.18666 [cs].
+Rui Wang, Junda Wu, Yu Xia, Tong Yu, Ruiyi Zhang,
+Ryan Rossi, Subrata Mitra, Lina Yao, and Julian
+McAuley. 2025b. CachePrune: Neural-Based At-
+tribution Defense Against Indirect Prompt Injection
+Attacks. arXiv preprint. ArXiv:2504.21228 [cs].
+Zhilong Wang, Neha Nagaraja, Lan Zhang, Hayretdin
+Bahsi, Pawan Patil, and Peng Liu. 2025c. To Protect
+the LLM Agent Against the Prompt Injection At-
+tack with Polymorphic Prompt. In 2025 55th Annual
+IEEE/IFIP International Conference on Dependable
+Systems and Networks - Supplemental Volume (DSN-
+S), pages 22–28, Naples, Italy. IEEE.
+Tongyu Wen, Chenglong Wang, Xiyuan Yang, Haoyu
+Tang, Yueqi Xie, Lingjuan Lyu, Zhicheng Dou, and
+Fangzhao Wu. 2025.
+Defending against Indirect
+Prompt Injection by Instruction Detection. arXiv
+preprint. ArXiv:2505.06311.
+Simon Willison. 2023. Delimiters won’t save you from
+prompt injection. https://simonwillison.net/
+2023/May/11/delimiters-wont-save-you/.
+Yuhao Wu, Franziska Roesner, Tadayoshi Kohno, Ning
+Zhang, and Umar Iqbal. 2025. IsolateGPT: An Exe-
+cution Isolation Architecture for LLM-Based Agentic
+Systems. In 32nd Annual Network and Distributed
+System Security Symp
+
+---
+
+## Утверждение 31 из 51
+
+(источник: arXiv 1905.05253, стр. 8 PDF)
+
+**УТВЕРЖДЕНИЕ:** The performance of autonomous agents, including their decision-making value, timing, and the impacts of executed actions, should be evaluated to refine and share successful strategies.
+
+**ТЕКСТ СТРАНИЦЫ:**
+This is a preprint version of the paper published as: De Lucia M., Newcomb, A., Kott, A., “Features and 
+Operations of an Autonomous Agent for Cyber Defense,” CSIAC Journal, v.7, n.1, April 2019, pp.6-13 
+ 
+Ideally, the agents’ performance would be evaluated in order to refine and share successful 
+strategies with other agents.  Performance in this context includes the agents’ decision-making 
+value, timing, and the resulting impacts of the courses of action executed (e.g., Blue-17 was 
+successful—what factors contributed to these successes?).  This supports the need for agents to 
+be able to learn from their actions as well as the actions of other agents via machine-learning 
+techniques. 
+ 
+The agent could employ a combination of supervised and unsupervised machine learning. The 
+lessons learned and outcomes of the course of action taken by an agent could be used with a 
+reinforcement-based machine-learning algorithm. For example, the successful course of action 
+executed by Blue-17 with respect to defeating Red-35 would receive a positive reward. This 
+approach could be used to expand the knowledge of the autonomous agents, thereby improving 
+the agents’ performance and effectiveness.  
+ 
+Another requirement of these agents will be trust management between devices. Each device on 
+the network will require software-based logic to participate in the network with a full degree of 
+trust and access. This logic can be preinstalled or can be acquired from a peer node by a device 
+that seeks to join the network in a comply-to-connect mode of operation.  Once compliance 
+conditions are met, the agent can be transferred to other network member nodes. For example, in 
+our scenario, Blue-17 needed a way to determine that Blue-23 is no longer trustworthy. At the 
+same time, Blue-17 had to elicit a sufficient degree of trust from the node where Blue-23 resided 
+in order to overwrite the Blue-23 image.  
+ 
+Device-to-device transfer of the agents—such as the move of a copy of Blue-17 to the node 
+originally defended by Blue-23—necessarily raises concern for unintended propagation and 
+behaviors beyond the intended network, as witnessed with the Morris worm (Qing and Wen 
+2005; Spafford 1989) and the more recent Stuxnet attack (Farwell and Rohozinski, 2011).  
+Findings from studies on limiting the spread of malware in mobile networks (Zyba et al., 2009; 
+Li et al., 2014) could be adapted to manage the propagation of defensive agents.  Another 
+potential solution to controlling propagation is to require consensus approval of a certain number 
+of nodes prior to enabling transfer of the agent to a new device.  A suggested approach is to 
+define boundary rules to determine whether the agent has been transferred outside its intended 
+network.   When the boundary rules evaluate to a true condition (out of bounds), mandatory 
+removal of the agent or a self-destruct sequence would be triggered.  The effects of these 
+combined approaches to controlling propagation require additional research. 
+ 
+While autonomous agents should be free to learn, act, and propagate, careful thought should be 
+given to methods that would constrain behaviors within the bounds of legal and ethical policies, 
+as well as the chain of command. For example, it would be undesirable if Blue-17 were to learn 
+that requests to Blue-C2 are generally fruitless and should not be attempted. An agent that is 
+fully autonomous must be able to operate within an appropriate military C2 construct (Kott and 
+Alberts, 2017). It is imperative that a software agent be bounded in its propagation, yet capable 
+to move around freely between authorized devices.
+
+---
+
+## Утверждение 32 из 51
+
+(источник: arXiv 2411.18241, стр. 1 PDF)
+
+**УТВЕРЖДЕНИЕ:** Multi-agent systems achieve complex tasks that are difficult for a single agent to complete through division of labor and collaboration among agents.
+
+**ТЕКСТ СТРАНИЦЫ:**
+Exploration of LLM Multi-Agent Application
+Implementation Based on LangGraph+CrewAI
+Zhihua Duan
+Intelligent Cloud Network Monitoring Department
+China Telecom Shanghai Company
+Shanghai, China
+duanzh.sh@chinatelecom.cn
+Jialin Wang
+Executive Vice President
+Ferret Relationship Intelligence
+Burlingame, CA 94010, USA
+jialinwangspace@gmail.com
+Abstract—With the rapid development of large model tech-
+nology, the application of agent technology in various fields is
+becoming increasingly widespread, profoundly changing people’s
+work and lifestyles. In complex and dynamic systems, multi-
+agents achieve complex tasks that are difficult for a single
+agent to complete through division of labor and collaboration
+among agents. This paper discusses the integrated application
+of LangGraph and CrewAI. LangGraph improves the efficiency
+of information transmission through graph architecture, while
+CrewAI enhances team collaboration capabilities and system
+performance through intelligent task allocation and resource
+management. The main research contents of this paper are: (1)
+designing the architecture of agents based on LangGraph for
+precise control; (2) enhancing the capabilities of agents based on
+CrewAI to complete a variety of tasks. This study aims to delve
+into the application of LangGraph and CrewAI in multi-agent
+systems, providing new perspectives for the future development
+of agent technology, and promoting technological progress and
+application innovation in the field of large model intelligent
+agents.
+Index Terms—LangGraph, CrewAI, Agent, Large Language
+Model, Generative AI
+I. INTRODUCTION
+Driven by the rapid advancements in artificial intelligence
+technology, the application of agents in various fields is in-
+creasingly growing, profoundly affecting everyone’s work and
+lifestyle. The application scope of agent technology is broad;
+it can autonomously perceive the environment, conduct data
+analysis, and make decisions, thereby significantly enhancing
+efficiency and optimizing resource allocation. In complex and
+dynamic systems, the introduction of multi-agent systems
+enables multiple agents to collaborate and complete complex
+tasks that are difficult for a single agent to achieve.
+The key advantage of multi-agent systems lies in their
+task decomposition capabilities, achieving goals through the
+collaborative action of agents, which not only enhances the
+system’s flexibility and adaptability but also improves its
+generalization ability. In environments characterized by uncer-
+tainty and dynamic changes, the ability of agents to collaborate
+and divide tasks is particularly crucial.
+This paper primarily investigates two issues: (1) designing
+the architecture of agents based on LangGraph for more
+precise control; (2) enhancing the capabilities of agents based
+on CrewAI to accomplish different tasks. The aim is to delve
+into the application of AI multi-agent systems, explore the
+technological advantages brought about by the combination of
+LangGraph and CrewAI, and their potential application value
+in various fields. Through the analysis and research of these
+technologies, it is expected to provide new perspectives and
+ideas for the future development of agent technology, thereby
+promoting technological progress and application innovation
+in the field of large model intelligent agents.
+II. RELATED WORK
+Autonomous agents are typically responsible for specific
+roles to accomplish various tasks.MetaGPT [1], ChatDev [2],
+and self-collaboration [3] pre-set various roles and correspond-
+ing responsibilities to foster collaboration among agents.
+Autonomous agents based on Large Language Models
+(LLMs) incorporate mechanisms from human memory pro-
+cesses.RLP [4] is a conversational agent that maintains an
+internal state for both parties in a dialogue, achieving the
+agent’s short-term memory.SayPlan [5] is an agent designed
+for task planning and design.When faced with complex tasks,
+break them down into simpler subtasks and solve them. The
+Chain of T
+
+---
+
+## Утверждение 33 из 51
+
+(источник: arXiv 2411.18241, стр. 1 PDF)
+
+**УТВЕРЖДЕНИЕ:** LangGraph improves the efficiency of information transmission through graph architecture, while CrewAI enhances team collaboration capabilities and system performance through intelligent task allocation and resource management.
+
+**ТЕКСТ СТРАНИЦЫ:**
+Exploration of LLM Multi-Agent Application
+Implementation Based on LangGraph+CrewAI
+Zhihua Duan
+Intelligent Cloud Network Monitoring Department
+China Telecom Shanghai Company
+Shanghai, China
+duanzh.sh@chinatelecom.cn
+Jialin Wang
+Executive Vice President
+Ferret Relationship Intelligence
+Burlingame, CA 94010, USA
+jialinwangspace@gmail.com
+Abstract—With the rapid development of large model tech-
+nology, the application of agent technology in various fields is
+becoming increasingly widespread, profoundly changing people’s
+work and lifestyles. In complex and dynamic systems, multi-
+agents achieve complex tasks that are difficult for a single
+agent to complete through division of labor and collaboration
+among agents. This paper discusses the integrated application
+of LangGraph and CrewAI. LangGraph improves the efficiency
+of information transmission through graph architecture, while
+CrewAI enhances team collaboration capabilities and system
+performance through intelligent task allocation and resource
+management. The main research contents of this paper are: (1)
+designing the architecture of agents based on LangGraph for
+precise control; (2) enhancing the capabilities of agents based on
+CrewAI to complete a variety of tasks. This study aims to delve
+into the application of LangGraph and CrewAI in multi-agent
+systems, providing new perspectives for the future development
+of agent technology, and promoting technological progress and
+application innovation in the field of large model intelligent
+agents.
+Index Terms—LangGraph, CrewAI, Agent, Large Language
+Model, Generative AI
+I. INTRODUCTION
+Driven by the rapid advancements in artificial intelligence
+technology, the application of agents in various fields is in-
+creasingly growing, profoundly affecting everyone’s work and
+lifestyle. The application scope of agent technology is broad;
+it can autonomously perceive the environment, conduct data
+analysis, and make decisions, thereby significantly enhancing
+efficiency and optimizing resource allocation. In complex and
+dynamic systems, the introduction of multi-agent systems
+enables multiple agents to collaborate and complete complex
+tasks that are difficult for a single agent to achieve.
+The key advantage of multi-agent systems lies in their
+task decomposition capabilities, achieving goals through the
+collaborative action of agents, which not only enhances the
+system’s flexibility and adaptability but also improves its
+generalization ability. In environments characterized by uncer-
+tainty and dynamic changes, the ability of agents to collaborate
+and divide tasks is particularly crucial.
+This paper primarily investigates two issues: (1) designing
+the architecture of agents based on LangGraph for more
+precise control; (2) enhancing the capabilities of agents based
+on CrewAI to accomplish different tasks. The aim is to delve
+into the application of AI multi-agent systems, explore the
+technological advantages brought about by the combination of
+LangGraph and CrewAI, and their potential application value
+in various fields. Through the analysis and research of these
+technologies, it is expected to provide new perspectives and
+ideas for the future development of agent technology, thereby
+promoting technological progress and application innovation
+in the field of large model intelligent agents.
+II. RELATED WORK
+Autonomous agents are typically responsible for specific
+roles to accomplish various tasks.MetaGPT [1], ChatDev [2],
+and self-collaboration [3] pre-set various roles and correspond-
+ing responsibilities to foster collaboration among agents.
+Autonomous agents based on Large Language Models
+(LLMs) incorporate mechanisms from human memory pro-
+cesses.RLP [4] is a conversational agent that maintains an
+internal state for both parties in a dialogue, achieving the
+agent’s short-term memory.SayPlan [5] is an agent designed
+for task planning and design.When faced with complex tasks,
+break them down into simpler subtasks and solve them. The
+Chain of T
+
+---
+
+## Утверждение 34 из 51
+
+(источник: arXiv 2511.00628, стр. 4 PDF)
+
+**УТВЕРЖДЕНИЕ:** The current mainstream multi-agent frameworks include LangGraph, Agno, Autogen, CrewAI, and Dify.
+
+**ТЕКСТ СТРАНИЦЫ:**
+4
+Li et al.: AgentGit
+• We analyze the theoretical complexity of the rollback mechanism in AgentGit, demonstrating
+its scalability and efficiency in reducing redundant computations during iterative tasks.
+• We design and conduct an A/B test task to evaluate the performance of AgentGit in comparison
+to other frameworks (LangGraph, AutoGen, and Agno). Experimental results show that the
+rollback functionality of AgentGit significantly improves testing efficiency by reducing token
+consumption and optimizing runtime.
+• We introduce potential application cases for AgentGit, such as error recovery, safe explo-
+ration, iterative debugging, and A/B testing, highlighting its versatility in accelerating MAS
+development and enhancing system robustness.
+• We fully open-source our dataset, codebase, and the AgentGit framework to facilitate further
+research and development in the field of MAS.
+2.
+Related Works
+LLM-powered multi-agent frameworks provide standardized infrastructures for designing, orches-
+trating, and evaluating interactions among multiple agents powered by LLMs, thus simplify the
+development of LLM-powered MAS (Li et al. 2024, He et al. 2025). Such frameworks abstract com-
+plex coordination processes—such as message passing, role assignment, and tool invocation—into
+reusable components, enabling researchers and developers to efficiently prototype and deploy collab-
+orative AI systems. In recent years, with the rapid development of LLM technology, the application
+scenarios of MAS have expanded significantly, including automated software development, scientific
+simulations, knowledge graph construction, and intelligent customer service systems (Qian et al.
+2023, Pan et al. 2025). These scenarios demand higher reliability and scalability from MAS (Rana
+and Stout 2000, Lee et al. 1998).
+The current mainstream multi-agent frameworks include LangGraph (https://github.com/
+langchain-ai/langgraph), Agno (https://docs.agno.com/introduction), Autogen (Wu et al.
+2024), CrewAI (https://github.com/crewAIInc/crewAI) and Dify (https://github.com/
+langgenius/dify). LangGraph adopts a graph-based orchestration paradigm, representing agent
+workflows as directed acyclic graphs. This design ensures deterministic control and reproducibility,
+making it well-suited for structured pipelines. In contrast, AutoGen models agents as conversational
+entities that exchange natural language messages, allowing flexible, dialogue-driven coordination
+among agents and humans. CrewAI organizes agents into role-based teams, where each agent is
+assigned a specific responsibility under a shared objective—an approach that closely resembles
+human organizational structures and facilitates multi-role collaboration. Agno focuses on flexible
+orchestration and adaptive agent coordination, allowing the system to evolve its behavior over
+time. Dify offers a low-code environment where developers can visually compose and deploy agent
+workflows, aiming for ease of deployment rather than experimental control.
+
+---
+
+## Утверждение 35 из 51
+
+(источник: arXiv 2511.00628, стр. 4 PDF)
+
+**УТВЕРЖДЕНИЕ:** LangGraph adopts a graph-based orchestration paradigm, representing agent workflows as directed acyclic graphs, which ensures deterministic control and reproducibility.
+
+**ТЕКСТ СТРАНИЦЫ:**
+4
+Li et al.: AgentGit
+• We analyze the theoretical complexity of the rollback mechanism in AgentGit, demonstrating
+its scalability and efficiency in reducing redundant computations during iterative tasks.
+• We design and conduct an A/B test task to evaluate the performance of AgentGit in comparison
+to other frameworks (LangGraph, AutoGen, and Agno). Experimental results show that the
+rollback functionality of AgentGit significantly improves testing efficiency by reducing token
+consumption and optimizing runtime.
+• We introduce potential application cases for AgentGit, such as error recovery, safe explo-
+ration, iterative debugging, and A/B testing, highlighting its versatility in accelerating MAS
+development and enhancing system robustness.
+• We fully open-source our dataset, codebase, and the AgentGit framework to facilitate further
+research and development in the field of MAS.
+2.
+Related Works
+LLM-powered multi-agent frameworks provide standardized infrastructures for designing, orches-
+trating, and evaluating interactions among multiple agents powered by LLMs, thus simplify the
+development of LLM-powered MAS (Li et al. 2024, He et al. 2025). Such frameworks abstract com-
+plex coordination processes—such as message passing, role assignment, and tool invocation—into
+reusable components, enabling researchers and developers to efficiently prototype and deploy collab-
+orative AI systems. In recent years, with the rapid development of LLM technology, the application
+scenarios of MAS have expanded significantly, including automated software development, scientific
+simulations, knowledge graph construction, and intelligent customer service systems (Qian et al.
+2023, Pan et al. 2025). These scenarios demand higher reliability and scalability from MAS (Rana
+and Stout 2000, Lee et al. 1998).
+The current mainstream multi-agent frameworks include LangGraph (https://github.com/
+langchain-ai/langgraph), Agno (https://docs.agno.com/introduction), Autogen (Wu et al.
+2024), CrewAI (https://github.com/crewAIInc/crewAI) and Dify (https://github.com/
+langgenius/dify). LangGraph adopts a graph-based orchestration paradigm, representing agent
+workflows as directed acyclic graphs. This design ensures deterministic control and reproducibility,
+making it well-suited for structured pipelines. In contrast, AutoGen models agents as conversational
+entities that exchange natural language messages, allowing flexible, dialogue-driven coordination
+among agents and humans. CrewAI organizes agents into role-based teams, where each agent is
+assigned a specific responsibility under a shared objective—an approach that closely resembles
+human organizational structures and facilitates multi-role collaboration. Agno focuses on flexible
+orchestration and adaptive agent coordination, allowing the system to evolve its behavior over
+time. Dify offers a low-code environment where developers can visually compose and deploy agent
+workflows, aiming for ease of deployment rather than experimental control.
+
+---
+
+## Утверждение 36 из 51
+
+(источник: arXiv 2412.05449, стр. 3 PDF)
+
+**УТВЕРЖДЕНИЕ:** LangGraph introduces an innovative framework for organizing agent interactions using directed acyclic graphs (DAGs), allowing for clear and structured communication.
+
+**ТЕКСТ СТРАНИЦЫ:**
+process can be distributed across multiple agent developers. Note that although the supervisor agent
+can delegate tasks to other agents, it is still the responsibility of the supervisor agent to complete the
+task and bring the results back to the user.
+Inter-Agent Knowledge Exchange
+Knowledge exchange between agents is a fundamental aspect
+of multi-agent collaboration. In this technical report, we focus on enabling the most basic form of
+knowledge exchange: message passing. Each agent can send direct messages to other visible agents.
+Within the context of hierarchical agents, an agent can send and receive messages from its supervisor
+and, potentially, from specialist agents. We initially support synchronized communication, where
+message passing temporarily blocks the execution of the sender agent until a response is received.
+This protocol can be extended to support asynchronous communication, allowing the sender agent to
+continue execution while waiting for a response.
+Multi-Agent Evaluation
+Benchmarking single AI agents is already difficult [10] and increasing
+the number of agents to benchmark only complicates the problem. While an ideal approach is to
+have a human try out the multi-agent system and evaluate whether every conversation is successful or
+not, this kind of online evaluation is too expensive and not scalable for fast prototyping. To rapidly
+evaluate our multi-agent systems, we introduce assertion-based benchmarking as a way to leverage
+model-based evaluation and avoid dependency on collecting ground-truth conversation trajectories.
+For assertion-based benchmarking, we collect 90 scenarios from three different enterprise application
+domains. We open-source the benchmarking dataset and conversation evaluation script.2
+For enterprise applications, efficient collaboration is crucial, as many are latency-sensitive. To address
+this, we further optimize the multi-agent collaboration framework by introducing payload referencing
+and a dynamic routing mechanism. The remainder of this report provides details on methodologies
+and optimizations in Section 3. Evaluation results and analysis are presented in Sections 4 to 6.
+Finally, we discuss limitations and future work in Sections 7 to 8.
+2
+Related Work
+Multi-agent GenAI Systems
+An agent is defined as “an entity which is placed in an environ-
+ment and senses different parameters that are used to make a decision based on the goal of the
+entity.” [10]. The motivation for multi-agent systems is to have agents collaborate on a complex
+task that could not have been accomplished by a single agent. With the rise of LLMs, researchers
+have proposed leveraging the reasoning and planning capabilities of these models to develop more
+sophisticated multi-agent systems. Examples of such multi-agent LLM systems include MetaGPT [9]
+and CAMEL [12]. MetaGPT is one of the first multi-agent LLM projects that tries to mimic a
+software company. Developers can provide a standard operating procedure and MetaGPT tries to
+assign roles to various agents. CAMEL, or Communicative Agent Framework, promotes independent
+collaboration between LLM agents. Its key innovation is the use of "inception prompting," a method
+that steers conversational agents to complete tasks. Beyond its practical applications, CAMEL also
+functions as a research platform. It enables the creation and analysis of conversational data, offering
+valuable insights into the behavior and interactions of communicative agents. Across these works,
+much of the emphasis is on customization and coordination, which was much less prominent in
+traditional multi-agent systems [18, 20].
+Multi-agent Frameworks and Platforms
+CrewAI [5] is designed to enhance task execution
+by organizing agents into specialized roles, similar to team members in a crew. This approach
+emphasizes task decomposition, where a complex problem is broken down into smaller, manageable
+subtasks. Each agent is assigned a specific role based on its expertise, allowing for efficient
+
+---
+
+## Утверждение 37 из 51
+
+(источник: arXiv 2411.18241, стр. 1 PDF)
+
+**УТВЕРЖДЕНИЕ:** The main research contents of this paper are designing the architecture of agents based on LangGraph for precise control and enhancing the capabilities of agents based on CrewAI to complete a variety of tasks.
+
+**ТЕКСТ СТРАНИЦЫ:**
+Exploration of LLM Multi-Agent Application
+Implementation Based on LangGraph+CrewAI
+Zhihua Duan
+Intelligent Cloud Network Monitoring Department
+China Telecom Shanghai Company
+Shanghai, China
+duanzh.sh@chinatelecom.cn
+Jialin Wang
+Executive Vice President
+Ferret Relationship Intelligence
+Burlingame, CA 94010, USA
+jialinwangspace@gmail.com
+Abstract—With the rapid development of large model tech-
+nology, the application of agent technology in various fields is
+becoming increasingly widespread, profoundly changing people’s
+work and lifestyles. In complex and dynamic systems, multi-
+agents achieve complex tasks that are difficult for a single
+agent to complete through division of labor and collaboration
+among agents. This paper discusses the integrated application
+of LangGraph and CrewAI. LangGraph improves the efficiency
+of information transmission through graph architecture, while
+CrewAI enhances team collaboration capabilities and system
+performance through intelligent task allocation and resource
+management. The main research contents of this paper are: (1)
+designing the architecture of agents based on LangGraph for
+precise control; (2) enhancing the capabilities of agents based on
+CrewAI to complete a variety of tasks. This study aims to delve
+into the application of LangGraph and CrewAI in multi-agent
+systems, providing new perspectives for the future development
+of agent technology, and promoting technological progress and
+application innovation in the field of large model intelligent
+agents.
+Index Terms—LangGraph, CrewAI, Agent, Large Language
+Model, Generative AI
+I. INTRODUCTION
+Driven by the rapid advancements in artificial intelligence
+technology, the application of agents in various fields is in-
+creasingly growing, profoundly affecting everyone’s work and
+lifestyle. The application scope of agent technology is broad;
+it can autonomously perceive the environment, conduct data
+analysis, and make decisions, thereby significantly enhancing
+efficiency and optimizing resource allocation. In complex and
+dynamic systems, the introduction of multi-agent systems
+enables multiple agents to collaborate and complete complex
+tasks that are difficult for a single agent to achieve.
+The key advantage of multi-agent systems lies in their
+task decomposition capabilities, achieving goals through the
+collaborative action of agents, which not only enhances the
+system’s flexibility and adaptability but also improves its
+generalization ability. In environments characterized by uncer-
+tainty and dynamic changes, the ability of agents to collaborate
+and divide tasks is particularly crucial.
+This paper primarily investigates two issues: (1) designing
+the architecture of agents based on LangGraph for more
+precise control; (2) enhancing the capabilities of agents based
+on CrewAI to accomplish different tasks. The aim is to delve
+into the application of AI multi-agent systems, explore the
+technological advantages brought about by the combination of
+LangGraph and CrewAI, and their potential application value
+in various fields. Through the analysis and research of these
+technologies, it is expected to provide new perspectives and
+ideas for the future development of agent technology, thereby
+promoting technological progress and application innovation
+in the field of large model intelligent agents.
+II. RELATED WORK
+Autonomous agents are typically responsible for specific
+roles to accomplish various tasks.MetaGPT [1], ChatDev [2],
+and self-collaboration [3] pre-set various roles and correspond-
+ing responsibilities to foster collaboration among agents.
+Autonomous agents based on Large Language Models
+(LLMs) incorporate mechanisms from human memory pro-
+cesses.RLP [4] is a conversational agent that maintains an
+internal state for both parties in a dialogue, achieving the
+agent’s short-term memory.SayPlan [5] is an agent designed
+for task planning and design.When faced with complex tasks,
+break them down into simpler subtasks and solve them. The
+Chain of T
+
+---
+
+## Утверждение 38 из 51
+
+(источник: arXiv 2605.23989, стр. 3 PDF)
+
+**УТВЕРЖДЕНИЕ:** Agentic AI is defined as an AI system with persistent objectives that can perceive its environment, plan over multiple steps, and act via tools or actuators to affect external systems, while reflecting on outcomes and adapting its internal state under explicit human oversight, privacy/security policies, and operational constraints.
+
+**ТЕКСТ СТРАНИЦЫ:**
+https://doi.org/10.20935/xxx
+outcome metrics (e.g., success and catastrophic risk) and pro-
+cess metrics (e.g., constraint violation rates and trace cov-
+erage), and provide scenario-to-metric guidance for practical
+release gating in high-risk scenarios.
+• Open challenges and solutions. We identify research fron-
+tiers such as self-evolving agents under concept drift, veri-
+fication and runtime monitoring for rare events and inter-
+active settings, privacy-preserving personalization, and the
+trust–utility trade-off.
+1.7. Paper organization
+Figure 1 illustrates the overall structure and provides a reading
+guide. The survey is organized into four main parts:
+1. Preliminaries (Section 2): defines agentic AI and its com-
+ponents along the five-stage workflow (Perceive–Plan–Act–
+Reflect–Learn; see Figure 2 for the system architecture),
+reviews reinforcement learning and preference optimization
+foundations relevant to trustworthy training, and outlines
+the risk surface and assurance stack that frame subsequent
+discussions.
+2. Core dimensions (Section 3): examines the two core trust-
+worthiness dimensions—Safety and Robustness and Privacy
+and System Security—each following a consistent Definition
+→Risks →Methods structure aligned to the agent lifecycle
+(see Figure 3 for a hierarchical taxonomy with stage-specific
+mitigation methods and key references).
+3. Evaluation Hub (Section 4): consolidates metrics, benchmark
+suites, scenario-to-metric mapping for release gating, and
+recommended evaluation pipelines and reporting standards
+into a unified reference.
+4. Challenges and conclusion (Section 6): discusses open chal-
+lenges (self-evolving agents, monitoring, personalization,
+and the trust–utility trade-off) and presents a case study
+on security failures in open-source agentic systems (Open-
+Claw/Moltbook).
+2. Preliminaries
+2.1. Agentic AI: definition, components, and workflow
+2.1.1. Definition
+We define agentic AI as an AI system with persistent objectives
+that can perceive its environment, plan over multiple steps, and
+act via tools or actuators to affect external systems, while reflect-
+ing on outcomes and adapting its internal state under explicit
+human oversight, privacy/security policies, and operational con-
+straints. This view follows the classical agent perspective in AI and
+Section 1 Introduction
+Section 2 Preliminaries: Agentic AI & Workflow
+Section 2.2 RL & Preference
+Optimization Foundations
+Section 2.1 Definition & Components
+Perceive→Plan→Act→Reflect→Learn
+Section 2.3 Risk Surface &
+Assurance Stack
+Section 3 Core Dimensions of Trustworthiness
+Safety & Robustness
+Perceive→Plan→Act→Reflect→Learn
+Privacy & System Security
+Perceive→Plan→Act→Reflect→Learn
+Section 4 Metrics & Benchmarks
+Metric Dictionary, Scenario-to-Metric Mapping, Evaluation Pipeline, Reporting Standards
+Section 5 Challenges and Solutions
+Motivation, Scope, Contributions
+Each: Definition →Risks →Methods (stage-aligned)
+Figure 1 • Paper structure and reading guide. The survey begins with motivation and agentic AI preliminaries (Sections 1 and
+2), then presents two core trustworthiness dimensions—Safety and Robustness and Privacy and System Security—with consistent
+Definition→Risks→Methods structure (Section 3). Evaluation metrics consolidate process- and outcome-level assessments (Section 4).
+Challenges and solutions conclude the survey (Section 6). Gray boxes represent introductory and concluding sections; purple boxes
+denote preliminaries; green boxes denote core dimensions; yellow boxes denote the evaluation hub. Solid arrows indicate the primary
+reading flow; dashed arrows indicate dependency relationships between dimensions and evaluation.
+ACADEMIA AI AND APPLICATIONS
+2026, 2
+3 of 37
+
+---
+
+## Утверждение 39 из 51
+
+(источник: arXiv 2512.20640, стр. 1 PDF)
+
+**УТВЕРЖДЕНИЕ:** The emerging paradigm of agentic AI envisions networks governed by autonomous agents capable of perception, reasoning, and strategic action, addressing the gap in systems that learn from experience without human intervention.
+
+**ТЕКСТ СТРАНИЦЫ:**
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021
+1
+Reflection-Driven Self-Optimization 6G Agentic AI RAN via
+Simulation-in-the-Loop Workflows
+Yunhao Hu, Xinchen Lyu, Chenshan Ren, Keda Chen, Qimei Cui, and Xiaofeng Tao
+Abstract—The escalating complexity of sixth-generation (6G)
+networks demands unprecedented levels of autonomy beyond
+the capabilities of traditional optimization-based and current
+AI-based resource management approaches. While agentic AI
+has emerged as a promising paradigm for autonomous RAN,
+existing frameworks remain fundamentally open-loop, excelling
+at reasoning and planning but lacking empirical validation mech-
+anisms to verify decisions and learn from outcomes. This article
+identifies simulation-in-the-loop validation as a critical enabler
+for autonomous networks, where AI agents can empirically verify
+decisions and learn from outcomes. We present the first reflection-
+driven self-optimization framework that integrates agentic AI
+with high-fidelity network simulation in a closed-loop architec-
+ture. Our system orchestrates four specialized agents, including
+scenario, solver, simulation, and reflector agents, working in
+concert to transform unverified open-loop planning into a con-
+tinuous, evidence-grounded, self-optimization workflow. Extensive
+experiments validate significant performance improvements over
+non-agentic baselines: 17.1% higher throughput in interference
+optimization, 67% improved user QoS satisfaction through intent
+recognition, and 25% reduced resource utilization during low-
+traffic periods while maintaining service quality.
+Index
+Terms—6G
+networks,
+reflection-driven
+agentic
+AI,
+simulation-in-the-loop, autonomous RAN.
+I. Introduction
+T
+HE integration of artificial intelligence (AI) and com-
+munication has been recognized by the International
+Telecommunication Union (ITU-T) as a key scenario for the
+sixth-generation (6G) wireless networks. This vision is driving
+a fundamental transformation in radio access network (RAN)
+design, where traditional optimization-based resource manage-
+ment is increasingly being augmented (in some cases replaced)
+by AI-enabled methods. This paradigm shift accelerates the
+adoption of data-driven AI techniques in 5G-Advanced and
+early 6G research, offering promising gains in handling non-
+convex problems and unseen network scenarios [1].
+However, both traditional optimization and current AI-based
+approaches for resource management may not achieve the
+cognitive autonomy essential for 6G RAN. These approaches
+typically function within fixed system models and optimization
+objectives, lacking the ability to comprehend high-level user
+intent, dynamically reformulate problems, or learn from expe-
+rience without human intervention. This gap is being addressed
+by the emerging paradigm of agentic AI RAN [2], which
+envisions networks governed by autonomous agents capable of
+perception, reasoning, and strategic action. Gaining significant
+Y. Hu, X. Lyu, K. Chen, Q. Cui, and X. Tao are with National Engineering
+Research Center for Mobile Networking Technologies, Beijing University of
+Posts and Telecommunications, China. C. Ren is with the Key Laboratory
+of Ethnic Language Intelligent Analysis and Security Governance of MOE,
+Minzu University of China, China.
+traction in both academia and standardization (including 3GPP,
+ETSI, and 6GANA), agentic AI RAN promises transformative
+benefits, including intent-driven operation, dynamic adaptation
+to novel scenarios, and a substantial reduction in operational
+expenditure (OpEx) by minimizing manual engineering.
+As illustrated in Fig. 1 (a)-(c), recent explorations in agentic
+AI RAN can be broadly categorized into three types: (1) Large
+Language Model (LLM) Direct for Resource Management [3]–
+[5]: This approach employs the reasoning chain of LLMs to
+directly output resource allocation decisions. While simple to
+implement, it often proves inefficient and lacks the precision
+required for complex, high-dimensional optimization i
+
+---
+
+## Утверждение 40 из 51
+
+(источник: arXiv 2512.20640, стр. 3 PDF)
+
+**УТВЕРЖДЕНИЕ:** Recent research explores the use of LLMs and agentic AI techniques as catalysts for autonomy, evolving through three distinct tiers, with the first tier employing the inherent reasoning capability of LLMs to directly map network states to resource allocation decisions through prompt engineering.
+
+**ТЕКСТ СТРАНИЦЫ:**
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021
+3
+Research Direction
+Literature
+Highlight
+Tier 1. LLMs For
+Direct Problem
+Solving
+[3]
+Leverages LLM knowledge transfer to maximize energy and spectrum efficiency in resource allocation.
+[4]
+Uses prompt-based tuning to convey dynamic QoS constraints for constraint-aware resource allocation.
+[5]
+Achieves optimization without model fine-tuning via reinforced in-context learning for power control.
+Tier 2. LLMs As
+Tools For Problem
+Solving
+[6]
+Extracts high-level intents via LLMs and optimizes 5G/O-RAN using hierarchical reinforcement learning.
+[7]
+Detects and converts non-convex components into solvable forms for automated resource allocation solutions.
+[8]
+Leverages LLM generative capabilities to autonomously design diverse network optimization algorithms.
+Tier 3. Agentic
+Workflow For
+Problem Solving
+[9]
+Generates adaptive control algorithms from natural language intents for hierarchical autonomous 6G networks.
+[10]
+Integrates diverse tools for cross-domain operations like topology discovery and physics-informed optimization.
+[11]
+Constructs an autonomous agent framework with perception and planning for adaptive network slice management.
+[12]
+Enables edge devices to evolve into autonomous agents via a collaborative perception-action closed loop.
+[13]
+Achieves real-time, multi-level autonomous optimization in Open RAN environments via edge Agentic AI.
+[14]
+Enables continuous self-adaptation and evolution from fixed to mobile antenna optimization tasks.
+[15]
+Combines time series analysis with agents for intent decomposition and anomaly-based strategy execution.
+Use Case 2
+Reflection-Enabled Intent
+Recognition
+QoS
+Use Case 3
+Reflection-Driven Context
+Awareness
+BS Open
+BS Closed
+Use Case 1
+Reflection-Enhanced
+Optimization
+Throughput
+Current Explorations on Agentic AI RAN and Visions of Reflection-Driven Agentic RAN
+Using
+Scenario
+Without the ability to test hypotheses and learn from outcomes, the reasoning capability of agent remains an 
+unverified, open-loop process.
+Fig. 2. Difference between existing agentic AI RAN paradigms and the proposed closed-loop vision. Different from existing open-loop approaches, the proposed
+framework establishes a simulation-in-the-loop closed-loop workflow, thereby transforming unverified AI reasoning into evidence-grounded, self-optimization
+network autonomy.
+(3) AI automation supersedes manual configuration: Stan-
+dards now explicitly define ML model training and inference
+workflows that automate tasks previously requiring expert
+human intervention.
+This evolution represents a fundamental transition from
+purely model-based optimization to data-driven, AI-augmented
+RAN operations, establishing the technical foundation upon
+which agentic systems can build.
+B. Evolution towards LLM and Agentic AI RAN
+As shown in Fig. 2, recent research explores LLMs and
+agentic AI techniques as catalysts for autonomy, evolving
+through three distinct tiers.
+1) Tier 1: LLM Direct for Resource Management: This
+approach employs the inherent reasoning capability of LLM
+to directly map network states to resource allocation decisions
+through prompt engineering. In [3], the LLM leverages its
+pre-trained knowledge base to maximize energy or spectrum
+efficiency. In [4], specialized prompting strategies are developed
+to explicitly convey QoS constraints within the natural language
+prompt, enabling constraint-aware solutions. In [5], reinforced
+in-context learning is applied to achieve power control opti-
+mization without model fine-tuning. However, these methods
+lack the precision of mathematical solvers, proving inefficient
+for high-dimensional continuous optimization problems like
+precise power control in dense networks, where gradient-based
+methods outperform LLM reasoning.
+2) Tier 2: LLM as Tools for Resource Management: This
+paradigm demonstrates a shift from direct LLM solution to using
+LLMs as specialized tools to generate or augment traditional
+optimization pipelin
+
+---
+
+## Утверждение 41 из 51
+
+(источник: arXiv 2512.20640, стр. 3 PDF)
+
+**УТВЕРЖДЕНИЕ:** The proposed framework for agentic AI RAN establishes a simulation-in-the-loop closed-loop workflow, transforming the reasoning capability of agents from an unverified, open-loop process to a verified, closed-loop process.
+
+**ТЕКСТ СТРАНИЦЫ:**
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021
+3
+Research Direction
+Literature
+Highlight
+Tier 1. LLMs For
+Direct Problem
+Solving
+[3]
+Leverages LLM knowledge transfer to maximize energy and spectrum efficiency in resource allocation.
+[4]
+Uses prompt-based tuning to convey dynamic QoS constraints for constraint-aware resource allocation.
+[5]
+Achieves optimization without model fine-tuning via reinforced in-context learning for power control.
+Tier 2. LLMs As
+Tools For Problem
+Solving
+[6]
+Extracts high-level intents via LLMs and optimizes 5G/O-RAN using hierarchical reinforcement learning.
+[7]
+Detects and converts non-convex components into solvable forms for automated resource allocation solutions.
+[8]
+Leverages LLM generative capabilities to autonomously design diverse network optimization algorithms.
+Tier 3. Agentic
+Workflow For
+Problem Solving
+[9]
+Generates adaptive control algorithms from natural language intents for hierarchical autonomous 6G networks.
+[10]
+Integrates diverse tools for cross-domain operations like topology discovery and physics-informed optimization.
+[11]
+Constructs an autonomous agent framework with perception and planning for adaptive network slice management.
+[12]
+Enables edge devices to evolve into autonomous agents via a collaborative perception-action closed loop.
+[13]
+Achieves real-time, multi-level autonomous optimization in Open RAN environments via edge Agentic AI.
+[14]
+Enables continuous self-adaptation and evolution from fixed to mobile antenna optimization tasks.
+[15]
+Combines time series analysis with agents for intent decomposition and anomaly-based strategy execution.
+Use Case 2
+Reflection-Enabled Intent
+Recognition
+QoS
+Use Case 3
+Reflection-Driven Context
+Awareness
+BS Open
+BS Closed
+Use Case 1
+Reflection-Enhanced
+Optimization
+Throughput
+Current Explorations on Agentic AI RAN and Visions of Reflection-Driven Agentic RAN
+Using
+Scenario
+Without the ability to test hypotheses and learn from outcomes, the reasoning capability of agent remains an 
+unverified, open-loop process.
+Fig. 2. Difference between existing agentic AI RAN paradigms and the proposed closed-loop vision. Different from existing open-loop approaches, the proposed
+framework establishes a simulation-in-the-loop closed-loop workflow, thereby transforming unverified AI reasoning into evidence-grounded, self-optimization
+network autonomy.
+(3) AI automation supersedes manual configuration: Stan-
+dards now explicitly define ML model training and inference
+workflows that automate tasks previously requiring expert
+human intervention.
+This evolution represents a fundamental transition from
+purely model-based optimization to data-driven, AI-augmented
+RAN operations, establishing the technical foundation upon
+which agentic systems can build.
+B. Evolution towards LLM and Agentic AI RAN
+As shown in Fig. 2, recent research explores LLMs and
+agentic AI techniques as catalysts for autonomy, evolving
+through three distinct tiers.
+1) Tier 1: LLM Direct for Resource Management: This
+approach employs the inherent reasoning capability of LLM
+to directly map network states to resource allocation decisions
+through prompt engineering. In [3], the LLM leverages its
+pre-trained knowledge base to maximize energy or spectrum
+efficiency. In [4], specialized prompting strategies are developed
+to explicitly convey QoS constraints within the natural language
+prompt, enabling constraint-aware solutions. In [5], reinforced
+in-context learning is applied to achieve power control opti-
+mization without model fine-tuning. However, these methods
+lack the precision of mathematical solvers, proving inefficient
+for high-dimensional continuous optimization problems like
+precise power control in dense networks, where gradient-based
+methods outperform LLM reasoning.
+2) Tier 2: LLM as Tools for Resource Management: This
+paradigm demonstrates a shift from direct LLM solution to using
+LLMs as specialized tools to generate or augment traditional
+optimization pipelin
+
+---
+
+## Утверждение 42 из 51
+
+(источник: arXiv 2601.11816, стр. 13 PDF)
+
+**УТВЕРЖДЕНИЕ:** POLARIS integrates typed DAG planning for safe composition, diversity-constrained plan synthesis for distinct candidates, and reasoning-based selection for multi-criteria decision-making, providing a methodological and benchmark reference for policy-aligned Agentic AI in back-office automation.
+
+**ТЕКСТ СТРАНИЦЫ:**
+POLARIS: Typed Planning and Governed Execution for Agentic AI in Back-Office Automation
+Table 4 | Anomaly (MAD, 𝑘mad=3.5) and date checks. Metrics are undefined (—) where no positive
+cases exist.
+Scenario
+total
+TP
+FP
+FN
+TN
+precision
+recall
+f1
+VU
+8
+0
+0
+0
+8
+—
+—
+—
+VL
+6
+5
+0
+1
+0
+1.0000
+0.8333
+0.9091
+CC
+3
+0
+0
+0
+3
+—
+—
+—
+CM
+9
+4
+0
+0
+5
+1.0000
+1.0000
+1.0000
+TOTAL
+26
+9
+0
+1
+16
+1.0000
+0.9000
+0.9474
+Table 5 | SROIE overall and per-field accuracy.
+Metric
+Precision
+Recall
+F1
+Field Acc.
+Overall
+0.8189
+0.8045
+0.8116
+0.8045
+Field
+Company
+Address
+Date
+Total
+Accuracy
+0.8500
+0.8500
+0.7600
+0.7576
+lines, we see higher recall under noise and precise policy/alarm signals, while preserving auditability
+and policy compliance by construction.
+5.4. Benchmark Implications
+The controlled synthetic suite introduced in this work provides an initial benchmark for evaluating
+governed agentic systems. Beyond conventional precision and recall, it measures enterprise-specific
+dimensions such as policy compliance, audit-trace completeness, and risk-routing accuracy. POLARIS’s
+typed DAG traces, validator repair logs, and policy decisions constitute reusable evaluation primitives
+that enable reproducibility of compliance accuracy, routing precision, and repair effectiveness across
+agent frameworks.
+Future benchmarks may expand these dimensions with standardized governance metrics and multi-
+agent reproducibility protocols, forming a baseline schema for comparing enterprise-grade Agentic AI
+systems.
+6. Conclusion
+Classical back-office automation relies on brittle point tools (OCR + rules) that lack end-to-end
+provenance; generic agent stacks provide flexibility but often blur interfaces and policy boundaries.
+POLARIS integrates: typed DAG planning (safe composition), diversity-constrained plan synthesis
+(distinct candidates), reasoning-based selection (multi-criterion, policy-aware choice), and a bounded
+repair loop (targeted, auditable fixes). This combination yields decision-grade outputs with explicit
+lineage and policy justifications advancing from reactive point solutions or black-box agents to
+policy-aligned, valuable enterprise automation. Beyond its immediate performance gains, POLARIS
+introduces evaluation constructs—typed DAG lineage, governed selection logs, and validator repair
+traces—that can inform future benchmark design for reliable enterprise Agentic AI.
+13
+
+---
+
+## Утверждение 43 из 51
+
+(источник: arXiv 2601.11816, стр. 1 PDF)
+
+**УТВЕРЖДЕНИЕ:** POLARIS aims to address the limitations of classical back-office automation, which relies on brittle point tools (OCR + rules) that lack end-to-end provenance, by providing a flexible and governed approach to enterprise automation.
+
+**ТЕКСТ СТРАНИЦЫ:**
+POLARIS: Typed Planning and Governed Execution
+for Agentic AI in Back-Office Automation
+Zahra Moslemi1, Keerthi Koneru2, Yen-Ting Lee3, Sheethal Kumar2, Ramesh Radhakrishnan2
+1University of California, Irvine, 2Center for Advanced AI, Accenture, 3University of California, San Diego
+Enterprise back-office workflows require agentic systems that are auditable, policy-aligned, and op-
+erationally predictable, capabilities that generic multi-agent setups often fail to deliver. We present
+POLARIS (Policy-Aware LLM Agentic Reasoning for Integrated Systems), a governed orchestration
+framework that treats automation as typed plan synthesis and validated execution over LLM agents. A
+planner proposes structurally diverse, type-checked directed acyclic graphs (DAGs); a rubric-guided
+reasoning module selects a single compliant plan; and execution is guarded by validator-gated checks, a
+bounded repair loop, and compiled policy guardrails that block or route side effects before they occur.
+Applied to document-centric finance tasks, POLARIS produces decision-grade artifacts and full execution
+traces while reducing human intervention. Empirically, POLARIS achieves a micro-F1 of 0.81 on the
+SROIE dataset and, on a controlled synthetic suite, achieves 0.95–1.00 precision for anomaly routing
+with preserved audit trails. These evaluations constitute an initial benchmark for governed Agentic AI.
+POLARIS provides a methodological and benchmark reference for policy-aligned Agentic AI.
+Keywords: Agentic AI; Enterprise Automation; Back-Office Tasks; Benchmarks; Governance; Typed
+Planning; Evaluation
+1. Introduction
+Enterprise back-office automation (e.g., accounts payable, contract checks) imposes requirements
+that generic multi-agent LLM stacks often fail to meet: actions must be auditable, operationally
+predictable, policy-aligned, and governed before any side effects occur, and reliably evaluable against
+reproducible metrics. In practice, untyped tool calls, best-of-𝑁prompting, and open-ended retries
+yield brittle pipelines with unclear provenance and no predictable service-level agreement (SLA)
+guarantees. We argue that meeting enterprise guarantees requires re-casting orchestration as typed,
+governed planning and execution where plans are type-checked and structurally diverse; selection is
+rubric-based and policy-aware; and execution is guarded by validators and compiled policy checks
+that gate side effects.
+Recent progress in Agentic AI has created powerful but ungoverned multi-agent stacks. Modern
+LLMs now support precise language understanding and the use of controlled tools (OpenAI et al.,
+2023), enabling agentic systems for operational work. LLM-based agents combine core reasoning with
+domain tools (Qin et al., 2024; Wang et al., 2024); multi-agent systems assign specialized roles across
+workflows (Wu et al., 2023b; Hong et al., 2024); and planning-centric frameworks cast orchestration
+as agent-oriented planning (AOP) with typed sub-tasks (Li et al., 2024). In parallel, workflow-centric
+approaches represent execution as a directed acyclic graph (DAG) of tool calls with explicit interfaces
+(Wu et al., 2023b; Hong et al., 2024), often following a plan-then-act paradigm that synthesizes
+candidate workflows before selection (Author et al., 2025; Wu et al., 2023b). However, enterprise
+deployment of such Agentic AI remains limited by the lack of typed planning, evaluation metrics, and
+auditable execution paths.
+Applying these ideas in regulated settings is challenging: inputs are heterogeneous and legally
+constrained, and errors carry financial risk. Common stacks (a) pass untyped input/output (I/O) in
+Corresponding author(s): Keerthi Koneru (keerthi.koneru@accenture.com). All work was done during the authors’ tenure at Accenture.
+© 2026 Accenture. All rights reserved
+arXiv:2601.11816v1  [cs.AI]  16 Jan 2026
+
+---
+
+## Утверждение 44 из 51
+
+(источник: arXiv 2104.14336, стр. 2 PDF)
+
+**УТВЕРЖДЕНИЕ:** The Document Collection Visual Question Answering (DocCVQA) task requires methods to provide answers to questions and the IDs of the documents used to obtain the answers as answer evidence.
+
+**ТЕКСТ СТРАНИЦЫ:**
+2
+R. Tito et al.
+In this regard, we present Document Collection Visual Question Answering
+(DocCVQA) as a step towards better understanding document collections and
+going beyond word spotting. The objective of DocCVQA is to extract informa-
+tion from a document image collection by asking questions and expecting the
+methods to provide the answers. Nevertheless, to ensure that those answers have
+been inferred using the documents that contain the necessary information, the
+methods must also provide the IDs of the documents used to obtain the answer
+in the form of a conﬁdence list as answer evidence. Hence, we design this task
+as a retrieval-answering task, for which the methods should be trained initially
+on other datasets and consequently, we pose only a set of 20 questions over this
+document collection. In addition, most of the answers in this task are actually
+a set of words extracted from diﬀerent documents for which the order is not
+relevant, as we can observe in the question example in Figure 1. Therefore, we
+deﬁne a new evaluation metric based on the Average Normalized Levenshtein
+Similarity (ANLS) to evaluate the answering performance of the methods in this
+task. Finally, we propose two baseline methods from very diﬀerent perspectives
+which provide some insights on this task and dataset.
+The dataset, the baselines code and the performance evaluation scripts with
+an online evaluation service are available in https://docvqa.org.
+Q: In which years did Anna M. Rivers run for the State senator oﬃce?
+A: [2016, 2020]
+E: [454, 10901]
+Fig. 1. Top: Partial visualization of sample documents in DocCVQA. The left docu-
+ment corresponds to the document with ID 454, which is one of the relevant documents
+to answer the question below. Bottom: Example question from the sample set, its an-
+swer and their evidences. In DocCVQA the evidences are the documents where the
+answer can be inferred from. In this example, the correct answer are the years 2016
+and 2020, and the evidences are the document images with ids 454 and 10901 which
+corresponds to the forms where Anna M. Rivers presented as a candidate for the State
+senator oﬃce.
+
+---
+
+## Утверждение 45 из 51
+
+(источник: arXiv 2104.14336, стр. 2 PDF)
+
+**УТВЕРЖДЕНИЕ:** In the DocCVQA task, the methods are trained on other datasets and then posed a set of 20 questions over the document collection.
+
+**ТЕКСТ СТРАНИЦЫ:**
+2
+R. Tito et al.
+In this regard, we present Document Collection Visual Question Answering
+(DocCVQA) as a step towards better understanding document collections and
+going beyond word spotting. The objective of DocCVQA is to extract informa-
+tion from a document image collection by asking questions and expecting the
+methods to provide the answers. Nevertheless, to ensure that those answers have
+been inferred using the documents that contain the necessary information, the
+methods must also provide the IDs of the documents used to obtain the answer
+in the form of a conﬁdence list as answer evidence. Hence, we design this task
+as a retrieval-answering task, for which the methods should be trained initially
+on other datasets and consequently, we pose only a set of 20 questions over this
+document collection. In addition, most of the answers in this task are actually
+a set of words extracted from diﬀerent documents for which the order is not
+relevant, as we can observe in the question example in Figure 1. Therefore, we
+deﬁne a new evaluation metric based on the Average Normalized Levenshtein
+Similarity (ANLS) to evaluate the answering performance of the methods in this
+task. Finally, we propose two baseline methods from very diﬀerent perspectives
+which provide some insights on this task and dataset.
+The dataset, the baselines code and the performance evaluation scripts with
+an online evaluation service are available in https://docvqa.org.
+Q: In which years did Anna M. Rivers run for the State senator oﬃce?
+A: [2016, 2020]
+E: [454, 10901]
+Fig. 1. Top: Partial visualization of sample documents in DocCVQA. The left docu-
+ment corresponds to the document with ID 454, which is one of the relevant documents
+to answer the question below. Bottom: Example question from the sample set, its an-
+swer and their evidences. In DocCVQA the evidences are the documents where the
+answer can be inferred from. In this example, the correct answer are the years 2016
+and 2020, and the evidences are the document images with ids 454 and 10901 which
+corresponds to the forms where Anna M. Rivers presented as a candidate for the State
+senator oﬃce.
+
+---
+
+## Утверждение 46 из 51
+
+(источник: arXiv 2104.14336, стр. 5 PDF)
+
+**УТВЕРЖДЕНИЕ:** The DocCVQA dataset is designed as a retrieval-answering task, where the documents are relatively similar, and the task involves posing 20 natural language questions over the collection.
+
+**ТЕКСТ СТРАНИЦЫ:**
+Document Collection Visual Question Answering
+5
+3.1
+Data Collection
+Images: The DocCVQA dataset comprises 14, 362 document images sourced
+from the Open Data portal of the Public Disclosure Commission (PDC), an
+agency that aims to provide public access to information about the ﬁnancing
+of political campaigns, lobbyist expenditures, and the ﬁnancial aﬀairs of public
+oﬃcials and candidates. We got the documents from this source for various
+reasons. First, it’s a live repository that is updated periodically and therefore,
+the dataset can be increased in size in the future if it’s considered necessary or
+beneﬁcial for the research. In addition, it contains a type of documents in terms
+of layout and content that makes sense and can be interesting to reason about
+an entire collection. Moreover, along with the documents, they provide their
+transcriptions in the form of CSV ﬁles which allows us to pose a set of questions
+and get their answers without the costly process of annotation. From the original
+collection of document images, we discarded all the multi-page documents and
+documents for which the transcriptions were partially missing or ambiguous.
+Thus, all documents that were ﬁnally included in the dataset were sourced from
+the same document template, the US Candidate Registration form, with slight
+design diﬀerences due to changes over the time. However, these documents still
+pose some challenges since the proposed methods will need to understand its
+complex layout, as well as handwritten and typewritten text at the same time.
+We provide some document examples in Figure 1.
+Questions and Answers: Considering that DocCVQA dataset is set up as a
+retrieval-answering task and documents are relatively similar we pose only a set
+of 20 natural language questions over this collection. To gather the questions and
+answers, we ﬁrst analyzed which are the most important ﬁelds in the document
+form in terms of complexity (numbers, dates, candidate’s names, checkboxes and
+diﬀerent form ﬁeld layouts) and variability (see section 3.2). We also deﬁned dif-
+ferent types of constraints for the types of questions since limiting the questions
+to ﬁnd a speciﬁc value would place this in a standard word spotting scenario.
+Thus, we deﬁned diﬀerent constraints depending on the type of ﬁeld related to
+the question: for dates, the questions will refer to the document before, after and
+between speciﬁc dates, or speciﬁc years. For other textual ﬁelds the questions
+refer to documents with speciﬁc values (candidates from party P), to documents
+that do not contain speciﬁc values (candidates which do not represent the party
+P), or that contains a value from a set of possibilities (candidates from par-
+ties P, Q or R). For checkboxes we deﬁned constraints regarding if a value is
+checked or not. Finally, according to the ﬁelds and constraints deﬁned we posed
+the questions in natural language referring to the whole collection, and asking
+for particular values instead of the document itself. We provide the full list of
+questions in the test set in table 1.
+Once we had the question, we got the answer from the annotations down-
+loaded along with the images. Then, we manually checked that those answers
+were correct and unambiguous, since some original annotations were wrong. Fi-
+nally, we divided the questions into two diﬀerent splits; the sample set with 8
+
+---
+
+## Утверждение 47 из 51
+
+(источник: arXiv 2104.14336, стр. 8 PDF)
+
+**УТВЕРЖДЕНИЕ:** The first baseline for the DocCVQA task combines methods from word spotting and NLP Question Answering to retrieve relevant documents and answer questions.
+
+**ТЕКСТ СТРАНИЦЫ:**
+8
+R. Tito et al.
+Evidences: Following standard retrieval tasks [19] we use the Mean Average
+Precision (MAP) to assess the correctness of the positive evidences provided
+by the methods. We consider as positive evidences the documents in which the
+answer to the question can be found.
+Answers: Following other text based VQA tasks [5,6] we use the Average Nor-
+malized Levenshtein Similarity (ANLS) which captures the model’s reasoning
+capability while smoothly penalizing OCR recognition errors. However, in our
+case the answers are a set of items for which the order is not relevant, in con-
+trast to common VQA tasks where the answer is a string. Thus, we need to
+adapt this metric to make it suitable to our problem. We name this adapta-
+tion as Average Normalized Levenshtein Similarity for Lists (ANLSL), formally
+described in equation 1. Given a question Q, the ground truth list of answers
+G = {g1, g2 . . . gM} and a model’s list predicted answers P = {p1, p2 . . . pN}, the
+ANLSL performs the Hungarian matching algorithm to obtain a k number of
+pairs U = {u1, u2 . . . uK} where K is the minimum between the ground truth
+and the predicted answer lists lengths. The Hungarian matching (Ψ) is performed
+according to the Normalized Levenshtein Similarity (NLS) between each ground
+truth element gj ∈G and each prediction pi ∈P. Once the matching is per-
+formed, all the NLS scores of the uz ∈U pairs are summed and divided for the
+maximum length of both ground truth and predicted answer lists. Therefore, if
+there are more or less ground truth answers than the ones predicted, the method
+is penalized.
+U = Ψ(NLS(G, P))
+ANLSL =
+1
+max(M, N)
+K
+X
+z=1
+NLS(uz)
+(1)
+4
+Baselines
+This section describes the two baselines that are employed in the experiments.
+Both baselines breakdown the task into two diﬀerent stages. First, they rank the
+documents according to the conﬁdence of containing the information to answer
+a given a question and then, they get the answers from the documents with the
+highest conﬁdence. The ﬁrst baseline combines methods from the word spotting
+and NLP Question Answering ﬁelds to retrieve the relevant documents and an-
+swer the questions. We name this baseline as Text spotting + QA. In contrast,
+the second baseline is an ad-hoc method specially designed for this task and
+data, which consist on extracting the information from the documents and map
+it in the format of key-value relations. In this sense it represents the collection
+similar as databases do, for which we name this baseline as Database. These
+baselines allows to appreciate the performance of two very diﬀerent approaches.
+
+---
+
+## Утверждение 48 из 51
+
+(источник: arXiv 2104.14336, стр. 8 PDF)
+
+**УТВЕРЖДЕНИЕ:** The second baseline for the DocCVQA task is an ad-hoc method specifically designed for the task.
+
+**ТЕКСТ СТРАНИЦЫ:**
+8
+R. Tito et al.
+Evidences: Following standard retrieval tasks [19] we use the Mean Average
+Precision (MAP) to assess the correctness of the positive evidences provided
+by the methods. We consider as positive evidences the documents in which the
+answer to the question can be found.
+Answers: Following other text based VQA tasks [5,6] we use the Average Nor-
+malized Levenshtein Similarity (ANLS) which captures the model’s reasoning
+capability while smoothly penalizing OCR recognition errors. However, in our
+case the answers are a set of items for which the order is not relevant, in con-
+trast to common VQA tasks where the answer is a string. Thus, we need to
+adapt this metric to make it suitable to our problem. We name this adapta-
+tion as Average Normalized Levenshtein Similarity for Lists (ANLSL), formally
+described in equation 1. Given a question Q, the ground truth list of answers
+G = {g1, g2 . . . gM} and a model’s list predicted answers P = {p1, p2 . . . pN}, the
+ANLSL performs the Hungarian matching algorithm to obtain a k number of
+pairs U = {u1, u2 . . . uK} where K is the minimum between the ground truth
+and the predicted answer lists lengths. The Hungarian matching (Ψ) is performed
+according to the Normalized Levenshtein Similarity (NLS) between each ground
+truth element gj ∈G and each prediction pi ∈P. Once the matching is per-
+formed, all the NLS scores of the uz ∈U pairs are summed and divided for the
+maximum length of both ground truth and predicted answer lists. Therefore, if
+there are more or less ground truth answers than the ones predicted, the method
+is penalized.
+U = Ψ(NLS(G, P))
+ANLSL =
+1
+max(M, N)
+K
+X
+z=1
+NLS(uz)
+(1)
+4
+Baselines
+This section describes the two baselines that are employed in the experiments.
+Both baselines breakdown the task into two diﬀerent stages. First, they rank the
+documents according to the conﬁdence of containing the information to answer
+a given a question and then, they get the answers from the documents with the
+highest conﬁdence. The ﬁrst baseline combines methods from the word spotting
+and NLP Question Answering ﬁelds to retrieve the relevant documents and an-
+swer the questions. We name this baseline as Text spotting + QA. In contrast,
+the second baseline is an ad-hoc method specially designed for this task and
+data, which consist on extracting the information from the documents and map
+it in the format of key-value relations. In this sense it represents the collection
+similar as databases do, for which we name this baseline as Database. These
+baselines allows to appreciate the performance of two very diﬀerent approaches.
+
+---
+
+## Утверждение 49 из 51
+
+(источник: arXiv 1512.05437, стр. 1 PDF)
+
+**УТВЕРЖДЕНИЕ:** In Korean Question Answering systems, it is important to decrease the number of documents related to a question by retrieving documents that include some information to the answer.
+
+**ТЕКСТ СТРАНИЦЫ:**
+- 1 - 
+ 
+A Method of Passage‐Based Document Retrieval in Question Answering System 
+ 
+Man-Hung Jong,  ,  
+College of Computer Science, Kim Il Sung University, Pyongyang, D.P.R.K 
+Chong-Han Ri 
+College of Computer Science, Kim Il Sung University, Pyongyang, D.P.R.K 
+ Hyok-Chol Choe 
+College of Computer Science, Kim Il Sung University, Pyongyang, D.P.R.K 
+Chol-Jun Hwang 
+Electronic Library, Kim Il Sung University, Pyongyang, D.P.R.K 
+ 
+ Abstract: We propose a method for using the scoring values of passages to effectively retrieve documents in a 
+Question Answering system. 
+    For this, we suggest evaluation function that considers proximity between each question terms in passage. And 
+using this evaluation function , we extract a documents which involves scoring values in the highest collection, as a 
+suitable document for question. 
+    The proposed method is very effective in document retrieval of Korean question answering system. 
+Keywords: document retrieval, passage retrieval, question answering 
+1. Introduction 
+It is often important in building a Korean Question Answering (QA) system to decrease the number of doc
+uments related with a question by retrieving documents that include some information to the answer for a given qu
+estion, because the performance of a QA system should be increased by searching the answer in a limited time aft
+er retrieving appropriate documents for the question. Thus, many approaches has been proposed for retrieving doc
+uments related with the question from the  collection[1, 2, 3, 4]. 
+In many document retrieval systems, the approaches has been proposed that apply the vector spac model (VSM),  
+pseuo-feedback and latent semantic indexing(LSI) based methods often used in general information retrieval sys
+tems[1, 2, 5].  However, these approaches are not appropriate for the document retrieval in QA systems because 
+the  estimate the appropriate documents according to the number of query terms involved in a document without 
+considering the distribution of the query terms. 
+In general, it has seen that smaller text area the query terms occur in, more appropriate the document is to the 
+user’s question. [6, 7] 
+To overcome this, we introduce a new concept: ”passage” as a new retrieval units and has presented the me
+thod which retrieval the document on based score value of passage.
+
+---
+
+## Утверждение 50 из 51
+
+(источник: arXiv 1512.05437, стр. 1 PDF)
+
+**УТВЕРЖДЕНИЕ:** The proposed method for Korean Question Answering systems uses an evaluation function that considers the proximity between each question term in a passage to effectively retrieve documents.
+
+**ТЕКСТ СТРАНИЦЫ:**
+- 1 - 
+ 
+A Method of Passage‐Based Document Retrieval in Question Answering System 
+ 
+Man-Hung Jong,  ,  
+College of Computer Science, Kim Il Sung University, Pyongyang, D.P.R.K 
+Chong-Han Ri 
+College of Computer Science, Kim Il Sung University, Pyongyang, D.P.R.K 
+ Hyok-Chol Choe 
+College of Computer Science, Kim Il Sung University, Pyongyang, D.P.R.K 
+Chol-Jun Hwang 
+Electronic Library, Kim Il Sung University, Pyongyang, D.P.R.K 
+ 
+ Abstract: We propose a method for using the scoring values of passages to effectively retrieve documents in a 
+Question Answering system. 
+    For this, we suggest evaluation function that considers proximity between each question terms in passage. And 
+using this evaluation function , we extract a documents which involves scoring values in the highest collection, as a 
+suitable document for question. 
+    The proposed method is very effective in document retrieval of Korean question answering system. 
+Keywords: document retrieval, passage retrieval, question answering 
+1. Introduction 
+It is often important in building a Korean Question Answering (QA) system to decrease the number of doc
+uments related with a question by retrieving documents that include some information to the answer for a given qu
+estion, because the performance of a QA system should be increased by searching the answer in a limited time aft
+er retrieving appropriate documents for the question. Thus, many approaches has been proposed for retrieving doc
+uments related with the question from the  collection[1, 2, 3, 4]. 
+In many document retrieval systems, the approaches has been proposed that apply the vector spac model (VSM),  
+pseuo-feedback and latent semantic indexing(LSI) based methods often used in general information retrieval sys
+tems[1, 2, 5].  However, these approaches are not appropriate for the document retrieval in QA systems because 
+the  estimate the appropriate documents according to the number of query terms involved in a document without 
+considering the distribution of the query terms. 
+In general, it has seen that smaller text area the query terms occur in, more appropriate the document is to the 
+user’s question. [6, 7] 
+To overcome this, we introduce a new concept: ”passage” as a new retrieval units and has presented the me
+thod which retrieval the document on based score value of passage.
+
+---
+
+## Утверждение 51 из 51
+
+(источник: arXiv 2312.10108, стр. 3 PDF)
+
+**УТВЕРЖДЕНИЕ:** Document Visual Question Answering (DocVQA) has gained attention as a unified approach for answering natural language questions to extract information from documents, with various datasets addressing different domains and challenges.
+
+**ТЕКСТ СТРАНИЦЫ:**
+Privacy-Aware Document Visual Question Answering
+3
+ploy a federated scheme for learning, that reflects the real-life distribution of
+documents.
+We focus on invoice processing, as a real-life document understanding sce-
+nario. Typically service providers issue invoices to clients, who use automated
+tools to extract information and take appropriate actions. In this scenario the
+sensitive information that needs to be protected is the invoice provider data
+contained in the training set. The trained model can potentially expose this in-
+formation through vision (logo, layout of the invoice, colour scheme used, etc)
+and / or language (the provider’s name, their vat number, address, telephone or
+any other identifying information in the textual part of the document). In this
+scenario, different clients receive invoices from distinct providers, highlighting
+the unbalanced and non i.i.d. distribution of data in the real world, in terms of
+invoice providers.
+In this work we explore the application of privacy-preserving methods for
+fine-tuning a pre-trained state-of-the-art DocVQA model in a federated setting.
+For that, we create a new dataset where data is split into several groups (cor-
+responding to clients in a real scenario), each one with a different distribution
+of providers. With this dataset we define two new tasks. The first one consists
+of collaborative learning of a single model among all the clients without shar-
+ing the training data. The second one aims at learning with privacy guarantees
+to protect the identity of the providers used during training. Specifically, our
+contributions are:
+– We put forward a new dataset for private federated DocVQA, focused on
+the real-life scenario of invoice processing.
+– We demonstrate that state-of-the-art non-private models exhibit a memo-
+risation effect, that can lead to exposing sensitive information, and can be
+used to attack the model.
+– We design a series of attacks exploiting the memorisation behaviour of the
+models.
+– We evaluate different training methods employing Federated Learning (FL)
+and Differential Privacy (DP) to train a SotA DocVQA model with privacy
+guarantees. We evaluate these methods using our proposed attacks, and show
+that FL+DP can mitigate privacy issues to certain degree.
+2
+Related Work
+Document Visual Question Answering. DocVQA has gained a lot of at-
+tention as a unified approach based on answering natural language questions
+to extract information from documents. Consequently, many datasets are nowa-
+days available tackling different domains and challenges such as industry doc-
+uments [39,38,58,57], infographics [37], multidomain [61,62], open-ended ques-
+tions [54], multilingual [46], multipage [57] or collections of documents [56]. De-
+spite the existence of many small and medium sized datasets one of the major
+challenges is still the lack of a large scale generic dataset that can be used for
+multiple scenarios. One of the main reasons for that is the sensitive content of
+
+---

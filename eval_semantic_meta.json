@@ -1,0 +1,31 @@
+{
+  "updated_at": "2026-11-06 21:40:27",
+  "judge_rule": "semantic",
+  "judge_model": "meta-llama/llama-3.3-70b-instruct",
+  "source_file": "eval_results.json",
+  "cells": 42,
+  "cells_skipped_no_text": 28,
+  "judge_tokens_this_pass": 314712,
+  "git_sha": "589d425",
+  "git_dirty": [
+    ".gitignore",
+    "arxiv_searcher.py",
+    "common.py",
+    "eval_benchmark.py",
+    "eval_cache.json",
+    "eval_results.json",
+    "eval_results_draft.json",
+    "eval_results_semantic.json",
+    "eval_run_meta.json",
+    "guard_tests.md",
+    "guard_tests.py",
+    "make_report.py",
+    "repair_cells.py",
+    "report.md",
+    "results_table.md",
+    "results_table_draft.md",
+    "tests/test_common.py",
+    "verifier_api.py",
+    "zero_cells.py"
+  ]
+}

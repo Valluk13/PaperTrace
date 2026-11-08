@@ -1,4 +1,4 @@
-claim_text,arxiv_id,page,judge_supported,pipeline_supported,page_text,rater1,rater2,final_label
+claim_text,arxiv_id,page,judge_supported,pipeline_supported,page_text,rater1,rater2,rater3,rater4,final_label,semantic_supported
 "Hallucination, where the model generates plausible yet incorrect outputs, persists as a significant and under-addressed challenge in the video domain.",2505.12826,1,True,True,"arXiv:2505.12826v1  [cs.CV]  19 May 2025
 Mitigating Hallucination in VideoLLMs via
 Temporal-Aware Activation Engineering
@@ -45,7 +45,7 @@ Despite their impressive performance, MLLMs inherit and even amplify the halluci
 prevalent in LLMs [7, 67, 69, 53]. ImageLLMs frequently hallucinate non-existent objects [52],
 misidentify visual elements [25, 35], or fabricate spatial relationships [62]. In the video domain, the
 additional temporal dimension substantially exacerbates hallucination problems [48]. VideoLLMs
-Preprint. Under review.",,,
+Preprint. Under review.",good,good,good,good,,True
 "Activation engineering has proven successful in mitigating hallucinations in LLMs and ImageLLMs, but its applicability to VideoLLMs remains largely unexplored.",2505.12826,1,True,True,"arXiv:2505.12826v1  [cs.CV]  19 May 2025
 Mitigating Hallucination in VideoLLMs via
 Temporal-Aware Activation Engineering
@@ -92,7 +92,7 @@ Despite their impressive performance, MLLMs inherit and even amplify the halluci
 prevalent in LLMs [7, 67, 69, 53]. ImageLLMs frequently hallucinate non-existent objects [52],
 misidentify visual elements [25, 35], or fabricate spatial relationships [62]. In the video domain, the
 additional temporal dimension substantially exacerbates hallucination problems [48]. VideoLLMs
-Preprint. Under review.",,,
+Preprint. Under review.",good,good,good,good,,True
 The authors systematically investigate the effectiveness and underlying mechanisms of activation engineering for mitigating hallucinations in VideoLLMs.,2505.12826,1,True,True,"arXiv:2505.12826v1  [cs.CV]  19 May 2025
 Mitigating Hallucination in VideoLLMs via
 Temporal-Aware Activation Engineering
@@ -139,7 +139,7 @@ Despite their impressive performance, MLLMs inherit and even amplify the halluci
 prevalent in LLMs [7, 67, 69, 53]. ImageLLMs frequently hallucinate non-existent objects [52],
 misidentify visual elements [25, 35], or fabricate spatial relationships [62]. In the video domain, the
 additional temporal dimension substantially exacerbates hallucination problems [48]. VideoLLMs
-Preprint. Under review.",,,
+Preprint. Under review.",good,good,good,good,,True
 The method involves identifying hallucination-sensitive modules in the VideoLLM and applying activation engineering to mitigate hallucinations.,2505.12826,2,False,True,"often confabulate events that never appear in the footage [73], misinterpret action sequences [37], or
 fail to maintain temporal consistency [17, 61], which creates increasingly complex challenges.
 To alleviate the hallucination issues in VideoLLMs, researchers have proposed various approaches
@@ -182,7 +182,7 @@ In summary, our primary contributions are as follows:
 and conduct a systematic investigation into its feasibility and intrinsic mechanisms.
 • Our study reveals that the hallucination sensitivity of internal modules in VideoLLMs is
 strongly correlated with temporal variation, e.g., temporal changes within videos.
-• We",,,
+• We",good,good,good,good,,True
 "Experiments demonstrate the effectiveness of the method, yielding consistent gains across multiple benchmarks and diverse models, including Video-LLaVA, VideoLLaMA2, and Qwen2.5-VL.",2505.12826,2,True,True,"often confabulate events that never appear in the footage [73], misinterpret action sequences [37], or
 fail to maintain temporal consistency [17, 61], which creates increasingly complex challenges.
 To alleviate the hallucination issues in VideoLLMs, researchers have proposed various approaches
@@ -225,7 +225,7 @@ In summary, our primary contributions are as follows:
 and conduct a systematic investigation into its feasibility and intrinsic mechanisms.
 • Our study reveals that the hallucination sensitivity of internal modules in VideoLLMs is
 strongly correlated with temporal variation, e.g., temporal changes within videos.
-• We",,,
+• We",good,good,good,good,,True
 "The approach computes offset vectors between normal and hallucination-inducing prompts, then injects these averaged vectors into specific modules in the model during inference to guide the model toward non-hallucinated outputs.",2505.12826,3,False,True,"2.1
 MLLMs for Video Understanding
 Following the success of Large Language Models (LLMs) [8, 18, 23, 44], researchers have extended
@@ -274,7 +274,7 @@ explore the applicability of activation engineering for mitigating hallucination
 Temporal Variation Matters in Activation Engineering
 In this section, we investigate the internal mechanisms of activation engineering and how key factors
 influence its effectiveness in mitigating VideoLLM hallucinations under varying conditions.
-3",,,
+3",trash,trash,trash,trash,,False
 "ITI was the first to apply this technique to mitigate textual hallucinations in LLMs by computing activation vectors from normal samples and hallucination-inducing samples, and injecting them into the multi-head attention layers during inference to suppress hallucinated content.",2505.12826,3,True,True,"2.1
 MLLMs for Video Understanding
 Following the success of Large Language Models (LLMs) [8, 18, 23, 44], researchers have extended
@@ -323,7 +323,7 @@ explore the applicability of activation engineering for mitigating hallucination
 Temporal Variation Matters in Activation Engineering
 In this section, we investigate the internal mechanisms of activation engineering and how key factors
 influence its effectiveness in mitigating VideoLLM hallucinations under varying conditions.
-3",,,
+3",good,good,good,good,,True
 Several studies have extended activation engineering to address hallucinations in MLLMs for image-related tasks.,2505.12826,17,False,False,"ITI [41] was the first to apply this technique to mitigate textual hallucinations in LLMs by computing
 activation vectors from normal samples and hallucination-inducing samples, and injecting them into
 the multi-head attention layers during inference to suppress hallucinated content. More recently,
@@ -404,7 +404,7 @@ Data Cleaning
 Although ShareGPT4Video originally contains 40k (video, question, answer) triples, activation engi-
 neering benefits more from a compact, high-quality corpus. We begin with dataset cleaning through a
 multi-step process. First, duplicate videos are identified and removed to ensure uniqueness. Next, we
-filter out clips with low visual quality (e.g., excessive blur, compression artifacts) or incomplet",,,
+filter out clips with low visual quality (e.g., excessive blur, compression artifacts) or incomplet",good,good,good,good,,True
 "Retrieval-augmented generation (RAG) augments large language models (LLMs) by retrieving relevant knowledge, showing promising potential in mitigating LLM hallucinations and enhancing response quality.",2401.15391,1,False,True,"MultiHop-RAG: Benchmarking Retrieval-Augmented Generation for
 Multi-Hop Queries
 Yixuan Tang and Yi Yang
@@ -485,7 +485,7 @@ late an answer. Due to the multifaceted nature of
 such queries, involving information from various
 sources, traditional similarity matching methods
 like cosine similarity between query and financial
-arXiv:2401.15391v1  [cs.CL]  27 Jan 2024",,,
+arXiv:2401.15391v1  [cs.CL]  27 Jan 2024",good,good,good,good,,True
 "However, existing RAG systems primarily focus on evaluating the generation aspect without specifically addressing their retrieval accuracy.",2401.15391,8,True,True,"niques. We believe that there are many potential
 areas for enhancing RAG’s performance on multi-
 hop queries, and the curated dataset MultiHop-
@@ -576,7 +576,7 @@ sists of a knowledge base, a large collection of
 multi-hop queries, their ground-truth answers, and
 the associated supporting evidence. This paper
 details the creation process of MultiHop-RAG, em-
-ployi",,,
+ployi",trash,trash,trash,trash,,True
 "Recent advancements have been made in automated RAG evaluation tools, such as ARES (Saad-Falcon et al., 2023) and RAGAS (Es et al., 2023), which utilize LLMs to automatically assess the quality of RAG generation.",2401.15391,8,True,True,"niques. We believe that there are many potential
 areas for enhancing RAG’s performance on multi-
 hop queries, and the curated dataset MultiHop-
@@ -667,7 +667,7 @@ sists of a knowledge base, a large collection of
 multi-hop queries, their ground-truth answers, and
 the associated supporting evidence. This paper
 details the creation process of MultiHop-RAG, em-
-ployi",,,
+ployi",good,good,good,good,,True
 "MultiHop-RAG can be used as a benchmark for various RAG-related tasks, and it is publicly released to provide a valuable resource to the community, contributing to the advancement and benchmarking of RAG systems.",2401.15391,5,False,False,"bridge-topic into a claim set. We restrict the claim
 set to have at least two claims but no more than four
 claims. For each type of query, we feed the claim
@@ -788,7 +788,7 @@ quired to answer a multi-hop query varies. Table
 each query in the dataset. Around 42% of queries
 can be answered using two pieces of evidence,
 while approximately 30% and 15% of queries can
-be a",,,
+be a",trash,trash,trash,trash,,False
 "Retrieval Augmented Generation (RAG) combines large language models (LLMs) with external document retrieval, allowing models to access information beyond their training data.",2510.25518,1,True,True,"Retrieval Augmented Generation (RAG) for
 Fintech: Agentic Design and Evaluation
 1,3Thomas Cook∗, 2,3Richard Osuagwu∗, 1,3Liman Tsatiashvili∗, 4,3Vrynsia Vrynsia∗,
@@ -862,7 +862,7 @@ For example, consider a product manager in Mastercard
 analyzing feature alignment across offerings such as MDES
 (Mastercard Digital Enablement Service) 1, M4M (Mastercard
 for Merchants) [7], and SwitchCore (Mastercard’s transaction
-switching platform) [8]. Internal knowled",,,
+switching platform) [8]. Internal knowled",good,good,good,good,,True
 Retrieval-Augmented Generation (RAG) enables Large Language Models (LLMs) to generate grounded responses by integrating external knowledge.,2502.00306,1,False,False,"arXiv:2502.00306v2  [cs.CR]  30 Jun 2025
 Riddle Me This! Stealthy Membership Inference for
 Retrieval-Augmented Generation
@@ -954,7 +954,7 @@ into the model’s prompt as context, augmenting its knowledge. RAG
 offers a promising approach to grounding model outputs while en-
 abling flexible, domain-specific knowledge customization without
 the need for expensive model retraining. However, this advantage
-of parameter-free customization introduces a significa",,,
+of parameter-free customization introduces a significa",good,good,good,good,,True
 FAIR-RAG is a method that uses Faithful Adaptive Iterative Refinement for Retrieval-Augmented Generation to improve the accuracy and reliability of generated content.,2510.22344,1,True,True,"FAIR-RAG: Faithful Adaptive Iterative Refinement for
 Retrieval-Augmented Generation
 Mohammad Aghajani Asl
@@ -1041,7 +1041,7 @@ quently complex and cannot be answered through
 a single-shot retrieval step. For instance, a query
 such as “Which movie, directed by the same per-
 son who directed Inception, won an Oscar for
-arXiv:2510.22344v1  [cs.CL]  25 Oct 2025",,,
+arXiv:2510.22344v1  [cs.CL]  25 Oct 2025",good,good,good,good,,True
 The retrieval-augmented generation (RAG) paradigm has gained significant attention due to its efficiency in adapting large language models (LLMs) without training.,2402.12317,1,True,True,"EVOR: Evolving Retrieval for Code Generation
 Hongjin Su1, Shuyang Jiang2, Yuhang Lai2,
 Haoyuan Wu1, Boao Shi1, Che Liu1, Qian Liu3, Tao Yu 1,
@@ -1158,7 +1158,7 @@ the corresponding grammar or function usage.
 In this work, we introduce EVOR, a novel
 pipeline that applies synchronous evolution of both
 queries and documents in RACG. In the traces of
-multi-round interactions among r",,,
+multi-round interactions among r",good,good,good,good,,True
 "Yuan et al. have discussed the generation of comprehensive reviews using machine learning techniques, natural language generation, multi-document summarization, and multi-objective optimization.",2411.18583,2,False,False,"II. LITERATURE REVIEW 
 A framework was proposed by Silva et al. [6] for auto- 
 matically producing systematic literature reviews. They have 
@@ -1226,7 +1226,7 @@ The gaps in the intersection of systematic literature reviews
 (SLRs) and LLMs are discussed by Susnjak et. al. [12]. They 
 also emphasized the need to address challenges in the synthesis 
 phase of research and highlighted the potential of fine-tuning 
-LLMs with datasets to enhance knowledge sy",,,
+LLMs with datasets to enhance knowledge sy",good,good,good,good,,True
 "REALM, introduced by Guu et al., is a retrieval-augmented language model pre-training method.",2402.12317,9,False,False,"to output the code answer. This iterative process
 can lead to longer latency and increased energy
 consumption, which are critical concerns in real-
@@ -1317,7 +1317,7 @@ abs/2002.08909.
 Baizhou Huang, Shuai Lu, Weizhu Chen, Xiaojun
 Wan, and Nan Duan. 2023. Enhancing large lan-
 guage models in coding through multi-perspective
-self-consisten",,,
+self-consisten",good,good,good,good,,True
 The REALM model integrates retrieval mechanisms to enhance the performance of language models.,2402.12317,9,False,False,"to output the code answer. This iterative process
 can lead to longer latency and increased energy
 consumption, which are critical concerns in real-
@@ -1408,7 +1408,7 @@ abs/2002.08909.
 Baizhou Huang, Shuai Lu, Weizhu Chen, Xiaojun
 Wan, and Nan Duan. 2023. Enhancing large lan-
 guage models in coding through multi-perspective
-self-consisten",,,
+self-consisten",trash,trash,trash,trash,,True
 Speculative Decoding is a technique that aims to improve the efficiency of large language model inference by optimizing the decoding process.,2503.00491,2,True,True,"A taxonomy of methods
 We introduce a tax-
 onomy of SD methods based on a variety of di-
@@ -1504,7 +1504,7 @@ ods
 (40 minutes)
 • Definition, formulation, and illustrated algo-
 rithms of Speculative Decoding
-• Introduction to various",,,
+• Introduction to various",trash,trash,good,good,,True
 "The tutorial on Speculative Decoding includes discussions on evaluation metrics, fair comparisons of leading methods, and downstream adaptations such as retrieval-augmented and long-context Speculative Decoding.",2503.00491,3,True,False,"5. Speculative Decoding: Metrics and evalua-
 tions
 (20 minutes)
@@ -1613,7 +1613,7 @@ GIR, KDD, AAAI, CIKM, TOIS, and IPM. He has
 also served as an area chair for COLING 2025, a
 guest editor for Frontiers in Big Data, and a re-
 viewer for TKDE, TOIS, TMM, and TCVST jour-
-nals.",,,
+nals.",good,good,good,good,,True
 "Input-guided Aggressive Decoding, as discussed in a technical report by Ge et al. in May 2022, is a special case of Speculative Decoding.",2203.16487,8,True,True,"Models
 Rouge-1
 Rouge-2
@@ -1740,7 +1740,7 @@ Early Draft-then-verify attempts
 This work is
 a generalized version of our previously proposed
 (Input-guided) Aggressive Decoding13 (Sun et al.,
-12We provide a detailed com",,,
+12We provide a detailed com",trash,trash,trash,trash,,True
 "Distillspec, a method for improving Speculative Decoding via knowledge distillation, was introduced by a team including Ge, Rostamizadeh, Kumar, Kagy, and Agarwal in 2023.",2203.16487,12,True,True,"Raphael Shu, Jason Lee, Hideki Nakayama, and
 Kyunghyun Cho. 2020.
 Latent-variable non-
@@ -1851,7 +1851,7 @@ Yongchao Zhou, Kaifeng Lyu, Ankit Singh Rawat,
 Aditya Krishna Menon, Afshin Rostamizadeh, Sanjiv
 Kumar, Jean-François Kagy, and Rishabh Agarwal.
 2023. Distillspec: Improving speculative decoding
-via knowledge distillation.",,,
+via knowledge distillation.",trash,trash,trash,trash,,True
 "The tutorial also covers cutting-edge algorithms in Speculative Decoding, including adaptive token tree verification and draft model alignment.",2503.00491,2,False,True,"A taxonomy of methods
 We introduce a tax-
 onomy of SD methods based on a variety of di-
@@ -1947,7 +1947,7 @@ ods
 (40 minutes)
 • Definition, formulation, and illustrated algo-
 rithms of Speculative Decoding
-• Introduction to various",,,
+• Introduction to various",trash,trash,trash,trash,,True
 "Indirect prompt injection attacks pose a significant threat to LLM agents, especially as they transition from digital assistants to physical controllers in autonomous systems and robotics.",2601.04795,1,True,True,"Defense Against Indirect Prompt Injection via Tool Result Parsing
 Qiang Yu, Xinran Cheng, Chuanyi Liu
 Harbin Institute of Technology
@@ -2036,7 +2036,7 @@ itself to bolster its inherent capability to distinguish
 between instructions and data (Chen et al., 2025a),
 thereby mitigating injection risks. However, this
 approach incurs prohibitive computational costs
-and suffers from tight coupling, requiring re-tunin",,,
+and suffers from tight coupling, requiring re-tunin",good,good,good,good,,True
 Attackers can hijack the decision-making process of LLM agents by embedding adversarial instructions into the results of tool calls.,2601.04795,1,False,True,"Defense Against Indirect Prompt Injection via Tool Result Parsing
 Qiang Yu, Xinran Cheng, Chuanyi Liu
 Harbin Institute of Technology
@@ -2125,7 +2125,7 @@ itself to bolster its inherent capability to distinguish
 between instructions and data (Chen et al., 2025a),
 thereby mitigating injection risks. However, this
 approach incurs prohibitive computational costs
-and suffers from tight coupling, requiring re-tunin",,,
+and suffers from tight coupling, requiring re-tunin",good,good,good,good,,True
 "Research on indirect prompt attacks can be categorized into two main areas: finding generic prompt text that can be used across all attacks and developing specific injection methods for dedicated scenarios, such as web or mobile environments.",2601.04795,2,True,True,"whenever the base model is updated. The second
 paradigm training an auxiliary lightweight model
 (Chen et al., 2025b; Wen et al., 2025) to intercept
@@ -2210,7 +2210,7 @@ such as ""« »"" to distinguish data sections (e.g., tool
 results) from user instructions, prompting the LLM
 to ignore any commands embedded within the data
 area. Since attacks always use tricky prompts to hi-
-jack the original goal, si",,,
+jack the original goal, si",good,good,good,good,,True
 "Autonomous cyber defense agents are required to augment and multiply military forces, possessing the ability to self-propagate, sense malicious activity, and disseminate information among trusted network members.",1905.05253,9,True,True,"This is a preprint version of the paper published as: De Lucia M., Newcomb, A., Kott, A., “Features and 
 Operations of an Autonomous Agent for Cyber Defense,” CSIAC Journal, v.7, n.1, April 2019, pp.6-13 
 Conclusions  
@@ -2256,7 +2256,7 @@ Spafford, E. H. (1989). The Internet worm program: An analysis. ACM SIGCOMM Comp
 Communication Review, 19(1), 17-57. 
  
 US Army Research Laboratory. Internet of Battlefield Things Collaborative Research Alliance program 
-announcement (2017).  https://www.arl.army.mil/www/default.cfm?page=3050 accessed 09-25-2017.",,,
+announcement (2017).  https://www.arl.army.mil/www/default.cfm?page=3050 accessed 09-25-2017.",good,good,good,good,,True
 "These agents must operate in near real-time, making decisions on the most appropriate course of cyber defense actions without continuous human monitoring.",1905.05253,3,True,True,"This is a preprint version of the paper published as: De Lucia M., Newcomb, A., Kott, A., “Features and 
 Operations of an Autonomous Agent for Cyber Defense,” CSIAC Journal, v.7, n.1, April 2019, pp.6-13 
 To gain an appreciation for the size and complexity of the IoBT, consider the following:  
@@ -2301,7 +2301,7 @@ heard nothing within a reasonable waiting time, Blue-17 independently formulates
 a set of actions to defeat Red-35. However, having completed these actions, Blue-17 receives a 
 belated reply from Blue-23. Blue-17 determines that Blue-23 is compromised because the 
 response is suspicious. Given the extreme seriousness of this situation, Blue-17 neutralizes Blue-
-23 and places a copy of itself on the device that was being protected by Blue-23.",,,
+23 and places a copy of itself on the device that was being protected by Blue-23.",good,trash,good,good,,True
 "To defend against indirect prompt injection, various methods have been proposed, including instruction detection and tool result parsing.",2601.04795,10,True,True,"Wenyue Hua, Xianjun Yang, Mingyu Jin, Zelong Li,
 Wei Cheng, Ruixiang Tang, and Yongfeng Zhang.
 2024. TrustAgent: Towards Safe and Trustworthy
@@ -2394,7 +2394,7 @@ Yuhao Wu, Franziska Roesner, Tadayoshi Kohno, Ning
 Zhang, and Umar Iqbal. 2025. IsolateGPT: An Exe-
 cution Isolation Architecture for LLM-Based Agentic
 Systems. In 32nd Annual Network and Distributed
-System Security Symp",,,
+System Security Symp",trash,trash,trash,trash,,False
 "The performance of autonomous agents, including their decision-making value, timing, and the impacts of executed actions, should be evaluated to refine and share successful strategies.",1905.05253,8,True,True,"This is a preprint version of the paper published as: De Lucia M., Newcomb, A., Kott, A., “Features and 
 Operations of an Autonomous Agent for Cyber Defense,” CSIAC Journal, v.7, n.1, April 2019, pp.6-13 
  
@@ -2440,7 +2440,7 @@ as well as the chain of command. For example, it would be undesirable if Blue-17
 that requests to Blue-C2 are generally fruitless and should not be attempted. An agent that is 
 fully autonomous must be able to operate within an appropriate military C2 construct (Kott and 
 Alberts, 2017). It is imperative that a software agent be bounded in its propagation, yet capable 
-to move around freely between authorized devices.",,,
+to move around freely between authorized devices.",good,good,good,good,,True
 Multi-agent systems achieve complex tasks that are difficult for a single agent to complete through division of labor and collaboration among agents.,2411.18241,1,False,False,"Exploration of LLM Multi-Agent Application
 Implementation Based on LangGraph+CrewAI
 Zhihua Duan
@@ -2517,7 +2517,7 @@ internal state for both parties in a dialogue, achieving the
 agent’s short-term memory.SayPlan [5] is an agent designed
 for task planning and design.When faced with complex tasks,
 break them down into simpler subtasks and solve them. The
-Chain of T",,,
+Chain of T",good,good,good,good,,True
 "LangGraph improves the efficiency of information transmission through graph architecture, while CrewAI enhances team collaboration capabilities and system performance through intelligent task allocation and resource management.",2411.18241,1,True,True,"Exploration of LLM Multi-Agent Application
 Implementation Based on LangGraph+CrewAI
 Zhihua Duan
@@ -2594,7 +2594,7 @@ internal state for both parties in a dialogue, achieving the
 agent’s short-term memory.SayPlan [5] is an agent designed
 for task planning and design.When faced with complex tasks,
 break them down into simpler subtasks and solve them. The
-Chain of T",,,
+Chain of T",good,good,good,good,,True
 "The current mainstream multi-agent frameworks include LangGraph, Agno, Autogen, CrewAI, and Dify.",2511.00628,4,True,True,"4
 Li et al.: AgentGit
 • We analyze the theoretical complexity of the rollback mechanism in AgentGit, demonstrating
@@ -2632,7 +2632,7 @@ assigned a specific responsibility under a shared objective—an approach that c
 human organizational structures and facilitates multi-role collaboration. Agno focuses on flexible
 orchestration and adaptive agent coordination, allowing the system to evolve its behavior over
 time. Dify offers a low-code environment where developers can visually compose and deploy agent
-workflows, aiming for ease of deployment rather than experimental control.",,,
+workflows, aiming for ease of deployment rather than experimental control.",good,good,good,good,,True
 "LangGraph adopts a graph-based orchestration paradigm, representing agent workflows as directed acyclic graphs, which ensures deterministic control and reproducibility.",2511.00628,4,True,True,"4
 Li et al.: AgentGit
 • We analyze the theoretical complexity of the rollback mechanism in AgentGit, demonstrating
@@ -2670,7 +2670,7 @@ assigned a specific responsibility under a shared objective—an approach that c
 human organizational structures and facilitates multi-role collaboration. Agno focuses on flexible
 orchestration and adaptive agent coordination, allowing the system to evolve its behavior over
 time. Dify offers a low-code environment where developers can visually compose and deploy agent
-workflows, aiming for ease of deployment rather than experimental control.",,,
+workflows, aiming for ease of deployment rather than experimental control.",good,good,good,good,,True
 "LangGraph introduces an innovative framework for organizing agent interactions using directed acyclic graphs (DAGs), allowing for clear and structured communication.",2412.05449,3,False,True,"process can be distributed across multiple agent developers. Note that although the supervisor agent
 can delegate tasks to other agents, it is still the responsibility of the supervisor agent to complete the
 task and bring the results back to the user.
@@ -2719,7 +2719,7 @@ Multi-agent Frameworks and Platforms
 CrewAI [5] is designed to enhance task execution
 by organizing agents into specialized roles, similar to team members in a crew. This approach
 emphasizes task decomposition, where a complex problem is broken down into smaller, manageable
-subtasks. Each agent is assigned a specific role based on its expertise, allowing for efficient",,,
+subtasks. Each agent is assigned a specific role based on its expertise, allowing for efficient",trash,trash,trash,trash,,False
 The main research contents of this paper are designing the architecture of agents based on LangGraph for precise control and enhancing the capabilities of agents based on CrewAI to complete a variety of tasks.,2411.18241,1,True,True,"Exploration of LLM Multi-Agent Application
 Implementation Based on LangGraph+CrewAI
 Zhihua Duan
@@ -2796,7 +2796,7 @@ internal state for both parties in a dialogue, achieving the
 agent’s short-term memory.SayPlan [5] is an agent designed
 for task planning and design.When faced with complex tasks,
 break them down into simpler subtasks and solve them. The
-Chain of T",,,
+Chain of T",good,good,good,good,,True
 "Agentic AI is defined as an AI system with persistent objectives that can perceive its environment, plan over multiple steps, and act via tools or actuators to affect external systems, while reflecting on outcomes and adapting its internal state under explicit human oversight, privacy/security policies, and operational constraints.",2605.23989,3,False,True,"https://doi.org/10.20935/xxx
 outcome metrics (e.g., success and catastrophic risk) and pro-
 cess metrics (e.g., constraint violation rates and trace cov-
@@ -2867,7 +2867,7 @@ denote preliminaries; green boxes denote core dimensions; yellow boxes denote 
 reading flow; dashed arrows indicate dependency relationships between dimensions and evaluation.
 ACADEMIA AI AND APPLICATIONS
 2026, 2
-3 of 37",,,
+3 of 37",good,good,good,good,,True
 "The emerging paradigm of agentic AI envisions networks governed by autonomous agents capable of perception, reasoning, and strategic action, addressing the gap in systems that learn from experience without human intervention.",2512.20640,1,True,True,"JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021
 1
 Reflection-Driven Self-Optimization 6G Agentic AI RAN via
@@ -2941,7 +2941,7 @@ Language Model (LLM) Direct for Resource Management [3]–
 [5]: This approach employs the reasoning chain of LLMs to
 directly output resource allocation decisions. While simple to
 implement, it often proves inefficient and lacks the precision
-required for complex, high-dimensional optimization i",,,
+required for complex, high-dimensional optimization i",good,good,good,good,,True
 "Recent research explores the use of LLMs and agentic AI techniques as catalysts for autonomy, evolving through three distinct tiers, with the first tier employing the inherent reasoning capability of LLMs to directly map network states to resource allocation decisions through prompt engineering.",2512.20640,3,True,True,"JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021
 3
 Research Direction
@@ -3032,7 +3032,7 @@ methods outperform LLM reasoning.
 2) Tier 2: LLM as Tools for Resource Management: This
 paradigm demonstrates a shift from direct LLM solution to using
 LLMs as specialized tools to generate or augment traditional
-optimization pipelin",,,
+optimization pipelin",good,good,good,good,,True
 "The proposed framework for agentic AI RAN establishes a simulation-in-the-loop closed-loop workflow, transforming the reasoning capability of agents from an unverified, open-loop process to a verified, closed-loop process.",2512.20640,3,True,True,"JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021
 3
 Research Direction
@@ -3123,7 +3123,7 @@ methods outperform LLM reasoning.
 2) Tier 2: LLM as Tools for Resource Management: This
 paradigm demonstrates a shift from direct LLM solution to using
 LLMs as specialized tools to generate or augment traditional
-optimization pipelin",,,
+optimization pipelin",good,good,good,good,,True
 "POLARIS integrates typed DAG planning for safe composition, diversity-constrained plan synthesis for distinct candidates, and reasoning-based selection for multi-criteria decision-making, providing a methodological and benchmark reference for policy-aligned Agentic AI in back-office automation.",2601.11816,13,True,True,"POLARIS: Typed Planning and Governed Execution for Agentic AI in Back-Office Automation
 Table 4 | Anomaly (MAD, 𝑘mad=3.5) and date checks. Metrics are undefined (—) where no positive
 cases exist.
@@ -3224,7 +3224,7 @@ lineage and policy justifications advancing from reactive point solutions or bla
 policy-aligned, valuable enterprise automation. Beyond its immediate performance gains, POLARIS
 introduces evaluation constructs—typed DAG lineage, governed selection logs, and validator repair
 traces—that can inform future benchmark design for reliable enterprise Agentic AI.
-13",,,
+13",good,trash,good,good,,True
 "POLARIS aims to address the limitations of classical back-office automation, which relies on brittle point tools (OCR + rules) that lack end-to-end provenance, by providing a flexible and governed approach to enterprise automation.",2601.11816,1,False,True,"POLARIS: Typed Planning and Governed Execution
 for Agentic AI in Back-Office Automation
 Zahra Moslemi1, Keerthi Koneru2, Yen-Ting Lee3, Sheethal Kumar2, Ramesh Radhakrishnan2
@@ -3268,7 +3268,7 @@ Applying these ideas in regulated settings is challenging: inputs are heterogene
 constrained, and errors carry financial risk. Common stacks (a) pass untyped input/output (I/O) in
 Corresponding author(s): Keerthi Koneru (keerthi.koneru@accenture.com). All work was done during the authors’ tenure at Accenture.
 © 2026 Accenture. All rights reserved
-arXiv:2601.11816v1  [cs.AI]  16 Jan 2026",,,
+arXiv:2601.11816v1  [cs.AI]  16 Jan 2026",trash,trash,trash,trash,,False
 The Document Collection Visual Question Answering (DocCVQA) task requires methods to provide answers to questions and the IDs of the documents used to obtain the answers as answer evidence.,2104.14336,2,True,True,"2
 R. Tito et al.
 In this regard, we present Document Collection Visual Question Answering
@@ -3300,7 +3300,7 @@ swer and their evidences. In DocCVQA the evidences are the documents where the
 answer can be inferred from. In this example, the correct answer are the years 2016
 and 2020, and the evidences are the document images with ids 454 and 10901 which
 corresponds to the forms where Anna M. Rivers presented as a candidate for the State
-senator oﬃce.",,,
+senator oﬃce.",good,good,good,good,,True
 "In the DocCVQA task, the methods are trained on other datasets and then posed a set of 20 questions over the document collection.",2104.14336,2,True,True,"2
 R. Tito et al.
 In this regard, we present Document Collection Visual Question Answering
@@ -3332,7 +3332,7 @@ swer and their evidences. In DocCVQA the evidences are the documents where the
 answer can be inferred from. In this example, the correct answer are the years 2016
 and 2020, and the evidences are the document images with ids 454 and 10901 which
 corresponds to the forms where Anna M. Rivers presented as a candidate for the State
-senator oﬃce.",,,
+senator oﬃce.",good,good,good,good,,True
 "The DocCVQA dataset is designed as a retrieval-answering task, where the documents are relatively similar, and the task involves posing 20 natural language questions over the collection.",2104.14336,5,True,True,"Document Collection Visual Question Answering
 5
 3.1
@@ -3379,7 +3379,7 @@ questions in the test set in table 1.
 Once we had the question, we got the answer from the annotations down-
 loaded along with the images. Then, we manually checked that those answers
 were correct and unambiguous, since some original annotations were wrong. Fi-
-nally, we divided the questions into two diﬀerent splits; the sample set with 8",,,
+nally, we divided the questions into two diﬀerent splits; the sample set with 8",good,good,good,good,,True
 The first baseline for the DocCVQA task combines methods from word spotting and NLP Question Answering to retrieve relevant documents and answer questions.,2104.14336,8,False,True,"8
 R. Tito et al.
 Evidences: Following standard retrieval tasks [19] we use the Mean Average
@@ -3426,7 +3426,7 @@ the second baseline is an ad-hoc method specially designed for this task and
 data, which consist on extracting the information from the documents and map
 it in the format of key-value relations. In this sense it represents the collection
 similar as databases do, for which we name this baseline as Database. These
-baselines allows to appreciate the performance of two very diﬀerent approaches.",,,
+baselines allows to appreciate the performance of two very diﬀerent approaches.",good,good,good,good,,True
 The second baseline for the DocCVQA task is an ad-hoc method specifically designed for the task.,2104.14336,8,True,True,"8
 R. Tito et al.
 Evidences: Following standard retrieval tasks [19] we use the Mean Average
@@ -3473,7 +3473,7 @@ the second baseline is an ad-hoc method specially designed for this task and
 data, which consist on extracting the information from the documents and map
 it in the format of key-value relations. In this sense it represents the collection
 similar as databases do, for which we name this baseline as Database. These
-baselines allows to appreciate the performance of two very diﬀerent approaches.",,,
+baselines allows to appreciate the performance of two very diﬀerent approaches.",good,good,good,good,,True
 "In Korean Question Answering systems, it is important to decrease the number of documents related to a question by retrieving documents that include some information to the answer.",1512.05437,1,False,True,"- 1 - 
  
 A Method of Passage‐Based Document Retrieval in Question Answering System 
@@ -3508,7 +3508,7 @@ considering the distribution of the query terms.
 In general, it has seen that smaller text area the query terms occur in, more appropriate the document is to the 
 user’s question. [6, 7] 
 To overcome this, we introduce a new concept: ”passage” as a new retrieval units and has presented the me
-thod which retrieval the document on based score value of passage.",,,
+thod which retrieval the document on based score value of passage.",good,good,good,good,,True
 The proposed method for Korean Question Answering systems uses an evaluation function that considers the proximity between each question term in a passage to effectively retrieve documents.,1512.05437,1,True,True,"- 1 - 
  
 A Method of Passage‐Based Document Retrieval in Question Answering System 
@@ -3543,7 +3543,7 @@ considering the distribution of the query terms.
 In general, it has seen that smaller text area the query terms occur in, more appropriate the document is to the 
 user’s question. [6, 7] 
 To overcome this, we introduce a new concept: ”passage” as a new retrieval units and has presented the me
-thod which retrieval the document on based score value of passage.",,,
+thod which retrieval the document on based score value of passage.",good,good,good,good,,True
 "Document Visual Question Answering (DocVQA) has gained attention as a unified approach for answering natural language questions to extract information from documents, with various datasets addressing different domains and challenges.",2312.10108,3,True,True,"Privacy-Aware Document Visual Question Answering
 3
 ploy a federated scheme for learning, that reflects the real-life distribution of
@@ -3589,4 +3589,4 @@ uments [39,38,58,57], infographics [37], multidomain [61,62], open-ended ques-
 tions [54], multilingual [46], multipage [57] or collections of documents [56]. De-
 spite the existence of many small and medium sized datasets one of the major
 challenges is still the lack of a large scale generic dataset that can be used for
-multiple scenarios. One of the main reasons for that is the sensitive content of",,,
+multiple scenarios. One of the main reasons for that is the sensitive content of",good,good,good,good,,True
