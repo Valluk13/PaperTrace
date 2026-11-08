@@ -16,6 +16,7 @@ if "onedrive" in os.getcwd().lower():
           "записи (WinError 32) и может отдавать откачанные на-demand файлы. Гони из локальной папки.")
 
 import chromadb
+
 import common
 
 try:
@@ -69,11 +70,35 @@ else:
 
 # PDF-ы статей переживают прогон и докачиваются по ходу, но свободное место кончается внезапно.
 import arxiv_searcher as _az
+
 need_mb = len(cases) * _az.MAX_PAPERS * 3
 free_mb = shutil.disk_usage(".").free // (1024 * 1024)
 print(f"Места на диске: {free_mb} МБ, нужно ~{need_mb} МБ на {len(cases)} тем")
 if free_mb < need_mb:
     sys.exit(f"ПРЕФЛАЙТ: места меньше {need_mb} МБ — докачка PDF оборвётся посреди прогона")
+
+# Сон ОС — тихий убийца ночных прогонов: фоновый процесс НЕ сбрасывает таймер простоя,
+# и через N минут бездействия пользователя Windows усыпляет машину посреди платной ячейки.
+if sys.platform == "win32":
+    import re as _re
+    import subprocess as _sp
+    try:
+        _out = _sp.run(["powercfg", "-q", "SCHEME_CURRENT", "SUB_SLEEP", "STANDBYIDLE"],
+                       capture_output=True, text=True, timeout=10).stdout
+        _m = _re.search(r"от сети:\s*0x([0-9a-fA-F]+)", _out)
+        _ac = int(_m.group(1), 16) if _m else None
+    except Exception:
+        _ac = None
+    if _ac is None:
+        print("ПРЕДУПРЕЖДЕНИЕ: не удалось прочитать таймер сна Windows — проверь сам:\n"
+              "  powercfg -q SCHEME_CURRENT SUB_SLEEP STANDBYIDLE")
+    elif _ac > 0:
+        sys.exit(f"ОСТАНОВ: Windows уснёт через {_ac // 60} мин простоя и убьёт ночной прогон. Выполни:\n"
+                 "  powercfg -setacvalueindex SCHEME_CURRENT SUB_SLEEP STANDBYIDLE 0\n"
+                 "  powercfg -setactive SCHEME_CURRENT\n"
+                 "и запусти preflight заново. После прогона верни прежнее значение.")
+    else:
+        print("Сон ОС от сети отключён — таймер простоя не убьёт ночной прогон")
 
 for name in ("verifier_api", "arxiv_searcher", "reliability_rag"):
     if not os.path.exists(f"{name}.py"):
