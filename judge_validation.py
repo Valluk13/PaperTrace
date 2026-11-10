@@ -31,7 +31,7 @@ LABELS = {"good": GOOD, "trash": TRASH}
 
 # Кто размечал (для честной методологии в judge_validation.md). Все четыре — внешние LLM
 # разных производителей, не задействованные в пайплайне: писатель qwen, судья llama.
-RATERS = {"r1": "Gemini (Argon)", "r2": "Claude Opus 5.5", "r3": "GPT 6.1 Sol Pro", "r4": "Kimi 3.1 Pro"}
+RATERS = {"r1": "Gemini (Argon)", "r2": "Claude Opus 5.5", "r3": "GPT 6.1 Sol Pro", "r4": "Kimi K3.1 Pro"}
 
 
 def parse_label(raw: str) -> bool | None:
