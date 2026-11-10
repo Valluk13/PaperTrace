@@ -23,9 +23,9 @@ import math
 import os
 import re
 
-REPORT_PATH = "report.md"
+REPORT_PATH = "docs/report.md"
 MODE_D_DETAILS = "mode_d_details.json"
-JUDGE_VALIDATION_MD = "judge_validation.md"
+JUDGE_VALIDATION_MD = "docs/judge_validation.md"
 SEMANTIC_RESULTS = "eval_results_semantic.json"
 SEMANTIC_META = "eval_semantic_meta.json"
 DRAFT_RESULTS = "eval_results_draft.json"

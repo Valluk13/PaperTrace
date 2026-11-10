@@ -22,7 +22,7 @@ import csv
 import math
 
 CSV_PATH = "judge_sample.csv"
-MD_PATH = "judge_validation.md"
+MD_PATH = "docs/judge_validation.md"
 MAX_N = 50          # бриф: первые 50 строк
 SEMANTIC_COL = "semantic_supported"
 GOOD, TRASH = True, False
